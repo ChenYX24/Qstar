@@ -8,7 +8,25 @@
             },
 			"navigationBarHidden": true
 		}
-	],
+	    ,{
+            "path" : "pages/myQ/myQ",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/home/home",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 	"globalStyle": {
 		"navigationStyle": "custom"
 		// //#ifndef MP-WEIXIN
