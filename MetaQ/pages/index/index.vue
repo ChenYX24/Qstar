@@ -5,10 +5,10 @@
 				Meta Q
 			</view>
 			<view class="buttonGroup">
-				<view class="button">
+				<view class="button" @tap="Login">
 					登陆
 				</view>
-				<view class="button">
+				<view class="button" @tap="Register">
 					注册
 				</view>
 			</view>
@@ -24,10 +24,19 @@
 			}
 		},
 		onLoad() {
-
+			
 		},
 		methods: {
-
+			Login(){
+				uni.navigateTo({
+					url:"/pages/login/login"
+				})
+			},
+			Register(){
+				uni.navigateTo({
+					url:"/pages/register/register"
+				})
+			}
 		}
 	}
 </script>
