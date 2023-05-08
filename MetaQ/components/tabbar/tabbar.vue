@@ -118,6 +118,7 @@ export default {
   border-top-left-radius: 30px!important;
   border-top-right-radius: 30px!important;
   box-shadow: 0px -12px 10px -4px rgb(136, 63, 143, 0.15) !important;
+  background: rgba(252, 251, 255, 1);
 
 }
 
