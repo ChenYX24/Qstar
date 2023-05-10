@@ -78,7 +78,7 @@
   height: 12px;
   opacity: 1;
   background: rgba(221, 183, 247, 1);
-  filter: blur(1px);
+  filter: blur(0.6px);
   position: relative;
   top: 3px;
 }
@@ -88,7 +88,7 @@
   height: 12px;
   opacity: 1;
   background: rgba(221, 183, 247, 0);
-  filter: blur(0.8px);
+  filter: blur(0.6px);
   position: relative;
   top: 3px;
 }

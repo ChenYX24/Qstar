@@ -5,7 +5,7 @@
 				{{title}}
 			</view>
 			<view class="pushBox">
-				<view class="dot"></view>
+				<view :class="{ 'active-dot': isPush, 'dot': !isPush }"></view>
 				<view class="push">{{pushText}}</view>
 			</view>
 		</view>
@@ -36,6 +36,10 @@
 			text:{
 				type:String,
 				default:''
+			},
+			isPush:{
+				type:Boolean,
+				default:false
 			}
 		},
 		data() {
@@ -68,12 +72,34 @@
 		font-size: 20px;
 		font-weight: 400;
 	}
+	.pushBox{
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		.dot{
+			border-radius: 50%;
+			width: 12px;
+			height: 12px;
+			opacity: 1;
+			background: rgba(221, 183, 247, 0);
+			filter: blur(0.6px);
+			position: relative;
+		}
+		.active-dot{
+			border-radius: 50%;
+			width: 12px;
+			height: 12px;
+			opacity: 1;
+			background: rgba(221, 183, 247, 1);
+			filter: blur(0.6px);
+			position: relative;
+		}
+	}
 }
 .rightBox{
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	height: 40%;
 	.number{
 		font-size: 54pt;
 		font-weight: 900;

@@ -17,7 +17,7 @@
 		    >
 		      <swiper-item>
 		        <view class="page1">
-					<QBlock :number="number" :text="text" :title="title"></QBlock>
+					<QBlock :number="number" :text="text" :title="title" :isPush="isPush"></QBlock>
 				</view>
 		      </swiper-item>
 		      <swiper-item>
@@ -51,8 +51,9 @@ export default {
 		text1:'我创建的',
 		text2:"我填写的",
 		title:"关于早八是否会被饿死调查",
-		text:"答卷数量"
-		
+		text:"答卷数量",
+		isPush:true,
+		number:2
   	}
   },
     methods: {

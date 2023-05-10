@@ -137,7 +137,7 @@ export default {
 }
 //#endif
 .dot.active {
-  background-color: #DDB7F7;
+  background: rgba(221, 183, 247, 1);
 }
 .tab-item.add {
   position: relative;
@@ -146,10 +146,14 @@ export default {
 .dot {
   position: absolute;
   bottom: 1rem;
-  width: 0.5rem;
-  height: 0.5rem;
-  background-color: rgba(255,255,255,0);
   border-radius: 50%;
+  width: 12px;
+  height: 12px;
+  opacity: 1;
+  background: rgba(221, 183, 247, 0);
+  filter: blur(0.6px);
+  position: relative;
+  top: 3px;
 }
 
  
