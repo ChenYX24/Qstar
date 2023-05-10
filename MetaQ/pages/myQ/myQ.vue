@@ -120,9 +120,9 @@ export default {
 	}
 	
 	.swiper {
-	  height: calc(100% - 50px);
-	  position: relative;
-	  bottom: -50px;
+    height: calc(100% - 100px);
+    position: relative;
+    bottom: -65px;
 	}
 	
 	.page1,
@@ -131,7 +131,7 @@ export default {
 	  width: 100vw;
 	  display: flex;
 	  justify-content: center;
-	  align-items: center;
+	  
 	}
 	
 	.tabSwiper {

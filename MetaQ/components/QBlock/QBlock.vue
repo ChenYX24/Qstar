@@ -61,16 +61,23 @@
     width: 80vw;
     height: 35vw;
     justify-content: space-between;
+	box-sizing: border-box;
+	padding: 0% 5% 0% 5%;
 }
 .leftBox{
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
 	align-items: flex-start;
-	height: 40%;
+	height: 60%;
+	width: 80%;
 	.title{
 		font-size: 20px;
 		font-weight: 400;
+		width:100%;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 	.pushBox{
 		display: flex;
@@ -94,6 +101,9 @@
 			filter: blur(0.6px);
 			position: relative;
 		}
+		.push{
+			margin-left: 5px;
+		}
 	}
 }
 .rightBox{
@@ -109,6 +119,9 @@
 		font-size: 12px;
 		font-weight: 400;
 		color: rgba(187, 187, 199, 1);
+		position: relative;
+		bottom: 10px;
+		white-space: nowrap;
 	}
 }
 </style>
