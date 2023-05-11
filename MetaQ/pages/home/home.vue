@@ -1,35 +1,37 @@
 <template>
-	<view class="background" :class="{ 'background-blur': isExpanded }" @click="confirmInput($event)">
+	<view class="background" :class="{ 'background-blur': isExpanded,'blur2':isInfoExpanded }" @click="confirmInput($event)">
 		<view class="title">
 			我的
 		</view>
-		<view class="img">
-			<image :src="profilePhoto" mode="aspectFit"></image>
+		<view class="img" @tap="selectImage">
+			<image :src="profilePhoto" mode="aspectFill" ></image>
 		</view>
-		<input type="text" id="name" :class="{ 'name': true, 'expanded': isExpanded }" v-model="name" @click="expandInput">
-		<view class="infoBox">
-			<view class="info">
-			  <view class="item">
-				<view class="label">手机：</view>
-				<view class="value">{{phone}}</view>
+		<input type="text" id="name" :class="{ 'name': true, 'expanded': isExpanded }" v-model="name" @click="expandInput" :disabled="!isExpanded">
+		<view id="infoBox" :class="{ 'infoBox': true, 'infoExpanded': isInfoExpanded }">
+			<view class="info" id="infoBox2">
+			  <view class="item" id="infoBox3">
+				<view class="label" id="infoBox4">手机：</view>
+				<input type="text" v-model="phone" class="value" id="infoBox5" :disabled="!isInfoExpanded">
 			  </view>
-			  <view class="item">
-				<view class="label">邮箱：</view>
-				<view class="value">{{email}}</view>
+			  <view class="item" id="infoBox6">
+				<view class="label" id="infoBox7">邮箱：</view>
+				<input type="text" v-model="email" class="value" id="infoBox8" :disabled="!isInfoExpanded">
 			  </view>
-			  <view class="item">
-				<view class="label">地区：</view>
-				<view class="value">{{location}}</view>
+			  <view class="item" id="infoBox9">
+				<view class="label" id="infoBox10">地区：</view>
+				<picker mode="selector" :range="provinces" @change="onProvinceChange" class="picker" id="infoBox11" :disabled="!isInfoExpanded">
+				  <view class="picker-text" id="infoBox12">{{ currentProvince }}</view>
+				</picker>
 			  </view>
 			</view>
-			<image class="icon" src="/static/home/edit.png" mode="aspectFit"></image>
+			<image class="icon" src="/static/home/edit.png" mode="aspectFit"  @click="expandInfoBox"></image>
 		</view>
-		<view class="button">
+		<view class="button" @tap="goToIndex">
 			切换账号
 		</view>
 	</view>
 	<view class="tabbar" @click="confirmInput($event)">
-		<tab-bar :tab="tab" :isExpanded="isExpanded"></tab-bar>
+		<tab-bar :tab="tab" :isExpanded="isExpanded||isInfoExpanded"></tab-bar>
 	</view>
 </template>
 
@@ -49,15 +51,19 @@ export default {
 		profilePhoto:'/static/home/profilePhoto.png',
 		name:'尘',
 		isExpanded:false,
+		isInfoExpanded:false,
 		flag:false,
-		phone: "xxx",
-        email: "xxx",
-        location: "xxx",
-  	}
+		phone: "13306715109",
+        email: "1501434920@qq.com",
+		provinces: ['未知','北京市', '天津市', '上海市', '重庆市', '河北省', '山西省', '辽宁省', '吉林省', '黑龙江省', '江苏省', '浙江省', '安徽省', '福建省', '江西省', '山东省', '河南省', '湖北省', '湖南省', '广东省', '海南省', '四川省', '贵州省', '云南省', '陕西省', '甘肃省', '青海省', '台湾省', '内蒙古自治区', '广西壮族自治区', '西藏自治区', '宁夏回族自治区', '新疆维吾尔自治区', '香港特别行政区', '澳门特别行政区'],
+		currentProvince: '未知',
+		
+	}
   },
   methods: {
       expandInput() {
-        this.isExpanded = true;
+		if(!this.isInfoExpanded)
+			this.isExpanded = true;
       },
       confirmInput(event) {
         // 恢复样式
@@ -75,7 +81,56 @@ export default {
 				this.flag=true
 			}
 		}
+		if(this.isInfoExpanded)
+		{
+			if(this.flag2)
+			{
+				console.log(event.target.id)
+				if (!event.target.id.startsWith('infoBox')) {
+				    this.isInfoExpanded = false;
+					this.flag2=false;
+				}
+			}
+			else
+			{
+				this.flag2=true
+			}
+		}
       },
+	  expandInfoBox(){
+		if(!this.isExpanded)
+		  this.isInfoExpanded = true;
+	  },
+	  onProvinceChange(event) {
+	    const provinceIndex = event.detail.value
+	    this.currentProvince = this.provinces[provinceIndex]
+	    if (this.currentProvince !== '请选择省份') {
+	        this.trueProvince = this.currentProvince
+	      }
+	  },
+	  goToIndex(){
+		if(!this.isInfoExpanded&&!this.isExpanded)
+		  uni.reLaunch({
+		  	url:'/pages/index/index'
+		  })
+	  },
+	selectImage() {
+      // 在这里编写选择图片的逻辑
+      uni.chooseImage({
+        count: 1, // 最多可选择的图片数量
+        success: (res) => {
+          // 选择图片成功后的回调函数
+          const tempFilePaths = res.tempFilePaths;
+          if (tempFilePaths && tempFilePaths.length > 0) {
+            this.profilePhoto = tempFilePaths[0]; // 更新当前图片的路径
+          }
+        },
+        fail: (err) => {
+          // 选择图片失败后的回调函数
+          console.error(err);
+        },
+      });
+    },
 	}
 
 };
@@ -138,6 +193,11 @@ export default {
 	margin: 3vw;
 	transition: all 0.3s ease;
 }
+.infoBox.infoExpanded{
+	background-color: rgba(255,255,255,1);
+	height: 40vh;
+	width: 90vw;
+}
 .background-blur>*:not(.name):not(.confirm){
 	filter: blur(5px);
 }
@@ -158,9 +218,9 @@ export default {
 	border-radius: 10px;
 	background: rgba(255, 255, 255, 0.45);
 	position: relative;
-	    padding-left: 5%;
-	    box-sizing: border-box;
-
+	padding-left: 5%;
+	box-sizing: border-box;
+	transition: all 0.3s ease;
 }
 
 .info {
@@ -175,6 +235,7 @@ export default {
   display: flex;
   align-items: center;
   margin-bottom: 5px;
+  flex:1
 }
 
 .label {
@@ -215,5 +276,16 @@ export default {
 	position: absolute;
 	bottom: 10%;
 	
+}
+.picker-text
+{
+	font-size: 14pt;
+	font-weight: 400;
+	letter-spacing: 0px;
+	line-height: 24.7px;
+	color: #bbbbc7;
+}
+.blur2>*:not(.infoBox){
+	filter: blur(5px);
 }
 </style>
