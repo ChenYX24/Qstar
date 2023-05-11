@@ -11,20 +11,20 @@
 				</div>
 			    <div>
 			      <label class="Label">邮箱：</label>
-			      <input type="text"  class="Input" v-model="formData.email" required>
+			      <input type="email" :class="{'Input':trueEmail,'errorWrite':!trueEmail}" v-model="formData.email" @input="checkEmail" required>
 			    </div>
 			    <div>
 			      <label class="Label">密码：</label>
-			      <input type="password" class="Input" v-model="formData.password" required>
+			      <input type="password" :class="{'Input':isSame,'errorWrite':!isSame}" v-model="formData.password" required>
 			    </div>
 				<div id="confirmDiv">
 					<label class="Label" id="Confirm">确认密码：</label>
-					<input type="password" class="Input" v-model="formData.confirm" required>
+					<input type="password" :class="{'Input':isSame,'errorWrite':!isSame}" v-model="formData.confirm" required>
 				</div>
 				<div id="getcode">
 					<label class="Label">验证码:</label>
-					<input type="password" class="Input" v-model="formData.verification" required>
-					<button>获取验证码</button>
+					<input type="text" class="Input" v-model="formData.verification" required>
+					<button :disabled="!enableGetcode" @tap="startTime">{{ getCodeText }}</button>
 				</div>
 				<div class="buttonGroup">
 			    <button :class="{'active': isFill,'notlogin': !isFill}" :disabled="!isFill" type="submit" @tap="submitForm">注册</button>
@@ -36,33 +36,73 @@
 </template>
 
 <script>
+import axios from 'axios';
 	export default {
 		data() {
 			return {
 				formData: {
-						email:    '',
+						email:"",
 				        username: '',
 				        password: '',
 						 confirm: '',
 					verification: ''
-				      }
+				      },
+				active:true,
+				getCodeText:"获取验证码",
+				trueEmail:false,
 			};
 		},
 		computed: {
 			isFill(){
-				return this.formData.email !== '' && this.formData.username !== '' && this.formData.password !== '' 
+				return this.trueEmail && this.formData.username !== '' && this.formData.password !== '' 
 					   && this.formData.confirm !== '' && this.formData.verification !== '';
+			},
+			enableGetcode(){
+				return this.trueEmail && this.active;
+			},
+			isSame(){
+				return this.formData.password == this.formData.confirm;
 			}
 		},
 		methods: {
 		    submitForm() {
-		      // 处理表单提交逻辑
-		      console.log(this.formData);
+		        axios.post('http://localhost:8080/register', {
+				  username:this.formData.username,
+		          email: this.formData.email,
+		      	password: this.formData.password
+		      	})
+		        .then(response => {
+					this.token = response.data;
+					console.log(this.token);
+				})
+				.catch(error => {
+		            console.log(error);
+				});
+		        //console.log(this.formData);
 		    },
 			Login(){
 				uni.navigateTo({
 					url:"/pages/login/login"
 				})
+			},
+			startTime(){
+				var time = 3;
+				this.active = false;
+				this.getCodeText = time;
+				const intervalId = setInterval(() => {
+				        time--;
+				        if (time === 0) {
+				          clearInterval(intervalId);
+				          this.active = true;
+				          this.getCodeText = "获取验证码";
+				        } else {
+				          this.getCodeText = time;
+				        }
+				      }, 1000);
+			},
+			checkEmail(){
+				const emailPattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+				this.trueEmail = emailPattern.test(this.formData.email);
 			}
 		  }
 	}
@@ -142,15 +182,27 @@
 	}
 	.Input {
 		display: inline-block;
-		border-bottom: 1px solid #000;
+		border-bottom: 2px solid #000;
 		border-top: 0px;
 		border-left: 0px;
 		border-right: 0px;
 		vertical-align: top;
 		width: 212px;
 	}
-	.Input :focus{
-		border-bottom: 5px solid rgba(200, 196, 218, 50);
+	.Input:focus-within{
+		border-bottom: 2px solid rgba(200, 196, 218, 50)!important;
+	}
+	.errorWrite {
+		display: inline-block;
+		border-bottom: 2px solid rgba(255, 0, 0, 0.3);
+		border-top: 0px;
+		border-left: 0px;
+		border-right: 0px;
+		vertical-align: top;
+		width: 212px;
+	}
+	.errorWrite:focus-within {
+		border-bottom: 2px solid rgba(200, 196, 218, 50);
 	}
 	.Label {
 		display: inline-block;

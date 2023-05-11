@@ -25,24 +25,16 @@ public class DataIO {
     }
     //将对象转为json格式的字符串，然后写入文件中
     public void writeObject(Object object){
-        // try (FileChannel channel = FileChannel.open(Paths.get("user.json"), StandardOpenOption.READ, StandardOpenOption.WRITE)) {
-        //     FileLock lock = channel.lock();//获取文件锁定
-        //     // 在锁定期间进行文件读写操作
-            try {
-                String result = " ";
-                result = objectMapper.writeValueAsString(object) + "\n";
-                System.out.println(result);
-                FileWriter fileWriter = new FileWriter(this.path,true);
-                fileWriter.write(result);
-                fileWriter.close();
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        //     lock.release(); // 释放文件锁定
-        // } catch (Exception e) {
-        //     // 处理异常
-        //     System.out.println(e.getMessage());
-        // }
+        try {
+            String result = " ";
+            result = objectMapper.writeValueAsString(object) + "\n";
+            System.out.println(result);
+            FileWriter fileWriter = new FileWriter(this.path,true);
+            fileWriter.write(result);
+            fileWriter.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
     //获取某个key的值为value的对象的id
     public int getIDofObject(String key,String value){
@@ -51,10 +43,17 @@ public class DataIO {
             line = reader.readLine();
             while(line != null){
                 JsonNode node = objectMapper.readTree(line);
-                String temp = node.get(key).asText();
-                if(temp == value){
-                    reader.close();
-                    return node.get("_id").asInt();
+                JsonNode nodekey = node.get(key);
+                String temp = " ";
+                if(nodekey != null){
+                    System.out.println("nodekey != null");
+                    temp = nodekey.asText();
+                    System.out.println(temp);
+                    if(temp.hashCode() == value.hashCode()){
+                        reader.close();
+                        System.out.println("return id");
+                        return node.get("_id").asInt();
+                    }
                 }
                 line = reader.readLine();
             }
@@ -79,7 +78,11 @@ public class DataIO {
             line = reader.readLine();
             while(line != null){
                 JsonNode node = objectMapper.readTree(line);
-                int temp = node.get("_id").asInt();
+                JsonNode nodeid = node.get("_id");
+                int temp = 0;
+                if(nodeid !=  null){
+                    temp = nodeid.asInt();
+                }
                 if(temp == id){
                     reader.close();
                     return line;
@@ -99,7 +102,11 @@ public class DataIO {
             line = reader.readLine();
             while(line != null){
                 JsonNode node = objectMapper.readTree(line);
-                int temp = node.get("_id").asInt();
+                JsonNode nodeid = node.get("_id");
+                int temp = 0;
+                if(nodeid != null){
+                    temp = nodeid.asInt();
+                }
                 if(temp > maxid){
                     maxid = temp;
                 }
@@ -111,6 +118,7 @@ public class DataIO {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+        System.out.println("error");
         return 0;
     }
     //更改密码

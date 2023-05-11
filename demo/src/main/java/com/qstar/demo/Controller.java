@@ -31,24 +31,21 @@ public class Controller {
         }
         return result;
     }
-    @RequestMapping("/save")
-    public void saveuser(){
-        Runnable task = () -> {//定义线程执行内容
-            try (Scanner sc = new Scanner(System.in)){
-                User user = new User();
-		        System.out.println("请输入用户名");
-		        user.set_name(sc.nextLine());
-		        System.out.println("请输入邮箱");
-		        user.set_email(sc.nextLine());
-		        System.out.println("请输入密码");
-		        user.set_passwd(sc.nextLine());
-		        sc.close();
-                userService.SaveUser(user);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        };
-        new Thread(task).start();//启动线程
+    @RequestMapping("/register")
+    public String saveuser(@RequestBody String json){
+        System.out.println(json);
+        String result = " ";
+        String username = " ";
+        String email = " ";
+        String password = " ";
+        username = userio.getKeyValueofJson(json, "username");
+        email = userio.getKeyValueofJson(json, "email");
+        System.out.println(email);
+        password = userio.getKeyValueofJson(json, "password");
+        User user = new User(username, email, password);
+        userService.SaveUser(user);
+        result = userService.GetUserByEmail(email);
+        return result;
     }
     @RequestMapping("/get")
     public void getuser(){

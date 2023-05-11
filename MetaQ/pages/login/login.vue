@@ -7,7 +7,7 @@
 			<form @submit.prevent="submitForm" class="Form">
 			    <div>
 			      <label class="Label">邮箱：</label>
-			      <input type="text"  class="Input" v-model="formData.email" required>
+			      <input type="email" :class="{'Input':trueEmail,'errorWrite':!trueEmail}" v-model="formData.email" @input="checkEmail" required>
 			    </div>
 			    <div>
 			      <label class="Label">密码：</label>
@@ -28,33 +28,36 @@ import axios from 'axios';
 		data() {
 			return {
 				formData: {
-				        email: '',
-				        password: ''
+				        email: "",
+				        password: ""
 				      },
-				token:''
+				token:"",
+				trueEmail:""
 			};
 		},
 		computed: {
 			isFill(){
-				return this.formData.email !== '' && this.formData.password !== '';
+				return this.trueEmail !== '' && this.formData.password !== '';
 			}
 		},
 		methods: {
 		    submitForm() {
-				var self = this;
 				axios.post('http://localhost:8080/login', {
-		            email: self.formData.email,
-					password: self.formData.password
+		            email: this.formData.email,
+					password: this.formData.password
 					})
 		            .then(response => {
-		              self.token = response.data;
-					  console.log(self.token);
+		              this.token = response.data;
+					  console.log(this.token);
 		            })
 		            .catch(error => {
 		              console.log(error);
 		            });
 				
-		    },
+		    },checkEmail(){
+				const emailPattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+				this.trueEmail = emailPattern.test(this.formData.email);
+			},
 			Register(){
 				uni.navigateTo({
 					url:"/pages/register/register"
@@ -118,14 +121,25 @@ import axios from 'axios';
 	
 	.Input {
 		display: inline-block;
-		border-bottom: 1px solid #000;
+		border-bottom: 2px solid #000;
 		border-top: 0px;
 		border-left: 0px;
 		border-right: 0px;
 		vertical-align: top;
 	}
-	.Input :focus{
-		border-bottom: 5px solid rgba(200, 196, 218, 50);
+	.Input:focus-within {
+		border-bottom: 2px solid rgba(200, 196, 218, 50);
+	}
+	.errorWrite {
+		display: inline-block;
+		border-bottom: 2px solid rgba(255, 0, 0, 0.3);
+		border-top: 0px;
+		border-left: 0px;
+		border-right: 0px;
+		vertical-align: top;
+	}
+	.errorWrite:focus-within {
+		border-bottom: 2px solid rgba(200, 196, 218, 50);
 	}
 	.Label {
 		display: inline-block;
