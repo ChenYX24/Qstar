@@ -44,15 +44,25 @@
             }
             
         }
-        // ,{
-        //     "path" : "pages/test/test",
-        //     "style" :                                                                                    
-        //     {
-        //         "navigationBarTitleText": "",
-        //         "enablePullDownRefresh": false
-        //     }
+
+        ,{
+            "path" : "pages/editQuestion/editQuestion",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
             
-        // }
+        }
+        ,{
+            "path" : "pages/editQuestionnire/editQuestionnire",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationStyle": "custom"
