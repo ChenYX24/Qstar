@@ -30,4 +30,8 @@ public class myconfig {
     public UserService userService(){
         return new UserService("user.json");
     }
+    @Bean
+    public DataIO userio(){
+        return new DataIO("user.json");
+    }
 }

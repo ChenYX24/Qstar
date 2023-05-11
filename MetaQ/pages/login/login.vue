@@ -31,7 +31,7 @@ import axios from 'axios';
 				        email: '',
 				        password: ''
 				      },
-				token:-1
+				token:''
 			};
 		},
 		computed: {
@@ -42,18 +42,18 @@ import axios from 'axios';
 		methods: {
 		    submitForm() {
 				var self = this;
-				axios.post('http://localhost:8080/hello', {
-		            email: self.formData.email
+				axios.post('http://localhost:8080/login', {
+		            email: self.formData.email,
+					password: self.formData.password
 					})
 		            .then(response => {
-		              self.formData.password = response.data;
-					  console.log(response.data);
-					  console.log(self.formData.email)
+		              self.token = response.data;
+					  console.log(self.token);
 		            })
 		            .catch(error => {
 		              console.log(error);
 		            });
-					console.log(self.formData.email)
+				
 		    },
 			Register(){
 				uni.navigateTo({

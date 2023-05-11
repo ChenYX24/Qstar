@@ -1,5 +1,7 @@
 package com.qstar.demo;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 // import java.util.List;
 
 // import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,8 @@ public class UserService {
     //     this.jdbcTemplate = jdbcTemplate;
     // }
 	private String path = "user.json";
+	@Autowired
+	DataIO userio;
 	UserService(String Path){
 		this.path = Path;
 	}
@@ -20,7 +24,7 @@ public class UserService {
 	public void SaveUser(User user){
 		// String sql = "INSERT INTO users(NAME,EMAIL,PASSWD) VALUES (?,?,?)";
 		// this.jdbcTemplate.update(sql,user.get_name(), user.get_email(),user.get_passwd());
-		DataIO userio = new DataIO(path);
+		userio = new DataIO(path);
 		user.set_id(userio.getMaxId() + 1);
 		System.out.println("userid= " + user.get_id());
 		userio.writeObject(user);
@@ -33,7 +37,7 @@ public class UserService {
 		// User user = users.isEmpty() ? null : users.get(0);
 		// ObjectMapper objectMapper = new ObjectMapper();
 		// result = objectMapper.writeValueAsString(user);
-		DataIO userio = new DataIO(path);
+		userio = new DataIO(path);
 		int id = userio.getIDofObject("_email", Email);
 		result = userio.getJsonById(id);
 		return result;
@@ -43,7 +47,7 @@ public class UserService {
 		// String sql = "SELECT * FROM users WHERE EMAIL = ?";
 		// List<User> users = this.jdbcTemplate.query(sql, new UserMapper(), new Object[]{Email});
 		// User user = users.isEmpty() ? null : users.get(0);
-		DataIO userio = new DataIO(path);
+		userio = new DataIO(path);
 		result = userio.getJsonById(id);
 		return result;
 	}
@@ -51,8 +55,19 @@ public class UserService {
 	public void ChangePasswdByEmail(String Email,String passwd){
 		// String sql = "update users set PASSWD = ? where EMAIL = ?";
 		// this.jdbcTemplate.update(sql,passwd,email);
-		DataIO userio = new DataIO(path);
+		userio = new DataIO(path);
 		int id = userio.getIDofObject("_email", Email);
 		userio.changePasswdById(id,passwd);
+	}
+	//判断邮箱和密码是否匹配
+	public Boolean MatchEmailtoPasswd(String Email,String Passwd){
+		String json = "";
+		json = GetUserByEmail(Email);
+		User user = userio.switchJsonToObject(json,User.class);
+		if(user.get_passwd().hashCode() == Passwd.hashCode())
+		{
+			return true;
+		}
+		return false;
 	}
 }

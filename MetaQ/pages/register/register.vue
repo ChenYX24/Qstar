@@ -5,6 +5,10 @@
 				Register
 			</view>
 			<form @submit.prevent="submitForm" class="Form">
+				<div id="username">
+				  <label class="Label">用户名：</label>
+				  <input type="text"  class="Input" v-model="formData.username" required>
+				</div>
 			    <div>
 			      <label class="Label">邮箱：</label>
 			      <input type="text"  class="Input" v-model="formData.email" required>
@@ -37,7 +41,7 @@
 			return {
 				formData: {
 						email:    '',
-				        username: '131',
+				        username: '',
 				        password: '',
 						 confirm: '',
 					verification: ''
@@ -170,5 +174,15 @@
 		text-align: center;
 		vertical-align: top;
 		font-family: 'ali', sans-serif;
+	}
+	#username label{
+		width: 64px;
+		margin-left: 0px;
+		vertical-align: top;
+	}
+	#username input{
+		width: 196px;
+		margin-left: 0px;
+		vertical-align: top;
 	}
 </style>

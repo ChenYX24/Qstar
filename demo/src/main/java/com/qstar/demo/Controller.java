@@ -3,16 +3,33 @@ package com.qstar.demo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Scanner;
 @RestController
 public class Controller {
     @Autowired
     UserService userService;
+    @Autowired
+    DataIO userio;
     @RequestMapping("/hello")
     public String handle01(){
         return "helloworld!";
+    }
+    //登录功能，解析前端输入的json，判断邮箱与密码是否对应，返回值为该用户的json或者为空格。
+    @RequestMapping("/login")
+    public String login(@RequestBody String json){
+        System.out.println(json);
+        String result = " ";
+        String email = "";
+        String password = "";
+        email = userio.getKeyValueofJson(json, "email");
+        password = userio.getKeyValueofJson(json, "password");
+        if(userService.MatchEmailtoPasswd(email, password)){
+            result = userService.GetUserByEmail(email);
+            System.out.println(result);
+        }
+        return result;
     }
     @RequestMapping("/save")
     public void saveuser(){

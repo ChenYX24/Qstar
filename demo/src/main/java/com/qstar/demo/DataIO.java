@@ -1,6 +1,6 @@
 package com.qstar.demo;
 
-import com.fasterxml.jackson.databind.JavaType;
+//import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.FileWriter;
 import java.io.BufferedReader;
@@ -64,7 +64,7 @@ public class DataIO {
         return 0;
     }
     //将Json转换为对象
-    public Object switchJsonToObject(String json,JavaType valuetype){
+    public <T> T switchJsonToObject(String json,Class<T> valuetype){
         try {
             return objectMapper.readValue(json,valuetype);
         } catch (Exception e) {
@@ -176,5 +176,15 @@ public class DataIO {
             System.out.println(e.getMessage());
         }
     }
-    
+    //获取json中某个key的值
+    public String getKeyValueofJson(String json,String key){
+        String result = "";
+        try {
+            JsonNode node = objectMapper.readTree(json);
+            result = node.get(key).asText();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return result;
+    }
 }
