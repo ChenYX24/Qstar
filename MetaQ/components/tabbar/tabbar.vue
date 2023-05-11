@@ -1,5 +1,5 @@
 <template>
-<view class="tabContainer">
+<view class="tabContainer" :class="{'blur':isExpanded}">
   <view class="tab-bar">
     <view class="tab-item"  @click="switchTab('question')">
       <image class="imgGroup notebIcon leftIcon" :src="activeTab === 'question'?'/static/tabbar/Q2.png':'/static/tabbar/Q.png'"></image>
@@ -27,15 +27,19 @@ export default {
   },
   data() {
     return {
-		tab:'question',
+		activeTab: this.tab,
 		isAdd:false,
     };
   },
    props: {
-      activeTab: {
+      tab: {
         type: String,
         default: 'question'
-      }
+      },
+	  isExpanded:{
+		  type:Boolean,
+		  default:false
+	  }
     },
   methods: {
 	  changeAdd(){
@@ -44,58 +48,64 @@ export default {
 
 	//#ifdef MP-WEIXIN
 	switchTab(tab) {
-	  if (tab === 'add') {
-	    // 点击加号按钮跳转到相应页面
-	    // wx.reLaunch({
-	    //   url: '/pages/add/add',
-	    // });
-		console.log(this.tab,this.activeTab)
-		this.isAdd=!this.isAdd
-	  } else {
-	    // 切换选中的tab
-	    this.tab = tab;
-	    // 根据选中的tab跳转到相应页面
-	    switch (tab) {
-	      case 'question':
-	        wx.reLaunch({
-	          url: `/pages/myQ/myQ?tab=${tab}`,
-	        });
-	        break;
-	      case 'home':
-	        wx.reLaunch({
-	          url: `/pages/home/home?tab=${tab}`,
-	        });
-	        break;
-	    }
-	  }
+	if(!this.isExpanded)
+	{
+		if (tab === 'add') {
+		  // 点击加号按钮跳转到相应页面
+		  // wx.reLaunch({
+		  //   url: '/pages/add/add',
+		  // });
+				this.isAdd=!this.isAdd
+		} else {
+		  // 切换选中的tab
+		  this.activeTab = tab;
+		  // 根据选中的tab跳转到相应页面
+		  switch (tab) {
+		    case 'question':
+		      wx.reLaunch({
+		        url: `/pages/myQ/myQ?tab=${tab}`,
+		      });
+		      break;
+		    case 'home':
+		      wx.reLaunch({
+		        url: `/pages/home/home?tab=${tab}`,
+		      });
+		      break;
+		  }
+		}
+	}
+	 
 	},
 	//#endif
 	//#ifndef MP-WEIXIN
 	switchTab(tab) {
-	  if (tab === 'add') {
-	    // 点击加号按钮跳转到相应页面
-	    // uni.reLaunch({
-	    //   url: '/pages/add/add',
-	    // });
-		this.isAdd=!this.isAdd
-		console.log(this.tab,this.activeTab)
-	  } else {
-	    // 切换选中的tab
-	    this.tab = tab;
-	    // 根据选中的tab跳转到相应页面
-	    switch (tab) {
-	      case 'question':
-	        uni.reLaunch({
-	          url: `/pages/myQ/myQ?tab=${tab}`,
-	        });
-	        break;
-	      case 'home':
-	        uni.reLaunch({
-	          url: `/pages/home/home?tab=${tab}`,
-	        });
-	        break;
-	    }
-	  }
+	if(!this.isExpanded)
+	{
+		if (tab === 'add') {
+		  // 点击加号按钮跳转到相应页面
+		  // uni.reLaunch({
+		  //   url: '/pages/add/add',
+		  // });
+				this.isAdd=!this.isAdd
+		} else {
+		  // 切换选中的tab
+		  this.activeTab = tab;
+		  // 根据选中的tab跳转到相应页面
+		  switch (tab) {
+		    case 'question':
+		      uni.reLaunch({
+		        url: `/pages/myQ/myQ?tab=${tab}`,
+		      });
+		      break;
+		    case 'home':
+		      uni.reLaunch({
+		        url: `/pages/home/home?tab=${tab}`,
+		      });
+		      break;
+		  }
+		}
+	}
+
 	},
 	//#endif
 
@@ -188,6 +198,9 @@ export default {
 /* .leftIcon{
 	 bottom: 0.1rem;
  } */
+ .blur :not(.blur){
+	filter: blur(5px);
+ }
 .tabContainer::after {
   content: "";
   display: block;

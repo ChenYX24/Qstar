@@ -4,18 +4,18 @@
 			<view class="title">
 				{{title}}
 			</view>
-		   <view class="number" :style="{fontSize:fontSize}">
-			{{number}}
-		   </view>
+			<view class="check">
+				查看
+			</view>
 		</view>
 		<view class="bottomBox">
-		   <view class="pushBox">
-			<view :class="{ 'active-dot': isPush, 'dot': !isPush }"></view>
-			<view class="push">{{pushText}}</view>
-		   </view>
-		   <view class="text">
-			答卷数量
-		   </view>
+			<view class="endBox">
+				<view :class="{ 'active-dot': !isEnd, 'dot': isEnd }"></view>
+				<view class="name">{{name}}</view>
+			</view>
+			<view :class="{ 'end': isEnd, 'noEnd': !isEnd }">
+				{{end}}
+			</view>
 		</view>
 	</view>
 </template>
@@ -24,51 +24,36 @@
 	export default {
 		name:"QBlock",
 		props: {
-		   title: {
-		    type: String,
-		    default:''
-		   },
-		   onumber:{
-		    type:Number,
-		    default:1
-		   },
-		   isPush:{
-		    type:Boolean,
-		    default:false
-		   }
-		  },
+			title: {
+				type: String,
+				default:''
+			},
+			isEnd:{
+				type:Boolean,
+				default:true
+			},
+			name:{
+				type:String,
+				default:''
+			}
+		},
 		data() {
 			return {
 				pushText:"已发布",
 			};
 		},
 		computed: {
-		      number(){
-		          let len = this.onumber.toString().length;
-		          if(len == 4) {
-		              return Math.floor(this.onumber / 1000)+'K'
-		          } else if(len == 5) {
-		              return Math.floor(this.onumber / 10000)+'W'
-		          } else if(len>5)
-		    {
-		     return '9W+'
-		    }
-		    else {
-		              return this.onumber
-		          }
-		      },
-		      fontSize() {
-		          let len = this.number.toString().length;
-		          if (len <= 1) {
-		              return '40pt';
-		          } else if (len == 2) {
-		              return '30pt';
-		          } else if (len >= 3) {
-		              return '24pt';
-		          }
-		      }
-		  }
-		 }
+		    end(){
+		        if(this.isEnd)
+				{
+					return '已截止'
+				}
+				else{
+					return '修改'
+				}
+		    },
+		}
+	}
 </script>
 
 <style lang="less">
@@ -102,11 +87,10 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
-	.number{
+	.check{
+		font-size: 20pt;
 		font-weight: 900;
 		color: rgba(204, 139, 247, 0.36);
-		width: 20%;
-		text-align: center;
 	}
 }
 .bottomBox{
@@ -115,7 +99,7 @@
 	align-items: center;
 	align-content: center;
 	flex-direction: row;
-	.pushBox{
+	.endBox{
 		display: flex;
 		flex-direction: row;
 		align-items: center;
@@ -137,17 +121,27 @@
 			filter: blur(0.6px);
 			position: relative;
 		}
-		.push{
+		.name{
 			color: rgba(187, 187, 199, 1);
 			margin-left: 5px;
 		}
 	}
-	.text{
+	.end{
 		font-size: 12px;
 		font-weight: 400;
 		color: rgba(187, 187, 199, 1);
 		width: 20%;
 		text-align: center;
+	}
+	.noEnd{
+		font-size: 12px;
+		font-weight: 400;
+		color: rgba(187, 187, 199, 1);
+		background: rgba(248, 241, 246, 1);
+		width: 20%;
+		border-radius: 999px;
+		text-align: center;
+
 	}
 }
 </style>

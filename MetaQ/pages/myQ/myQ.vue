@@ -17,16 +17,28 @@
 		    >
 		      <swiper-item>
 		        <view class="page1">
-					<QBlock :number="number" :text="text" :title="title" :isPush="isPush"></QBlock>
+					<QBlock :onumber="number" :title="title" :isPush="isPush"></QBlock>
 				</view>
 		      </swiper-item>
 		      <swiper-item>
-		        <view class="page2">页面2</view>
+		        <view class="page2">
+					<QBlock2 :title="title" :isEnd="isEnd" :name="name"></QBlock2>
+					<QBlock2 :title="title" :isEnd="isEnd" :name="name"></QBlock2>
+					<QBlock2 :title="title" :isEnd="isEnd" :name="name"></QBlock2>
+					<QBlock2 :title="title" :isEnd="isEnd" :name="name"></QBlock2>
+					<QBlock2 :title="title" :isEnd="isEnd" :name="name"></QBlock2>
+					<QBlock2 :title="title" :isEnd="isEnd" :name="name"></QBlock2>
+					<QBlock2 :title="title" :isEnd="isEnd" :name="name"></QBlock2>
+					<QBlock2 :title="title" :isEnd="isEnd" :name="name"></QBlock2>
+					<QBlock2 :title="title" :isEnd="isEnd" :name="name"></QBlock2>
+					<QBlock2 :title="title" :isEnd="isEnd" :name="name"></QBlock2>
+					<QBlock2 :title="title" :isEnd="isEnd" :name="name"></QBlock2>
+				</view>
 		      </swiper-item>
 		    </swiper>
 		  </view>
 		  
-		<tab-bar :activeTab="tab"></tab-bar>
+		<tab-bar :tab="tab"></tab-bar>
 	</view>
 </template>
 
@@ -34,11 +46,13 @@
 import TabBar from '/components/tabbar/tabbar.vue';
 import TabSwiper from "/components/tabSwiper/tabSwiper.vue";
 import QBlock from '/components/QBlock/QBlock.vue';
+import QBlock2 from '/components/QBlock2/QBlock2.vue';
 export default {
   components: {
     TabBar,
 	TabSwiper,
-	QBlock
+	QBlock,
+	QBlock2
   },
   onLoad: function (options) {
 	this.tab=options.tab
@@ -51,9 +65,10 @@ export default {
 		text1:'我创建的',
 		text2:"我填写的",
 		title:"关于早八是否会被饿死调查",
-		text:"答卷数量",
 		isPush:true,
-		number:2
+		number:2,
+		isEnd:true,
+		name:'尘'
   	}
   },
     methods: {
@@ -130,8 +145,10 @@ export default {
 	  height: 100%;
 	  width: 100vw;
 	  display: flex;
-	  justify-content: center;
-	  
+	  flex-direction: column;
+	  align-items: center;
+	  gap: 3%;
+	  overflow-y: scroll;
 	}
 	
 	.tabSwiper {
