@@ -7,7 +7,7 @@
 			<form @submit.prevent="submitForm" class="Form">
 			    <div>
 			      <label class="Label">邮箱：</label>
-			      <input type="text"  class="Input" v-model="formData.username" required>
+			      <input type="text"  class="Input" v-model="formData.email" required>
 			    </div>
 			    <div>
 			      <label class="Label">密码：</label>
@@ -17,9 +17,13 @@
 					<label class="Label" id="Confirm">确认密码：</label>
 					<input type="password" class="Input" v-model="formData.confirm" required>
 				</div>
-				
+				<div id="getcode">
+					<label class="Label">验证码:</label>
+					<input type="password" class="Input" v-model="formData.verification" required>
+					<button>获取验证码</button>
+				</div>
 				<div class="buttonGroup">
-			    <button type="submit" @tap="submitForm">注册</button>
+			    <button :class="{'active': isFill,'notlogin': !isFill}" :disabled="!isFill" type="submit" @tap="submitForm">注册</button>
 				<button @tap="Login" class="link">已有账户？立即登录</button>
 				</div>
 			  </form>
@@ -32,11 +36,19 @@
 		data() {
 			return {
 				formData: {
-				        username: '',
+						email:    '',
+				        username: '131',
 				        password: '',
-						confirm:  ''
+						 confirm: '',
+					verification: ''
 				      }
 			};
+		},
+		computed: {
+			isFill(){
+				return this.formData.email !== '' && this.formData.username !== '' && this.formData.password !== '' 
+					   && this.formData.confirm !== '' && this.formData.verification !== '';
+			}
 		},
 		methods: {
 		    submitForm() {
@@ -75,11 +87,27 @@
 		opacity: 1;
 		background: url('/static/index/bg.png') center center / 225% 130% no-repeat,  linear-gradient(225deg, rgba(230, 247, 255, 1) 0%, rgba(255, 254, 247, 1) 38.89%, rgba(233, 229, 254, 1) 67.78%, rgba(230, 224, 250, 1) 100%);
 	}
+	button {
+		background-color: red;
+		margin-top: 20px;
+		transition: transform 0.5s;
+	}
+	.buttonGroup :hover {
+		/* 悬浮效果 */
+		transform: translateY(-2px);
+		/*盒子阴影*/ 
+		box-shadow: 0px 5px 10px 4px rgba(200, 196, 218, 50); 
+	}
+	.buttonGroup .notlogin {
+		color: #000;
+		background-color: rgba(216, 214, 219, 100);
+	}
 	#confirmDiv input{
-		width: 146px;
+		width: 180px;
 	}
 	#Confirm{
 		width: 80px;
+		margin-left: 0px;
 	}
 	form {
 		display: flex;
@@ -90,20 +118,23 @@
 	form div {
 		margin-top: 20px;
 	}
-	form button {
-		background-color: rgba(216, 214, 219, 100);
-		margin-top: 20px;
-		transition: transform 0.5s;
+	#getcode {
+		display: table;
+		width: 100%;
 	}
-	form .link {
-		margin-top: 5px;
-		font-size: 14px;
+	#getcode button{
+		display: table-cell;
+		font-size: 5px;
+		width: 100px;
+		background-color: rgba(216, 214, 219, 20);
 	}
-	.buttonGroup :hover {
-		/* 悬浮效果 */
-		transform: translateY(-2px);
-		/*盒子阴影*/ 
-		box-shadow: 0px 5px 10px 4px rgba(200, 196, 218, 50); 
+	#getcode label{
+		width: 60px;
+		margin-left: 0px;
+		vertical-align: top;
+	}
+	#getcode input {
+		width: 100px;
 	}
 	.Input {
 		display: inline-block;
@@ -112,6 +143,7 @@
 		border-left: 0px;
 		border-right: 0px;
 		vertical-align: top;
+		width: 212px;
 	}
 	.Input :focus{
 		border-bottom: 5px solid rgba(200, 196, 218, 50);
@@ -119,7 +151,11 @@
 	.Label {
 		display: inline-block;
 		width: 48px;
-		text-align: right;
+		text-align: left;
+	}
+	.link {
+		margin-top: 5px;
+		font-size: 14px;
 	}
 	.title {
 		display: flex;
