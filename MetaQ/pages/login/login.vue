@@ -54,7 +54,8 @@ import axios from 'axios';
 		              console.log(error);
 		            });
 				
-		    },checkEmail(){
+		    },
+			checkEmail(){
 				const emailPattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 				this.trueEmail = emailPattern.test(this.formData.email);
 			},

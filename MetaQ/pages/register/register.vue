@@ -50,6 +50,7 @@ import axios from 'axios';
 				active:true,
 				getCodeText:"获取验证码",
 				trueEmail:false,
+				code:" "
 			};
 		},
 		computed: {
@@ -66,18 +67,23 @@ import axios from 'axios';
 		},
 		methods: {
 		    submitForm() {
-		        axios.post('http://localhost:8080/register', {
-				  username:this.formData.username,
-		          email: this.formData.email,
-		      	password: this.formData.password
-		      	})
-		        .then(response => {
-					this.token = response.data;
-					console.log(this.token);
-				})
-				.catch(error => {
-		            console.log(error);
-				});
+				if(this.code == this.formData.verification){
+					axios.post('http://localhost:8080/register', {
+					  username:this.formData.username,
+					  email: this.formData.email,
+					password: this.formData.password
+					})
+					.then(response => {
+						this.token = response.data;
+						console.log(this.token);
+					})
+					.catch(error => {
+					    console.log(error);
+					});
+				}else{
+					alert("验证码错误!");
+				}
+		        
 		        //console.log(this.formData);
 		    },
 			Login(){
@@ -86,6 +92,16 @@ import axios from 'axios';
 				})
 			},
 			startTime(){
+				axios.post('http://localhost:8080/getcode', {
+				  email: this.formData.email
+				})
+				.then(response => {
+					this.code = response.data;
+					console.log(this.code);
+				})
+				.catch(error => {
+				    console.log(error);
+				});
 				var time = 3;
 				this.active = false;
 				this.getCodeText = time;

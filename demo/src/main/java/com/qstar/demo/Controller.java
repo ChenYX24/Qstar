@@ -47,6 +47,22 @@ public class Controller {
         result = userService.GetUserByEmail(email);
         return result;
     }
+    @RequestMapping("/getcode")
+    public String getcode(@RequestBody String json){
+        EmailSender emailSender = new EmailSender();
+        System.out.println(json);
+        String code = " ";
+        String email = userio.getKeyValueofJson(json, "email");
+        code = emailSender.sendcode(email);
+        System.out.println(code);
+        return code;
+    }
+    @RequestMapping("/test")
+    public void test(){
+        // EmailSender emailSender = new EmailSender();
+        // String test = emailSender.sendcode("1835208239@qq.com");
+        // System.out.println(test);
+    }
     @RequestMapping("/get")
     public void getuser(){
         Runnable task = () -> {

@@ -28,7 +28,6 @@ public class DataIO {
         try {
             String result = " ";
             result = objectMapper.writeValueAsString(object) + "\n";
-            System.out.println(result);
             FileWriter fileWriter = new FileWriter(this.path,true);
             fileWriter.write(result);
             fileWriter.close();
@@ -46,12 +45,9 @@ public class DataIO {
                 JsonNode nodekey = node.get(key);
                 String temp = " ";
                 if(nodekey != null){
-                    System.out.println("nodekey != null");
                     temp = nodekey.asText();
-                    System.out.println(temp);
                     if(temp.hashCode() == value.hashCode()){
                         reader.close();
-                        System.out.println("return id");
                         return node.get("_id").asInt();
                     }
                 }
@@ -113,7 +109,6 @@ public class DataIO {
                 line = reader.readLine();
             }
             reader.close();
-            System.out.println("maxid= " + maxid);
             return maxid;
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -129,9 +124,7 @@ public class DataIO {
                 JsonNode node = objectMapper.readTree(line);
                 int temp = node.get("_id").asInt();
                 Vector<String> buffer = new Vector<String>();
-                System.out.println(line);
                 if(temp == id){
-                    System.out.println(id);
                     long pos = file.getFilePointer();
                     int length = 0;
                     while(line != null){
@@ -165,7 +158,6 @@ public class DataIO {
                         file.writeByte(chars[i]);
                     }
                     file.writeByte('"'); file.writeByte('}'); file.writeByte('\n');
-                    System.out.println(buffer.size());
                     for(int i = 0;i < buffer.size() - 1;i++){
                         String data = buffer.elementAt(i);
                         char Chars[] = data.toCharArray();
