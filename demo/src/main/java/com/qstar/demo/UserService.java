@@ -14,7 +14,7 @@ public class UserService {
     // UserService(JdbcTemplate jdbcTemplate){
     //     this.jdbcTemplate = jdbcTemplate;
     // }
-	private String path = "user.json";
+	String path = "user.json";
 	@Autowired
 	DataIO userio;
 	UserService(String Path){
@@ -24,7 +24,6 @@ public class UserService {
 	public void SaveUser(User user){
 		// String sql = "INSERT INTO users(NAME,EMAIL,PASSWD) VALUES (?,?,?)";
 		// this.jdbcTemplate.update(sql,user.get_name(), user.get_email(),user.get_passwd());
-		userio = new DataIO(path);
 		user.set_id(userio.getMaxId() + 1);
 		System.out.println("userid= " + user.get_id());
 		userio.writeObject(user);
@@ -37,7 +36,6 @@ public class UserService {
 		// User user = users.isEmpty() ? null : users.get(0);
 		// ObjectMapper objectMapper = new ObjectMapper();
 		// result = objectMapper.writeValueAsString(user);
-		userio = new DataIO(path);
 		int id = userio.getIDofObject("_email", Email);
 		result = userio.getJsonById(id);
 		return result;
@@ -47,7 +45,6 @@ public class UserService {
 		// String sql = "SELECT * FROM users WHERE EMAIL = ?";
 		// List<User> users = this.jdbcTemplate.query(sql, new UserMapper(), new Object[]{Email});
 		// User user = users.isEmpty() ? null : users.get(0);
-		userio = new DataIO(path);
 		result = userio.getJsonById(id);
 		return result;
 	}
@@ -55,7 +52,6 @@ public class UserService {
 	public void ChangePasswdByEmail(String Email,String passwd){
 		// String sql = "update users set PASSWD = ? where EMAIL = ?";
 		// this.jdbcTemplate.update(sql,passwd,email);
-		userio = new DataIO(path);
 		int id = userio.getIDofObject("_email", Email);
 		userio.changePasswdById(id,passwd);
 	}

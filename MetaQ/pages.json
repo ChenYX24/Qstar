@@ -63,6 +63,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/findPasswd/findPasswd",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationStyle": "custom"
