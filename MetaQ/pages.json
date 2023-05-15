@@ -63,7 +63,6 @@
             }
             
         }
-
         ,{
 
             "path" : "pages/findPasswd/findPasswd",
@@ -86,8 +85,6 @@
             }
             
         }
-
-
     ],
 	"globalStyle": {
 		"navigationStyle": "custom"
