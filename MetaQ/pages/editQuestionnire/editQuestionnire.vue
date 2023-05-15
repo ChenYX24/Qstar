@@ -51,6 +51,7 @@
 	    },
 		methods:{
 			test(e){
+				
 					this.h1=`${e.detail.height}px`
 					// const textarea = this.$refs.textareaDom;
 					// const lines = textarea.value.split(/\r\n|\r|\n/).length;
