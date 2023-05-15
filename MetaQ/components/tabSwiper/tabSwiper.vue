@@ -5,9 +5,7 @@
       :class="{ 'tab-active': currentTab === 0 }"
       @tap="switchTab(0)"
     >
-
 		{{text1}}
-
       <view v-if="currentTab === 0" class="active-dot"></view>
 	  <view v-else class="dot"></view>
     </view>
@@ -16,9 +14,7 @@
       :class="{ 'tab-active': currentTab === 1 }"
       @tap="switchTab(1)"
     >
-
       	{{text2}}
-
       <view v-if="currentTab === 1" class="active-dot" ></view>
 	  <view v-else class="dot"></view>
     </view>
