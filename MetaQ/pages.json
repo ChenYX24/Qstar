@@ -64,7 +64,20 @@
             
         }
         ,{
+<<<<<<< Updated upstream
             "path" : "pages/findPasswd/findPasswd",
+=======
+            "path" : "pages/try/try",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/edit_questionnire/edit_questionnire",
+>>>>>>> Stashed changes
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "",
