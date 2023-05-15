@@ -57,6 +57,18 @@ public class Controller {
         System.out.println(code);
         return code;
     }
+    @RequestMapping("/changepasswd")
+    public String changepasswd(@RequestBody String json){
+        String success = "false";
+        String passwd = userio.getKeyValueofJson(json, "password");
+        String email = userio.getKeyValueofJson(json, "email");
+        userService.ChangePasswdByEmail(email, passwd);
+        String userjson = userService.GetUserByEmail(email);
+        if(userio.getKeyValueofJson(userjson, "_passwd").hashCode() == passwd.hashCode()){
+            success = "true";
+        }
+        return success;
+    }
     @RequestMapping("/test")
     public void test(){
         // EmailSender emailSender = new EmailSender();
