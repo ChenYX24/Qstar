@@ -5,14 +5,19 @@
 				Login
 			</view>
 			<form @submit.prevent="submitForm" class="Form">
-			    <div>
-			      <label class="Label">邮箱：</label>
-			      <input type="email" :class="{'Input':trueEmail,'errorWrite':!trueEmail}" v-model="formData.email" @input="checkEmail" required>
-			    </div>
-			    <div>
-			      <label class="Label">密码：</label>
-			      <input type="password" class="Input" v-model="formData.password" required>
-			    </div>
+				<div class="temp">
+					<div>
+					  <label class="Label">邮箱：</label>
+					  <input type="email" placeholder="输入关键词" :class="{'Input':trueEmail,'errorWrite':!trueEmail}" v-model="formData.email" @input="checkEmail" required>
+					</div>
+				</div>
+			    <div class="temp">
+					<div>
+					  <label class="Label">密码：</label>
+					  <input type="password" class="Input" v-model="formData.password" required>
+					</div>
+				</div>
+			    
 				<div class="buttonGroup">
 			    <button :class="{'active': isFill,'notlogin': !isFill}" :disabled="!isFill" type="submit" @tap="submitForm">登录</button>
 				<button @click="Register" class="link">没有账户？点此注册</button>
@@ -112,8 +117,11 @@ import axios from 'axios';
 		justify-content: center;
 		align-items: center;
 	}
-	form div {
+	.temp{
 		margin-top: 20px;
+	}
+	form div {
+		//margin-top: 20px;
 	}
 	form .link {
 		margin-top: 5px;

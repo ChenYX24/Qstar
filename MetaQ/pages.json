@@ -63,6 +63,28 @@
             }
             
         }
+        ,{
+
+            "path" : "pages/findPasswd/findPasswd",
+
+            "path" : "pages/try/try",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/edit_questionnire/edit_questionnire",
+
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationStyle": "custom"

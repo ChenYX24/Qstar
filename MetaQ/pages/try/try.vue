@@ -7,8 +7,7 @@
 						  :style="{ height: h1 }"
 						  name="title"
 						  placeholder="请输入问卷标题"
-						  @linechange="test"
-						  ></textarea>
+						  @input="test"></textarea>
 
 			</view>
 			<view class="textarea_border">
@@ -42,38 +41,21 @@
 				tab: '',
 				textareaDom:null,
 				h1:null,
-				// textareaDom: null
+				textareaDom: null
 				// lineheight:0
 			}
 		},
  	    mounted() {
-		  // this.textareaDom = this.$refs.textareaDom;
+		  this.textareaDom = this.$refs.textareaDom;
 	    },
 		methods:{
-			test(e){
-				
-					this.h1=`${e.detail.height}px`
-					// const textarea = this.$refs.textareaDom;
-					// const lines = textarea.value.split(/\r\n|\r|\n/).length;
-					// const lineHeight = parseInt(getComputedStyle(this.textareaDom).lineHeight, 10);
-					// this.h1 = `${lines * lineHeight}px`;
-					// const textarea = this.$refs.textarea;
-					// if(textarea)
-					// {
-					// console.log(textarea.style)
-					// }
-
-					// console.log(`${e.detail.height}px`)
-					// var node=document.getElementById(e.currentTarget.id)
-					// console.log(node)
-					// const lines = node.value.split(/\r\n|\r|\n/).length;
-					// const lineHeight = parseInt(getComputedStyle(node).lineHeight, 10);
-					// node.style.height = `${lines * lineHeight}px`;
-					
-				
-			},
+			test(){
+				const textarea = this.$refs.textareaDom;
+				const lines = textarea.value.split(/\r\n|\r|\n/).length;
+				const lineHeight = parseInt(getComputedStyle(textarea).lineHeight, 10);
+				this.h1 = `${lines * lineHeight}px`;
+			}
 		}
-
 	};
 </script>
 
