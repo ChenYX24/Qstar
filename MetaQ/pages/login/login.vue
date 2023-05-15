@@ -16,7 +16,6 @@
 				<div class="buttonGroup">
 			    <button :class="{'active': isFill,'notlogin': !isFill}" :disabled="!isFill" type="submit" @tap="submitForm">登录</button>
 				<button @click="Register" class="link">没有账户？点此注册</button>
-				<button @click="Findpasswd" class="link">忘记密码？点此找回</button>
 				</div>
 			  </form>
 		</view>
@@ -63,11 +62,6 @@ import axios from 'axios';
 			Register(){
 				uni.navigateTo({
 					url:"/pages/register/register"
-				})
-			},
-			Findpasswd(){
-				uni.navigateTo({
-					url:"/pages/findPasswd/findPasswd"
 				})
 			}
 		  }

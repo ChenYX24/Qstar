@@ -63,10 +63,11 @@
             }
             
         }
+
         ,{
-<<<<<<< Updated upstream
+
             "path" : "pages/findPasswd/findPasswd",
-=======
+
             "path" : "pages/try/try",
             "style" :                                                                                    
             {
@@ -77,7 +78,7 @@
         }
         ,{
             "path" : "pages/edit_questionnire/edit_questionnire",
->>>>>>> Stashed changes
+
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "",
@@ -85,6 +86,8 @@
             }
             
         }
+
+
     ],
 	"globalStyle": {
 		"navigationStyle": "custom"
