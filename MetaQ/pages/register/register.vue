@@ -4,33 +4,30 @@
 			<view class="title">
 				Register
 			</view>
-			<form @submit.prevent="submitForm" class="Form">
-				<div id="username">
-				  <label class="Label">用户名：</label>
-				  <input type="text"  class="Input" v-model="formData.username" required>
+			<form class="Form">
+				<div class="Input-margin">
+					<input type="text" placeholder="请输入用户名" placeholder-style="color: rgba(187, 187, 199, 1);text-align: center;" class="Input" v-model="formData.username" required>
 				</div>
-			    <div>
-			      <label class="Label">邮箱：</label>
-			      <input type="email" :class="{'Input':trueEmail,'errorWrite':!trueEmail}" v-model="formData.email" @input="checkEmail" required>
-			    </div>
-			    <div>
-			      <label class="Label">密码：</label>
-			      <input type="password" :class="{'Input':isSame,'errorWrite':!isSame}" v-model="formData.password" required>
-			    </div>
-				<div id="confirmDiv">
-					<label class="Label" id="Confirm">确认密码：</label>
-					<input type="password" :class="{'Input':isSame,'errorWrite':!isSame}" v-model="formData.confirm" required>
+				<div class="Input-margin">
+					<input type="email" placeholder="请输入邮箱" placeholder-style="color: rgba(187, 187, 199, 1);text-align: center;" :class="{'Input':trueEmail,'errorWrite':!trueEmail}" v-model="formData.email" @input="checkEmail" required>
 				</div>
-				<div id="getcode">
-					<label class="Label">验证码:</label>
-					<input type="text" class="Input" v-model="formData.verification" required>
-					<button :disabled="!enableGetcode" @tap="startTime">{{ getCodeText }}</button>
+			    <div class="Input-margin">
+					<input type="password" placeholder="请输入密码" placeholder-style="color: rgba(187, 187, 199, 1);text-align: center;" :class="{'Input':isSame,'errorWrite':!isSame}" v-model="formData.password" required>
+				</div>
+			    <div class="Input-margin">
+					<input type="password" placeholder="请再次输入密码" placeholder-style="color: rgba(187, 187, 199, 1);text-align: center;" :class="{'Input':isSame,'errorWrite':!isSame}" v-model="formData.confirm" required>
+				</div>
+				<div id="gbutton">
+					<div id="getcode">
+						<input type="text" placeholder="请输入验证码" placeholder-style="color: rgba(187, 187, 199, 1);text-align: center;" class="Input" v-model="formData.verification" required>
+					</div>
+					<view @tap="startTime">{{ getCodeText }}</view>
 				</div>
 				<div class="buttonGroup">
-			    <button :class="{'active': isFill,'notlogin': !isFill}" :disabled="!isFill" type="submit" @tap="submitForm">注册</button>
+			    <button :class="{'active': isFill,'inactive': !isFill}" :disabled="!isFill" type="submit" @tap="submitForm">注册</button>
 				<button @tap="Login" class="link">已有账户？立即登录</button>
 				</div>
-			  </form>
+			</form>
 		</view>
 	</view>
 </template>
@@ -49,8 +46,9 @@ import axios from 'axios';
 				      },
 				active:true,
 				getCodeText:"获取验证码",
-				trueEmail:false,
-				code:" "
+				trueEmail:true,
+				code:"123456",
+				check:false
 			};
 		},
 		computed: {
@@ -83,8 +81,6 @@ import axios from 'axios';
 				}else{
 					alert("验证码错误!");
 				}
-		        
-		        //console.log(this.formData);
 		    },
 			Login(){
 				uni.navigateTo({
@@ -92,31 +88,34 @@ import axios from 'axios';
 				})
 			},
 			startTime(){
-				axios.post('http://localhost:8080/getcode', {
-				  email: this.formData.email
-				})
-				.then(response => {
-					this.code = response.data;
-					console.log(this.code);
-				})
-				.catch(error => {
-				    console.log(error);
-				});
-				var time = 3;
-				this.active = false;
-				this.getCodeText = time;
-				const intervalId = setInterval(() => {
-				        time--;
-				        if (time === 0) {
-				          clearInterval(intervalId);
-				          this.active = true;
-				          this.getCodeText = "获取验证码";
-				        } else {
-				          this.getCodeText = time;
-				        }
-				      }, 1000);
+				if(this.enableGetcode && this.check){
+					axios.post('http://localhost:8080/getcode', {
+					  email: this.formData.email
+					})
+					.then(response => {
+						this.code = response.data;
+						console.log(this.code);
+					})
+					.catch(error => {
+					    console.log(error);
+					});
+					var time = 30;
+					this.active = false;
+					this.getCodeText = time;
+					const intervalId = setInterval(() => {
+					        time--;
+					        if (time === 0) {
+					          clearInterval(intervalId);
+					          this.active = true;
+					          this.getCodeText = "获取验证码";
+					        } else {
+					          this.getCodeText = time;
+					        }
+					      }, 1000);
+				}
 			},
 			checkEmail(){
+				this.check = true;
 				const emailPattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 				this.trueEmail = emailPattern.test(this.formData.email);
 			}
@@ -149,25 +148,14 @@ import axios from 'axios';
 	}
 	button {
 		background-color: red;
-		margin-top: 20px;
-		transition: transform 0.5s;
 	}
-	.buttonGroup :hover {
-		/* 悬浮效果 */
-		transform: translateY(-2px);
-		/*盒子阴影*/ 
-		box-shadow: 0px 5px 10px 4px rgba(200, 196, 218, 50); 
+	.buttonGroup {
+		margin-top: 3vh;
+		width: 65vw;
 	}
-	.buttonGroup .notlogin {
+	.buttonGroup .inactive {
 		color: #000;
 		background-color: rgba(216, 214, 219, 100);
-	}
-	#confirmDiv input{
-		width: 180px;
-	}
-	#Confirm{
-		width: 80px;
-		margin-left: 0px;
 	}
 	form {
 		display: flex;
@@ -175,56 +163,61 @@ import axios from 'axios';
 		justify-content: center;
 		align-items: center;
 	}
-	form div {
-		margin-top: 20px;
-	}
 	#getcode {
-		display: table;
-		width: 100%;
+		display: inline-block;
 	}
-	#getcode button{
-		display: table-cell;
-		font-size: 5px;
-		width: 100px;
-		background-color: rgba(216, 214, 219, 20);
-	}
-	#getcode label{
-		width: 60px;
-		margin-left: 0px;
+	#getcode input{
+		display: inline-block;
+		text-align: center;
 		vertical-align: top;
+		border: 1px solid rgba(0,0,0,0.6);
+		border-radius: 10px;
+		width: 35vw;
+		height: 3vw;
 	}
-	#getcode input {
-		width: 100px;
+	#getcode input:focus-within {
+		border: 1px solid rgba(200, 196, 218, 50);
+	}
+	#gbutton{
+		margin-top:3vh;
+		display: flex;
+	}
+	#gbutton view{
+		text-align: center;
+		background-color: rgba(216, 214, 219, 100);
+		width: 30vw;
+		height: 6vw;
 	}
 	.Input {
 		display: inline-block;
-		border-bottom: 2px solid #000;
-		border-top: 0px;
-		border-left: 0px;
-		border-right: 0px;
+		text-align: center;
 		vertical-align: top;
-		width: 212px;
+		border: 1px solid rgba(0,0,0,0.6);
+		border-radius: 10px;
+		width: 65vw;
+		height: 3vh;
 	}
 	.Input:focus-within{
-		border-bottom: 2px solid rgba(200, 196, 218, 50)!important;
+		border: 1px solid rgba(200, 196, 218, 50);
+		border-radius: 10px;
 	}
 	.errorWrite {
 		display: inline-block;
-		border-bottom: 2px solid rgba(255, 0, 0, 0.3);
-		border-top: 0px;
-		border-left: 0px;
-		border-right: 0px;
+		text-align: center;
 		vertical-align: top;
-		width: 212px;
+		border: 1px solid red;
+		border-radius: 10px;
+		width: 65vw;
+		height: 3vh;
 	}
 	.errorWrite:focus-within {
-		border-bottom: 2px solid rgba(200, 196, 218, 50);
+		border: 2px solid rgba(200, 196, 218, 50);
+		border-radius: 10px;
 	}
-	.Label {
-		display: inline-block;
-		width: 48px;
-		text-align: left;
+	.Input-margin {
+		margin-top: 3vh;
 	}
+	
 	.link {
 		margin-top: 5px;
 		font-size: 14px;
@@ -242,15 +235,5 @@ import axios from 'axios';
 		text-align: center;
 		vertical-align: top;
 		font-family: 'ali', sans-serif;
-	}
-	#username label{
-		width: 64px;
-		margin-left: 0px;
-		vertical-align: top;
-	}
-	#username input{
-		width: 196px;
-		margin-left: 0px;
-		vertical-align: top;
 	}
 </style>
