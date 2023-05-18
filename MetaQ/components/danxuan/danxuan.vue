@@ -1,6 +1,6 @@
 <template>
-	<view>
-		
+	<view class="danxuan">
+
 	</view>
 </template>
 

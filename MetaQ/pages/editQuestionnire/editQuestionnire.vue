@@ -128,31 +128,23 @@
 					// this.show=0;
 			},
 			generateQuestion(e){
-				var type_num=parseInt(e.currentTarget.id);
+				// var type_num=parseInt(e.currentTarget.id);
 				// var questionnire_page=document.getElementById('questionnire_page');
 				this.question_page_show=0;
 				this.questionnire_page_show=0;
 				// this.show=1;
-				this.creat(type_num)
+				this.creat(parseInt(e.currentTarget.id));
 			},
 			creat(type_num){
 				var input_class_block=document.getElementById('input_class_block')
 				switch(type_num){
 					//单选题
 					case 0:
-					// console.log(this.num_q)
-						// var temp=document.createElement('view'{
-						// 	class:'danxuan',
-						// 	id:`duanxuan${name_q[0]}`
-						// });
 						var temp=document.createElement('view')
 						temp.setAttribute('class', 'danxuan');
 						temp.setAttribute('id', `duanxuan${this.num_q[0]}`);
 						this.setQuestionStyle(temp)
 						input_class_block.appendChild(temp);
-						// document.body.appendChild(temp);
-						// console.log(temp);
-						
 						break;
 					case 1:
 						break;

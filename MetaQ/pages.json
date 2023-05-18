@@ -62,25 +62,16 @@
                 "enablePullDownRefresh": false
             }
             
-        }
-
-
-
-
-
-        ,{
+        },
+		{
             "path" : "components/danxuan/danxuan",
-
-        {
-            "path" : "pages/edit_questionnire/edit_questionnire",
-
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
+			"style" :
+			    {
+			        "navigationBarTitleText": "",
+			        "enablePullDownRefresh": false
+			    }
+			    
+		}
         ,{
             "path" : "pages/findPasswd/findPasswd",
 
