@@ -9,6 +9,8 @@ import java.util.Scanner;
 @RestController
 public class Controller {
     @Autowired
+    EmailSender emailSender;
+    @Autowired
     UserService userService;
     @Autowired
     DataIO userio;
@@ -47,15 +49,24 @@ public class Controller {
         result = userService.GetUserByEmail(email);
         return result;
     }
-    @RequestMapping("/getcode")
-    public String getcode(@RequestBody String json){
-        EmailSender emailSender = new EmailSender();
+    @RequestMapping("/sendcode")
+    public String sendcode(@RequestBody String json){
         System.out.println(json);
-        String code = " ";
+        String success = "false";
         String email = userio.getKeyValueofJson(json, "email");
-        code = emailSender.sendcode(email);
-        System.out.println(code);
-        return code;
+        emailSender.sendcode(email);
+        success = "true";
+        return success;
+    }
+    @RequestMapping("/checkcode")
+    public String checkcode(@RequestBody String json){
+        System.out.println(json);
+        String success = "false";
+        String email = userio.getKeyValueofJson(json, "email");
+        String code = userio.getKeyValueofJson(json, "code");
+        success = emailSender.checkcode(email, code);
+        System.out.println(success);
+        return success;
     }
     @RequestMapping("/changepasswd")
     public String changepasswd(@RequestBody String json){

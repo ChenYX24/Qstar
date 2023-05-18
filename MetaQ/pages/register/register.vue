@@ -47,7 +47,7 @@ import axios from 'axios';
 				active:true,
 				getCodeText:"获取验证码",
 				trueEmail:true,
-				code:"123456",
+				code:"",
 				check:false
 			};
 		},
@@ -65,22 +65,33 @@ import axios from 'axios';
 		},
 		methods: {
 		    submitForm() {
-				if(this.code == this.formData.verification){
-					axios.post('http://localhost:8080/register', {
-					  username:this.formData.username,
-					  email: this.formData.email,
-					password: this.formData.password
-					})
-					.then(response => {
-						this.token = response.data;
-						console.log(this.token);
-					})
-					.catch(error => {
-					    console.log(error);
-					});
-				}else{
-					alert("验证码错误!");
-				}
+				axios.post('http://localhost:8080/checkcode', {
+				  email: this.formData.email,
+				  code:  this.formData.verification
+				})
+				.then(response => {
+					if(response.data == true){
+						axios.post('http://localhost:8080/register', {
+						  username:this.formData.username,
+						  email: this.formData.email,
+						password: this.formData.password
+						})
+						.then(response => {
+							this.token = response.data;
+							console.log(this.token);
+						})
+						.catch(error => {
+						    console.log(error);
+						});
+					}
+					else{
+						alert("验证码错误!");
+					}
+				})
+				.catch(error => {
+				    console.log(error);
+				});
+					
 		    },
 			Login(){
 				uni.navigateTo({
@@ -89,12 +100,13 @@ import axios from 'axios';
 			},
 			startTime(){
 				if(this.enableGetcode && this.check){
-					axios.post('http://localhost:8080/getcode', {
+					axios.post('http://localhost:8080/sendcode', {
 					  email: this.formData.email
 					})
 					.then(response => {
-						this.code = response.data;
-						console.log(this.code);
+						if(response.data == false){
+							alert("获取验证码失败!");
+						}
 					})
 					.catch(error => {
 					    console.log(error);

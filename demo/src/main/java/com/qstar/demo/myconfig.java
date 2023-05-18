@@ -34,4 +34,8 @@ public class myconfig {
     public DataIO userio(){
         return new DataIO("user.json");
     }
+    @Bean
+    public EmailSender emailSender(){
+        return new EmailSender();
+    }
 }
