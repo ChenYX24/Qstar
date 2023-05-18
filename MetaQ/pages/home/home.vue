@@ -144,7 +144,7 @@ export default {
 	flex-direction: column;
 	align-items: center;
 	width: 100vw;
-	height: calc(100vh - 15vh);
+	height: calc(100vh - 12vh);
 	position: relative;
 	top: 0;
 	left:0;

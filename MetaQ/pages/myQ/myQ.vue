@@ -5,7 +5,7 @@
 		</view>
 		<view class="inputBox">
 			<image src="/static/inputSearch/search.png" mode="aspectFill"></image>
-			<input type="text" placeholder="输入关键词" class="input" placeholder-style="color: rgba(187, 187, 199, 1);;" v-model="inputValue"> <!--v-model是双向绑定，将文本框的值与inputvalue绑定-->
+			<input type="text" placeholder="输入关键词" class="input" placeholder-style="color: rgba(187, 187, 199, 1);;" v-model="inputValue" @click="test"> <!--v-model是双向绑定，将文本框的值与inputvalue绑定-->
 		</view>
 		<view class="container">
 			<tab-swiper class="tabSwiper" @tab-change="handleTabChange" :current-tab="currentTab" :text1="text1" :text2="text2"/>
@@ -77,6 +77,9 @@ export default {
       },
 	  handleTabChange(index) {
 		this.currentTab = index;
+	  },
+	  test(e){
+		  console.log(e.target)
 	  }
     }
 

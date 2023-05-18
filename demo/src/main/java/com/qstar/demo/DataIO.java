@@ -122,7 +122,11 @@ public class DataIO {
             String line = file.readLine();
             while(line != null){
                 JsonNode node = objectMapper.readTree(line);
-                int temp = node.get("_id").asInt();
+                JsonNode nodeid = node.get("_id");
+                int temp = 0;
+                if(nodeid != null){
+                    temp = nodeid.asInt();
+                }
                 Vector<String> buffer = new Vector<String>();
                 if(temp == id){
                     long pos = file.getFilePointer();
@@ -181,7 +185,10 @@ public class DataIO {
         String result = "";
         try {
             JsonNode node = objectMapper.readTree(json);
-            result = node.get(key).asText();
+            JsonNode nodekey = node.get(key);
+            if(nodekey != null){
+                result = nodekey.asText();
+            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

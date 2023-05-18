@@ -5,16 +5,14 @@
 				Login
 			</view>
 			<form @submit.prevent="submitForm" class="Form">
-			    <div>
-			      <label class="Label">邮箱：</label>
-			      <input type="email" :class="{'Input':trueEmail,'errorWrite':!trueEmail}" v-model="formData.email" @input="checkEmail" required>
-			    </div>
-			    <div>
-			      <label class="Label">密码：</label>
-			      <input type="password" class="Input" v-model="formData.password" required>
-			    </div>
+				<div class="Input-margin">
+					<input type="email" placeholder="请输入邮箱" :class="{'Input':trueEmail,'errorWrite':!trueEmail}" v-model="formData.email" @input="checkEmail" required>
+				</div>
+			    <div class="Input-margin">
+					<input type="password" placeholder="请输入密码" class="Input" v-model="formData.password" required>
+				</div>
 				<div class="buttonGroup">
-			    <button :class="{'active': isFill,'notlogin': !isFill}" :disabled="!isFill" type="submit" @tap="submitForm">登录</button>
+			    <button :class="{'active': isFill,'inactive': !isFill}" :disabled="!isFill" type="submit" @tap="submitForm">登录</button>
 				<button @click="Register" class="link">没有账户？点此注册</button>
 				</div>
 			  </form>
@@ -32,7 +30,7 @@ import axios from 'axios';
 				        password: ""
 				      },
 				token:"",
-				trueEmail:""
+				trueEmail:true,
 			};
 		},
 		computed: {
@@ -93,16 +91,12 @@ import axios from 'axios';
 	}
 	button {
 		background-color: red;
-		margin-top: 20px;
-		transition: transform 0.5s;
 	}
-	.buttonGroup :hover {
-		/* 悬浮效果 */
-		transform: translateY(-2px);
-		/*盒子阴影*/ 
-		box-shadow: 0px 5px 10px 4px rgba(200, 196, 218, 50); 
+	.buttonGroup {
+		margin-top: 3vh;
+		width: 65vw;
 	}
-	.buttonGroup .notlogin {
+	.buttonGroup .inactive {
 		color: #000;
 		background-color: rgba(216, 214, 219, 100);
 	}
@@ -112,40 +106,39 @@ import axios from 'axios';
 		justify-content: center;
 		align-items: center;
 	}
-	form div {
-		margin-top: 20px;
-	}
-	form .link {
-		margin-top: 5px;
-		font-size: 14px;
-	}
-	
 	.Input {
 		display: inline-block;
-		border-bottom: 2px solid #000;
-		border-top: 0px;
-		border-left: 0px;
-		border-right: 0px;
+		text-align: center;
 		vertical-align: top;
+		border: 1px solid rgba(0,0,0,0.6);
+		border-radius: 10px;
+		width: 65vw;
+		height: 3vh;
 	}
-	.Input:focus-within {
-		border-bottom: 2px solid rgba(200, 196, 218, 50);
+	.Input:focus-within{
+		border: 1px solid rgba(200, 196, 218, 50);
+		border-radius: 10px;
 	}
 	.errorWrite {
 		display: inline-block;
-		border-bottom: 2px solid rgba(255, 0, 0, 0.3);
-		border-top: 0px;
-		border-left: 0px;
-		border-right: 0px;
+		text-align: center;
 		vertical-align: top;
+		border: 1px solid red;
+		border-radius: 10px;
+		width: 65vw;
+		height: 3vh;
 	}
 	.errorWrite:focus-within {
-		border-bottom: 2px solid rgba(200, 196, 218, 50);
+		border: 2px solid rgba(200, 196, 218, 50);
+		border-radius: 10px;
 	}
-	.Label {
-		display: inline-block;
-		width: 50px;
-		text-align: right;
+	.Input-margin {
+		margin-top: 3vh;
+	}
+	
+	.link {
+		margin-top: 5px;
+		font-size: 14px;
 	}
 	.title {
 		display: flex;

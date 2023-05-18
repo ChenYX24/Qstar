@@ -1,21 +1,18 @@
-<template>
++<template>
 	<view>
 		<view class="bg">
 			<view class="title">
-				Register
+				FindPasswd
 			</view>
 			<form class="Form">
-				<div class="Input-margin">
-					<input type="text" placeholder="请输入用户名" placeholder-style="color: rgba(187, 187, 199, 1);text-align: center;" class="Input" v-model="formData.username" required>
-				</div>
-				<div class="Input-margin">
-					<input type="email" placeholder="请输入邮箱" placeholder-style="color: rgba(187, 187, 199, 1);text-align: center;" :class="{'Input':trueEmail,'errorWrite':!trueEmail}" v-model="formData.email" @input="checkEmail" required>
-				</div>
 			    <div class="Input-margin">
-					<input type="password" placeholder="请输入密码" placeholder-style="color: rgba(187, 187, 199, 1);text-align: center;" :class="{'Input':isSame,'errorWrite':!isSame}" v-model="formData.password" required>
-				</div>
+			      <input type="email" placeholder="请输入邮箱" :class="{'Input':trueEmail,'errorWrite':!trueEmail}" v-model="formData.email" @input="checkEmail" required>
+			    </div>
 			    <div class="Input-margin">
-					<input type="password" placeholder="请再次输入密码" placeholder-style="color: rgba(187, 187, 199, 1);text-align: center;" :class="{'Input':isSame,'errorWrite':!isSame}" v-model="formData.confirm" required>
+			      <input type="password" placeholder="请输入新密码" :class="{'Input':isSame,'errorWrite':!isSame}" v-model="formData.password" required>
+			    </div>
+				<div class="Input-margin">
+					<input type="password" placeholder="请再次输入新密码" :class="{'Input':isSame,'errorWrite':!isSame}" v-model="formData.confirm" required>
 				</div>
 				<div id="gbutton">
 					<div id="getcode">
@@ -24,10 +21,9 @@
 					<view @tap="startTime">{{ getCodeText }}</view>
 				</div>
 				<div class="buttonGroup">
-			    <button :class="{'active': isFill,'inactive': !isFill}" :disabled="!isFill" type="submit" @tap="submitForm">注册</button>
-				<button @tap="Login" class="link">已有账户？立即登录</button>
+			    <button :class="{'active': isFill,'inactive': !isFill}" :disabled="!isFill" type="submit" @tap="changepasswd">修改密码</button>
 				</div>
-			</form>
+			  </form>
 		</view>
 	</view>
 </template>
@@ -39,7 +35,6 @@ import axios from 'axios';
 			return {
 				formData: {
 						email:"",
-				        username: '',
 				        password: '',
 						 confirm: '',
 					verification: ''
@@ -47,7 +42,8 @@ import axios from 'axios';
 				active:true,
 				getCodeText:"获取验证码",
 				trueEmail:true,
-				code:"",
+				code:"123456",
+				success:"",
 				check:false
 			};
 		},
@@ -64,34 +60,30 @@ import axios from 'axios';
 			}
 		},
 		methods: {
-		    submitForm() {
-				axios.post('http://localhost:8080/checkcode', {
-				  email: this.formData.email,
-				  code:  this.formData.verification
-				})
-				.then(response => {
-					if(response.data == true){
-						axios.post('http://localhost:8080/register', {
-						  username:this.formData.username,
-						  email: this.formData.email,
+		    changepasswd() {
+				if(this.code == this.formData.verification){
+					axios.post('http://localhost:8080/changepasswd', {
+						email:    this.formData.email,
 						password: this.formData.password
-						})
-						.then(response => {
-							this.token = response.data;
-							console.log(this.token);
-						})
-						.catch(error => {
-						    console.log(error);
-						});
-					}
-					else{
-						alert("验证码错误!");
-					}
-				})
-				.catch(error => {
-				    console.log(error);
-				});
-					
+					})
+					.then(response => {
+						console.log("响应值",response.data);
+						if(response.data == true){
+							alert("修改密码成功！");
+							uni.navigateTo({
+								url:"/pages/login/login"
+							})
+						}
+						else{
+							alert("修改密码失败！");
+						}
+					})
+					.catch(error => {
+					    console.log(error);
+					});
+				}else{
+					alert("验证码错误!");
+				}
 		    },
 			Login(){
 				uni.navigateTo({
@@ -99,35 +91,31 @@ import axios from 'axios';
 				})
 			},
 			startTime(){
-				if(this.enableGetcode && this.check){
-					axios.post('http://localhost:8080/sendcode', {
-					  email: this.formData.email
-					})
-					.then(response => {
-						if(response.data == false){
-							alert("获取验证码失败!");
-						}
-					})
-					.catch(error => {
-					    console.log(error);
-					});
-					var time = 30;
-					this.active = false;
-					this.getCodeText = time;
-					const intervalId = setInterval(() => {
-					        time--;
-					        if (time === 0) {
-					          clearInterval(intervalId);
-					          this.active = true;
-					          this.getCodeText = "获取验证码";
-					        } else {
-					          this.getCodeText = time;
-					        }
-					      }, 1000);
-				}
+				axios.post('http://localhost:8080/getcode', {
+				  email: this.formData.email
+				})
+				.then(response => {
+					this.code = response.data;
+					console.log(this.code);
+				})
+				.catch(error => {
+				    console.log(error);
+				});
+				var time = 3;
+				this.active = false;
+				this.getCodeText = time;
+				const intervalId = setInterval(() => {
+				        time--;
+				        if (time === 0) {
+				          clearInterval(intervalId);
+				          this.active = true;
+				          this.getCodeText = "获取验证码";
+				        } else {
+				          this.getCodeText = time;
+				        }
+				      }, 1000);
 			},
 			checkEmail(){
-				this.check = true;
 				const emailPattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 				this.trueEmail = emailPattern.test(this.formData.email);
 			}
