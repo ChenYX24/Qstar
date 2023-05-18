@@ -1,5 +1,6 @@
 <template>
 	<view class="background">
+		<view class="">
 		   <!-- 题型选择 -->
 		  <view id="tixing">
 			  <view class="titleBox" id="tixing_title">
@@ -9,21 +10,21 @@
 			  </view>
 		    
 		    <view class="square">
-		      <view class="square-part">
+		      <view class="square-part" @click="generateQuestion" id="0">
 				  <img src="/static/editQuestion/danxuan.png" alt="">
 				  <!-- <view class="square-part-word">单选题</view> -->
 				  <p>单选题</p>
 			  </view>
-		      <view class="square-part">
+		      <view class="square-part" @click="generateQuestion" id="1">
 				  <img src="/static/editQuestion/duoxuan.png" alt="">
 				  <!-- <view class="square-part-word">单选题</view> -->
 				  <p>多选题</p>
 			  </view>
-		      <view class="square-part">
+		      <view class="square-part" @click="generateQuestion" id="2">
 				  <img src="/static/editQuestion/tiankong.png" alt="">
 				  <p>填空题</p>
 			  </view>
-		      <view class="square-part">
+		      <view class="square-part" @click="generateQuestion" id="3">
 				  <img src="/static/editQuestion/huadongtiao.png" alt="">
 				  <p>滑动条</p>
 			  </view>
@@ -52,6 +53,7 @@
 				  </view>
 			  </view>
 		  </view>
+		</view>
 		<tab-bar :activeTab="tab"></tab-bar>
 	</view>
 </template>
@@ -59,17 +61,24 @@
 <script>
 import TabBar from '/components/tabbar/tabbar.vue';
 export default {
-  components: {
-    TabBar
-  },
-  onLoad: function (options) {
-	this.tab=options.tab
-  },
-  data() {
-  	return {
-  		tab: '',
-  	}
-  },
+	  components: {
+		TabBar
+	  },
+	  onLoad: function (options) {
+		this.tab=options.tab
+	  },
+	  data() {
+		return {
+			tab: '',
+		}
+	  },
+	  methods:{
+		  generateQuestion(e){
+			  var type_num=parseInt(e.currentTarget.id)
+			  // console.log(type_num)
+			  
+		  }
+	  }
   
 
 };

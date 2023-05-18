@@ -64,11 +64,11 @@
             
         }
 
+
+
+
         ,{
-
-            "path" : "pages/findPasswd/findPasswd",
-
-            "path" : "pages/try/try",
+            "path" : "components/danxuan/danxuan",
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "",
@@ -76,18 +76,6 @@
             }
             
         }
-        ,{
-            "path" : "pages/edit_questionnire/edit_questionnire",
-
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-
-
     ],
 	"globalStyle": {
 		"navigationStyle": "custom"
