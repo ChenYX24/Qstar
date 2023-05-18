@@ -21,7 +21,7 @@
 				</view>
 		      </swiper-item>
 		      <swiper-item>
-		        <view class="page2">
+<!-- 		        <view class="page2">
 					<QBlock2 :title="title" :isEnd="isEnd" :name="name"></QBlock2>
 					<QBlock2 :title="title" :isEnd="isEnd" :name="name"></QBlock2>
 					<QBlock2 :title="title" :isEnd="isEnd" :name="name"></QBlock2>
@@ -33,6 +33,10 @@
 					<QBlock2 :title="title" :isEnd="isEnd" :name="name"></QBlock2>
 					<QBlock2 :title="title" :isEnd="isEnd" :name="name"></QBlock2>
 					<QBlock2 :title="title" :isEnd="isEnd" :name="name"></QBlock2>
+					
+				</view> -->
+				<view class="page2">
+				  <QBlock2 v-for="item in blocks" :key="item.id" :title="item.title" :isEnd="item.isEnd" :name="item.name"></QBlock2>
 				</view>
 		      </swiper-item>
 		    </swiper>
@@ -68,7 +72,12 @@ export default {
 		isPush:true,
 		number:2,
 		isEnd:true,
-		name:'尘'
+		name:'尘',
+		blocks:[
+			{ id: 1, title: '关于早八是否会被饿死调查', isEnd: false, name: '尘' },
+		  { id: 2, title: 'Title 2', isEnd: false, name: '尘' },
+		  { id: 3, title: 'Title 3', isEnd: true, name: '尘' },
+		]
   	}
   },
     methods: {
