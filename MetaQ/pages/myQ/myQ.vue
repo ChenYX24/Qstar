@@ -35,8 +35,8 @@
 <script>
 import TabBar from '/components/tabbar/tabbar.vue';
 import TabSwiper from "/components/tabSwiper/tabSwiper.vue";
-import QBlock from '/components/QBlock/QBlock.vue';
-import QBlock2 from '/components/QBlock2/QBlock2.vue';
+import QBlock from '/components/myQ/QBlock/QBlock.vue';
+import QBlock2 from '/components/myQ/QBlock2/QBlock2.vue';
 export default {
   components: {
     TabBar,

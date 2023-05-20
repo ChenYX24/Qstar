@@ -44,16 +44,6 @@
             }
             
         }
-
-        ,{
-            "path" : "pages/editQuestion/editQuestion",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
         ,{
             "path" : "pages/editQuestionnire/editQuestionnire",
             "style" :                                                                                    
@@ -75,6 +65,15 @@
         ,{
             "path" : "pages/findPasswd/findPasswd",
 
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/analysis/analysis",
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "",

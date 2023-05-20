@@ -219,9 +219,12 @@
 
 	.questionnire_page{
 		    display: flex;
-		    flex-wrap: wrap;
 		    align-content: center;
-		    justify-content: center;
+			overflow-y: scroll;
+			height: 85%;
+			flex-direction: column;
+			align-items: center;
+			
 	}
 	
 	.input_class{
