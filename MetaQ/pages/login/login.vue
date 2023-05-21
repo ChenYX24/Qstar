@@ -5,15 +5,22 @@
 				Login
 			</view>
 			<form @submit.prevent="submitForm" class="Form">
-				<div class="Input-margin">
-					<input type="email" placeholder="请输入邮箱" :class="{'Input':trueEmail,'errorWrite':!trueEmail}" v-model="formData.email" @input="checkEmail" required>
+				<div :class="{'Input-margin':trueEmail,'errorWrite':!trueEmail}">
+					<label class="label">邮箱：</label>
+					<input type="email" placeholder="请输入邮箱" class="Input" maxlength="20" v-model="formData.email" @input="checkEmail" required>
 				</div>
 			    <div class="Input-margin">
-					<input type="password" placeholder="请输入密码" class="Input" v-model="formData.password" required>
+					<label class="label">密码：</label>
+					<input v-bind:type="this.visible ? 'text' : 'password'" maxlength="16" placeholder="请输入密码" class="Input" v-model="formData.password" required>
+					<image class="img"
+					v-bind:src="this.visible ? '../../static/login/visible.png' : '../../static/login/invisible.png'"
+					 @click="changeView"></image>
+					 <!-- :src="{'../../static/login/visible.png':this.visible,'../../static/login/invisible.png':!this.visible}" -->
 				</div>
 				<div class="buttonGroup">
-			    <button :class="{'active': isFill,'inactive': !isFill}" :disabled="!isFill" type="submit" @tap="submitForm">登录</button>
-				<button @click="Register" class="link">没有账户？点此注册</button>
+					<view :class="{'active': isFill,'inactive': !isFill}" :disabled="!isFill" type="submit" @tap="submitForm">登录</view>
+					<button @click="Register" class="link">没有账户？点此注册</button>
+					<button @click="findPasswd" class="link">忘记密码？点此找回</button>
 				</div>
 			  </form>
 		</view>
@@ -31,11 +38,13 @@ import axios from 'axios';
 				      },
 				token:"",
 				trueEmail:true,
+				check:false,
+				visible:false
 			};
 		},
 		computed: {
 			isFill(){
-				return this.trueEmail !== '' && this.formData.password !== '';
+				return this.trueEmail !== false && this.formData.password !== '' && this.check;
 			}
 		},
 		methods: {
@@ -46,6 +55,10 @@ import axios from 'axios';
 					})
 		            .then(response => {
 		              this.token = response.data;
+					  if(this.token == " ")
+					  {
+						  alert("登录失败");
+					  }
 					  console.log(this.token);
 		            })
 		            .catch(error => {
@@ -54,12 +67,21 @@ import axios from 'axios';
 				
 		    },
 			checkEmail(){
+				this.check = true;
 				const emailPattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 				this.trueEmail = emailPattern.test(this.formData.email);
+			},
+			changeView(){
+				this.visible = !this.visible;
 			},
 			Register(){
 				uni.navigateTo({
 					url:"/pages/register/register"
+				})
+			},
+			findPasswd(){
+				uni.navigateTo({
+					url:"/pages/findPasswd/findPasswd"
 				})
 			}
 		  }
@@ -89,16 +111,50 @@ import axios from 'axios';
 		opacity: 1;
 		background: url('/static/index/bg.png') center center / 225% 130% no-repeat,  linear-gradient(225deg, rgba(230, 247, 255, 1) 0%, rgba(255, 254, 247, 1) 38.89%, rgba(233, 229, 254, 1) 67.78%, rgba(230, 224, 250, 1) 100%);
 	}
-	button {
-		background-color: red;
-	}
 	.buttonGroup {
 		margin-top: 3vh;
-		width: 65vw;
+		width: 79vw;
+	}
+	.buttonGroup button {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin-top: 1.5vh;
+		background-color: rgba(230, 230, 240, 1);
+		box-shadow: 0px 2px 4px 0px rgba(136, 63, 143, 0.25);
+		height: 6.2vh;
+	}
+	.buttonGroup .active {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 10vh;
+		font-size: 24px;
+		font-weight: 400;
+		color: rgba(0, 0, 0, 0.75);
+		text-align: center;
+		vertical-align: top;
+		color: #000;
+		border-radius: 12px;
+		background: linear-gradient(90deg, rgba(224, 222, 250, 0.75) 0%, rgba(255, 235, 244, 0.75) 100%);
+		box-shadow: 0px 2px 4px 0px rgba(136, 63, 143, 0.25);
+		/* filter: blur(4px); */
 	}
 	.buttonGroup .inactive {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 10vh;
+		font-size: 24px;
+		font-weight: 400;
+		color: rgba(0, 0, 0, 0.75);
+		text-align: center;
+		vertical-align: top;
 		color: #000;
-		background-color: rgba(216, 214, 219, 100);
+		border-radius: 12px;
+		background-color: rgba(230, 230, 240, 1);
+		box-shadow: 0px 2px 4px 0px rgba(136, 63, 143, 0.25);
+		/* filter: blur(4px); */
 	}
 	form {
 		display: flex;
@@ -108,34 +164,57 @@ import axios from 'axios';
 	}
 	.Input {
 		display: inline-block;
-		text-align: center;
+		text-align: left;
 		vertical-align: top;
-		border: 1px solid rgba(0,0,0,0.6);
-		border-radius: 10px;
-		width: 65vw;
-		height: 3vh;
+		/* width: 45vw; */
 	}
-	.Input:focus-within{
+	/* .Input:focus-within{
 		border: 1px solid rgba(200, 196, 218, 50);
 		border-radius: 10px;
-	}
+	} */
 	.errorWrite {
-		display: inline-block;
-		text-align: center;
+		margin-top: 3vh;
+		display: flex;
+		align-items: center;
+		text-align: left;
 		vertical-align: top;
 		border: 1px solid red;
-		border-radius: 10px;
-		width: 65vw;
-		height: 3vh;
+		border-radius: 20px;
+		width: 77vw;
+		height: 6.2vh;
+		background-color: rgba(255,255,255,0.8);
+		box-shadow: 2px 2px 20px 0px rgba(136, 63, 143, 0.15);
 	}
 	.errorWrite:focus-within {
-		border: 2px solid rgba(200, 196, 218, 50);
-		border-radius: 10px;
+		border: 1px solid #8431de;
+		border-radius: 20px;
 	}
 	.Input-margin {
 		margin-top: 3vh;
+		display: flex;
+		align-items: center;
+		/* border: 1px solid rgba(0,0,0,0.6); */
+		border-radius: 20px;
+		width: 77vw;
+		height: 6.2vh;
+		background-color: rgba(255,255,255,0.8);
+		box-shadow: 2px 2px 20px 0px rgba(136, 63, 143, 0.15);
 	}
-	
+	.Input-margin:focus-within{
+		border: 1px solid #8431de;
+		border-radius: 20px;
+	}
+	.img {
+		display: inline-block;
+		width: 9vw;
+		height: 4vh;
+		margin-right: 2vw;
+	}
+	.label {
+		display: inline-block;
+		width: 20vw;
+		text-align: right;
+	}
 	.link {
 		margin-top: 5px;
 		font-size: 14px;

@@ -56,7 +56,7 @@ public class DataIO {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        return 0;
+        return -1;
     }
     //将Json转换为对象
     public <T> T switchJsonToObject(String json,Class<T> valuetype){
@@ -88,7 +88,7 @@ public class DataIO {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        return "null";
+        return " ";
     }
     //获取文件中的最大id
     public int getMaxId(){
