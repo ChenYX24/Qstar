@@ -28,7 +28,7 @@
 				<p>+</p>
 
 			</view>
-		
+		<Blank></Blank>
 		</view>
 		<tab-bar :activeTab="tab"></tab-bar>
 		
@@ -95,9 +95,11 @@
 
 <script>
 	import TabBar from '/components/tabbar/tabbar.vue';
+	import Blank from '/components/blank/blank.vue';
 	export default {
 		components: {
-			TabBar
+			TabBar,
+			Blank
 		},
 		onLoad: function(options) {
 			this.tab = options.tab
@@ -149,6 +151,11 @@
 					case 1:
 						break;
 					case 2:
+						var temp=document.createElement('view')
+						temp.setAttribute('class', 'blank');
+						temp.setAttribute('id', `blank${this.num_q[0]}`);
+						this.setQuestionStyle(temp)
+						input_class_block.appendChild(temp);
 						break;
 					case 3:
 						break;
@@ -212,9 +219,12 @@
 
 	.questionnire_page{
 		    display: flex;
-		    flex-wrap: wrap;
 		    align-content: center;
-		    justify-content: center;
+			overflow-y: scroll;
+			height: 85%;
+			flex-direction: column;
+			align-items: center;
+			
 	}
 	
 	.input_class{

@@ -44,16 +44,6 @@
             }
             
         }
-
-        ,{
-            "path" : "pages/editQuestion/editQuestion",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
         ,{
             "path" : "pages/editQuestionnire/editQuestionnire",
             "style" :                                                                                    
@@ -75,6 +65,37 @@
         ,{
             "path" : "pages/findPasswd/findPasswd",
 
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+<<<<<<< Updated upstream
+            "path" : "pages/analysis/analysis",
+=======
+            "path" : "components/question/danxuan/danxuan",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "components/setting/setting",
+>>>>>>> Stashed changes
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/test/test",
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "",

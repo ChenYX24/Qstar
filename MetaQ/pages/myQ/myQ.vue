@@ -16,23 +16,13 @@
 		      class="swiper"
 		    >
 		      <swiper-item>
-		        <view class="page1">
-					<QBlock :onumber="number" :title="title" :isPush="isPush"></QBlock>
+				<view class="page1">
+				  <QBlock v-for="(block, index) in blocks1" :key="block.id" :onumber="block.number" :title="block.title" :isPush="block.isPush"></QBlock>
 				</view>
 		      </swiper-item>
 		      <swiper-item>
-		        <view class="page2">
-					<QBlock2 :title="title" :isEnd="isEnd" :name="name"></QBlock2>
-					<QBlock2 :title="title" :isEnd="isEnd" :name="name"></QBlock2>
-					<QBlock2 :title="title" :isEnd="isEnd" :name="name"></QBlock2>
-					<QBlock2 :title="title" :isEnd="isEnd" :name="name"></QBlock2>
-					<QBlock2 :title="title" :isEnd="isEnd" :name="name"></QBlock2>
-					<QBlock2 :title="title" :isEnd="isEnd" :name="name"></QBlock2>
-					<QBlock2 :title="title" :isEnd="isEnd" :name="name"></QBlock2>
-					<QBlock2 :title="title" :isEnd="isEnd" :name="name"></QBlock2>
-					<QBlock2 :title="title" :isEnd="isEnd" :name="name"></QBlock2>
-					<QBlock2 :title="title" :isEnd="isEnd" :name="name"></QBlock2>
-					<QBlock2 :title="title" :isEnd="isEnd" :name="name"></QBlock2>
+				<view class="page2">
+				  <QBlock2 v-for="item in blocks" :key="item.id" :title="item.title" :isEnd="item.isEnd" :name="item.name"></QBlock2>
 				</view>
 		      </swiper-item>
 		    </swiper>
@@ -45,8 +35,8 @@
 <script>
 import TabBar from '/components/tabbar/tabbar.vue';
 import TabSwiper from "/components/tabSwiper/tabSwiper.vue";
-import QBlock from '/components/QBlock/QBlock.vue';
-import QBlock2 from '/components/QBlock2/QBlock2.vue';
+import QBlock from '/components/myQ/QBlock/QBlock.vue';
+import QBlock2 from '/components/myQ/QBlock2/QBlock2.vue';
 export default {
   components: {
     TabBar,
@@ -64,11 +54,22 @@ export default {
 		currentTab: 0,
 		text1:'我创建的',
 		text2:"我填写的",
-		title:"关于早八是否会被饿死调查",
-		isPush:true,
-		number:2,
 		isEnd:true,
-		name:'尘'
+		name:'尘',
+		blocks:[
+			{ id: 1, title: '关于早八是否会被饿死调查', isEnd: false, name: '尘' },
+		  { id: 2, title: 'Title 2', isEnd: false, name: '尘' },
+		  { id: 3, title: 'Title 3', isEnd: true, name: '尘' },
+		],
+		blocks1: [
+		  { id: 1,number: 2, title: '关于早八是否会被饿死调查', isPush: false },
+		  { id: 2,number: 20, title: 'Title 2', isPush: true },
+		  { id: 3,number: 3000, title: 'Title 3', isPush: false },
+		  { id: 4,number: 200, title: '关于早八是否会被饿死调查', isPush: false },
+		  { id: 5,number: 20000, title: 'Title 2', isPush: true },
+		  { id: 6,number: 3000, title: 'Title 3', isPush: false },
+		  // 添加更多的块数据...
+		]
   	}
   },
     methods: {
