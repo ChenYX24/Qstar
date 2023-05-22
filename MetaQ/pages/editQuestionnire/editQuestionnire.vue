@@ -26,9 +26,8 @@
 <view class="danxuan" id="duanxuan0"></view>
 			<view class="add_question" @click="showQuestionChoose">
 				<p>+</p>
-
 			</view>
-		<Blank></Blank>
+
 		</view>
 		<tab-bar :activeTab="tab"></tab-bar>
 		
@@ -109,6 +108,7 @@
 				tab: '',
 				//用来记录四种问题的数量
 				num_q:[0,0,0,0],
+				//下面是决定两个页面互相切换的变量
 				questionnire_page_show:0,
 				question_page_show:0,
 			}
@@ -123,74 +123,51 @@
 
 			},
 			showQuestionChoose(){
-				// var question_page=document.getElementById('question_page');
-					// question_page.style.top = 0;
 					this.question_page_show=1;
 					this.questionnire_page_show=1;
 					// this.show=0;
 			},
 			generateQuestion(e){
-				// var type_num=parseInt(e.currentTarget.id);
-				// var questionnire_page=document.getElementById('questionnire_page');
 				this.question_page_show=0;
 				this.questionnire_page_show=0;
-				// this.show=1;
 				this.creat(parseInt(e.currentTarget.id));
 			},
-			creat(type_num){
-				var input_class_block=document.getElementById('input_class_block')
-				switch(type_num){
-					//单选题
-					case 0:
-						var temp=document.createElement('view')
-						temp.setAttribute('class', 'danxuan');
-						temp.setAttribute('id', `duanxuan${this.num_q[0]}`);
-						this.setQuestionStyle(temp)
-						input_class_block.appendChild(temp);
-						break;
-					case 1:
-						break;
-					case 2:
-						var temp=document.createElement('view')
-						temp.setAttribute('class', 'blank');
-						temp.setAttribute('id', `blank${this.num_q[0]}`);
-						this.setQuestionStyle(temp)
-						input_class_block.appendChild(temp);
-						break;
-					case 3:
-						break;
-					default:
-					    break;
-				}
-				this.num_q[type_num]++;
-			},
-			setQuestionStyle(temp){
-				
-				temp.style.marginTop='3vh'
-				temp.style.display='flex';
-				temp.style.height= ' 15vh';
-				temp.style.width='80vw';
-				temp.style.border='2px solid red';
-				
-				// temp.style.cssText =`
-				// 	marginTop:'3vh';
-				// 	display:'flex';
-				// 	width:'80vw';
-				// 	border:'2px solid red';
-				// 	height: ' 15vh';
-				// `
+			//跳转函数
+			// jumpQuestionSetting(){
 
-				// console.log(temp.style.csscssText)
-				// temp.style.cssText = 'height: 100px;width:80vw;temp.style.border=2px solid red';
-				// temp.setStyle({
-				// 	'marginTop':'3vh',
-				// 	'display':'flex',
-				// 	'height':'15vh',
-				// 	'width':'80vw',
-				// 	'border':'2px solid red'
-				// })
-				
+			// },
+			creat(type_num){
+				console.log(type_num)
+				uni.navigateTo({
+					url: '/pages/try/try?typenum=' + type_num  
+				})
+				// var input_class_block=document.getElementById('input_class_block')
+				// switch(type_num){
+				// 	//单选题
+				// 	case 0:
+				// 		// var temp=document.createElement('view')
+				// 		// temp.setAttribute('class', 'danxuan');
+				// 		// temp.setAttribute('id', `duanxuan${this.num_q[0]}`);
+				// 		// this.setQuestionStyle(temp)
+				// 		// input_class_block.appendChild(temp);
+				// 		break;
+				// 	case 1:
+				// 		break;
+				// 	case 2:
+				// 		var temp=document.createElement('view')
+				// 		temp.setAttribute('class', 'blank');
+				// 		temp.setAttribute('id', `blank${this.num_q[0]}`);
+				// 		this.setQuestionStyle(temp)
+				// 		input_class_block.appendChild(temp);
+				// 		break;
+				// 	case 3:
+				// 		break;
+				// 	default:
+				// 	    break;
+				// }
+				// this.num_q[type_num]++;
 			},
+
 		}
 
 	};
@@ -284,6 +261,7 @@
 	.add_question {
 		margin: 2vh;
 		height: 15vh;
+		// min-height: 15vh;
 		width: 80vw;
 		border: 2px solid #fff;
 		border-radius: 5vw;
