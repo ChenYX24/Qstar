@@ -1,10 +1,12 @@
 <template>
 	<view class="Blank">
 		<view class="title">
-			{{content.title}}
+			<view class="*">*</view>
+			<view class="title—text">
+				填空题
+			</view>
 		</view>
-		<textarea class="content" maxlength="900">
-			
+		<textarea class="content" maxlength="900" v-model="content.title">
 		</textarea>
 	</view>
 </template>

@@ -73,10 +73,10 @@
             
         }
         ,{
-<<<<<<< Updated upstream
+
             "path" : "pages/analysis/analysis",
-=======
-            "path" : "components/question/danxuan/danxuan",
+
+            
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "",
@@ -86,7 +86,16 @@
         }
         ,{
             "path" : "components/setting/setting",
->>>>>>> Stashed changes
+
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/try/try",
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "",
