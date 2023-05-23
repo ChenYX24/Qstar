@@ -1,0 +1,1 @@
+import{o as a,c as r,i as s}from"./index-c25d265a.js";import{_ as e}from"./_plugin-vue_export-helper.1b428a4d.js";const n=e({data:()=>({})},[["render",function(e,n,o,t,i,p){const u=s;return a(),r(u,{class:"danxuan"})}]]);export{n as default};

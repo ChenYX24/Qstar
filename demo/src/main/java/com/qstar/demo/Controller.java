@@ -4,9 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
-
+import org.springframework.web.bind.annotation.CrossOrigin;
 import java.util.Scanner;
 @RestController
+@CrossOrigin
 public class Controller {
     @Autowired
     EmailSender emailSender;
@@ -82,9 +83,8 @@ public class Controller {
     }
     @RequestMapping("/test")
     public void test(){
-        // EmailSender emailSender = new EmailSender();
-        // String test = emailSender.sendcode("1835208239@qq.com");
-        // System.out.println(test);
+        QRcodeGenerator qRcodeGenerator = new QRcodeGenerator();
+        qRcodeGenerator.generate("http://www.baidu.com");
     }
     @RequestMapping("/get")
     public void getuser(){
