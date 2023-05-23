@@ -13,7 +13,7 @@
 			    	<label class="label">密码：</label>
 			    	<input v-bind:type="this.visible1 ? 'text' : 'password'" maxlength="16" placeholder="请输入密码" class="Input" v-model="formData.password" required>
 			    	<image class="img"
-			    	v-bind:src="this.visible1 ? '../../static/login/visible.png' : '../../static/login/invisible.png'"
+			    	v-bind:src="this.visible1 ? '../../static/login/avisible.png' : '../../static/login/invisible.png'"
 			    	 @click="changeView1"></image>
 			    </div>
 			    <div :class="{'Input-margin':isSame,'errorWrite':!isSame}">
