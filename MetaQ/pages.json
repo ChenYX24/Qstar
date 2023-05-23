@@ -72,17 +72,10 @@
             }
             
         }
-        ,{
-            "path" : "components/question/danxuan/danxuan",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
+
         ,{
             "path" : "components/setting/setting",
+
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "",
@@ -90,6 +83,26 @@
             }
             
         }
+        ,{
+            "path" : "pages/try/try",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "components/sliderSetting/sliderSetting",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+
+
         ,{
             "path" : "pages/test/test",
             "style" :                                                                                    

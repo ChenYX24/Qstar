@@ -31,35 +31,26 @@
 		 name: 'SingleChoice',
 		data() {
 			return {
-				text:['','','',''],
-				text_copy:['','','','']
+				text:[...this.text_copy]
 			};
 		},
-		
+		props:{
+			text_copy:{
+				type: Array,  
+				required: false,
+				default: () => (['',''])  
+			}
+		},
 		methods:{
 			delete_options(item){
-				// console.log(this.test,item)
+				  this.text.splice(item,1)
 				  this.text_copy.splice(item,1)
-				  // console.log(this.test)
-				  this.text=this.text_copy
-				  
-				  // let target = e.currentTarget; // 获取被点击的元素
-				  // console.log(target)
-				  // let parent = target.parentNode; // 获取被点击元素的父节点
-				  // console.log(parent)
-				  // parent.parentNode.removeChild(parent); // 删除父节点
+				  this.text=[...this.text_copy];
 			},
 			add_options(){
 				this.text_copy.push('');
 				this.text.push('');
 			}
-			// ttt(index,e){
-			// 	// console.log(e)
-			// 	this.test[index]=e.detail.value
-				
-			// }
-			
-			
 		}
 	}
 </script>
@@ -67,13 +58,14 @@
 <style lang="less">
 
 .SingleChoice{
+	width: 100vw;
 	// height: 30vh;
-	border: 2px solid red;
+	// border: 2px solid red;
 }	
 .xuanxiang_text{
 	height: 4vh;
 	 font-size:18px;
-	background-color: lightgray;
+	background-color: #dabff0;
 	 text-indent: 2vh;
 }
 .single_choice_option{
