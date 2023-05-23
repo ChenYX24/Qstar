@@ -10,30 +10,28 @@
       :current="currentSwiper"
       :loop="false"
     >
-      <swiper-item class="chart" v-for="(item, index) in SData" :key="index">
-	          <view v-if="index === 0">
+      <swiper-item class="chart" v-for="(item, index) in SData" :key="index" style="overflow-y: scroll;">
+	          <view v-if="index === 0" >
 	            <!-- 单选题列表 -->
-	            <view class="header">
-	              <text class="option">选项</text>
-	              <text class="ratio">比例</text>
-	              <text class="count">数量</text>
-	            </view>
-	            <view v-for="(data, dataIndex) in chartData" :key="dataIndex" class="row">
-	              <text class="option">{{ data.name }}</text>
-	              <text class="ratio">{{ data.ratio }}</text>
-	              <text class="count">{{ data.value }}</text>
-	            </view>
+	            <my-table :Data="pieData"></my-table>
 	          </view>
 	          <view v-if="index === 1" class="chartContainer">
 	            <!-- 饼状图 -->
-				<echarts   
-				ref="chartContainer"
-				:option="pieOption"
-				@click="onChartClick"
-				class="pie"
-				>
-				</echarts>
+					<echarts :options="pieOption" ></echarts>  <!-- @click-chart="handleClickChart" -->
 	          </view>
+			  <view v-if="index === 2" class="chartContainer">
+				  <!-- 环状图 -->
+					<echarts :options="huanOption" ></echarts>  
+			  </view>
+			  <view v-if="index === 3" class="chartContainer">
+			  		<echarts :options="barOption" ></echarts>  
+			  </view>
+			  <view v-if="index === 4" class="chartContainer">
+			  		<echarts :options="tiaoOption" ></echarts>  
+			  </view>
+			  <view v-if="index === 5" class="chartContainer">
+			  		<echarts :options="lineOption" ></echarts>  
+			  </view>
 
 	  </swiper-item>
     </swiper>
@@ -48,9 +46,12 @@
       </view>
     </view>
   </view>
+
+
 </template>
 <script>
 	import echarts from '/components/echarts/echarts.vue';
+	import MyTable from '/components/myTable/myTable.vue';
 	export default {
 		name:"QBlock",
 		props: {
@@ -63,8 +64,10 @@
 				default:''
 			},
 		},
-		
-		data() {
+		components:{
+			MyTable  
+		},
+		data(){
 			return {
 				pushText:"已发布",
 				CType:'',
@@ -77,17 +80,341 @@
 					{ name: '选项3', ratio: '25%', value: '5' },
 				],
 				pieData:[
-				  { value: 1048, name: 'Search Engine' },
-				  { value: 735, name: 'Direct' },
-				  { value: 580, name: 'Email' },
-				  { value: 484, name: 'Union Ads' },
-				  { value: 300, name: 'Video Ads' },
-				  { value: 300, name: 'Vdeo' },
-				  { value: 300, name: 'Vieo' },
-				  { value: 300, name: 'Vido' },
-				  { value: 300, name: 'Vide' },
-				]
+				  { value: 1048, name: 'Search Engine'},
+				  { value: 735, name: 'Direct'},
+				  { value: 580, name: 'Email'},
+				  { value: 484, name: 'Union Ads'},
+				  { value: 300, name: 'Video Ads'},
+				  { value: 300, name: 'Vdeo'},
+				  { value: 300, name: 'Vieo'},
+				  { value: 300, name: 'Vido'},
+				  { value: 300, name: 'Vide'},
+				],
+				tiaoOption:{
+					toolbox: {
+					    feature: {
+					      saveAsImage: {}
+					    }
+					  },
+					tooltip: {
+								trigger: 'item',
+								axisPointer: {
+								  type: 'shadow'
+								},
+								position:'auto'
+							  },
+								grid: {  
+								  top: 40,  
+								  bottom: 30,  
+								  left: 100,  
+								  right: 30,  
+								},  
+							  xAxis: {
+								  type: 'value',
+								  
+							  },
+							  yAxis: {								
+								  type: 'category',
+								  data: [],
+								  axisLabel: {
+								    interval: 0,  
+								    rotate: 30,
+									showMaxLabel:true,
+									formatter: function(value) {  
+												const maxLength = 9;  
+												if (value.length > maxLength) {  
+												  return value.substr(0, maxLength) + '...';  
+												} else {  
+												  return value;  
+												}  
+											  },  
+								  }
+							  },
+							  series: [
+								{
+								  type: 'bar',
+								  barHeight: '60%',
+								  data: [],
+								  
+								  itemStyle :{
+									  emphasis: {						
+									    label: {
+									      show: true,
+									      fontSize: 16,
+									      color:'rgba(196, 140, 255, 1)',
+										  position:'right',
+										  // offset: [0, -15]
+										  
+									    }
+									  },
+									  borderRadius: [0, 999, 999, 0],
+									  color:{
+											  type: 'linear',
+											  x: 1,
+											  y: 0,
+											  x2: 0,
+											  y2: 0,
+											  colorStops: [{
+												  offset: 0, color: 'rgba(196, 140, 255, 1)' // 0% 处的颜色
+											  },{
+												  offset: 0.51, color: 'rgba(235, 223, 242, 0.7)' // 100% 处的颜色
+											  },{
+												  offset: 0.78, color: 'rgba(232, 237, 255, 0.5)' // 100% 处的颜色
+											  }, {
+												  offset: 1, color: 'rgba(255, 255, 255, 0)' // 100% 处的颜色
+											  }],
+											  global: false // 缺省为 false
+											}
+								  }
+								}
+							  ],
+						dataZoom: [  
+					  {  
+					    type: 'slider',  
+					    yAxisIndex: 0, // Apply dataZoom to the xAxis at index 0  
+					    start: 0, // Initial start percentage  
+					    end: 100, // Initial end percentage  
+					    showDataShadow: true, // Disable data shadow  
+					    showDetail: true, // Disable detail tooltip
+						height:'80%',
+						left:'0',
+						bottom:'20',
+						orient: 'vertical', 
+					  },
+						{
+						  type: 'inside',
+						  orient: 'vertical', 
+						  start: 0,
+						  end: 100
+						},
+					],
+				},
+				barOption:{
+					toolbox: {
+					    feature: {
+					      saveAsImage: {}
+					    }
+					  },
+							tooltip: {
+								trigger: 'item',
+								axisPointer: {
+								  type: 'shadow'
+								},
+								position:'auto'
+							  },
+								grid: {  
+								  top: 40,  
+								  bottom: 100,  
+								  left: 50,  
+								  right: 0,  
+								},  
+							  xAxis: {
+								
+								  type: 'category',
+								  data: [],
+								  axisLabel: {
+								    interval: 0,  
+								    rotate: 30,
+									showMaxLabel:true,
+									formatter: function(value) {  
+									            const maxLength = 9;  
+									            if (value.length > maxLength) {  
+									              return value.substr(0, maxLength) + '...';  
+									            } else {  
+									              return value;  
+									            }  
+									          },  
+								  }
+							  },
+							  yAxis: {								
+								  type: 'value',
+							  },
+							  series: [
+								{
+								  type: 'bar',
+								  barWidth: '60%',
+								  data: [],
+								  
+								  itemStyle :{
+									  emphasis: {						
+									    label: {
+									      show: true,
+									      fontSize: 16,
+									      color:'rgba(196, 140, 255, 1)',
+										  position:'top'
+									    }
+									  },
+									  borderRadius: [999, 999, 0, 0],
+									  color:{
+											  type: 'linear',
+											  x: 0,
+											  y: 0,
+											  x2: 0,
+											  y2: 1,
+											  colorStops: [{
+												  offset: 0, color: 'rgba(196, 140, 255, 1)' // 0% 处的颜色
+											  },{
+												  offset: 0.51, color: 'rgba(235, 223, 242, 0.7)' // 100% 处的颜色
+											  },{
+												  offset: 0.78, color: 'rgba(232, 237, 255, 0.5)' // 100% 处的颜色
+											  }, {
+												  offset: 1, color: 'rgba(255, 255, 255, 0)' // 100% 处的颜色
+											  }],
+											  global: false // 缺省为 false
+											}
+								  }
+								}
+							  ],
+						dataZoom: [  
+				      {  
+				        type: 'slider',  
+				        xAxisIndex: 0, // Apply dataZoom to the xAxis at index 0  
+				        start: 0, // Initial start percentage  
+				        end: 100, // Initial end percentage  
+				        showDataShadow: true, // Disable data shadow  
+				        showDetail: true, // Disable detail tooltip
+						bottom:'40',
+						
+						right:'5',
+						height:'20'
+				      },
+						{
+						  type: 'inside',
+						  start: 0,
+						  end: 100
+						},
+				    ],
+					},
+					lineOption:{
+						toolbox: {
+						    feature: {
+						      saveAsImage: {}
+						    }
+						  },
+								tooltip: {
+									trigger: 'item',
+									axisPointer: {
+									  type: 'shadow'
+									},
+									position:'auto'
+								  },
+									grid: {  
+									  top: 40,  
+									  bottom: 100,  
+									  left: 50,  
+									  right: 0,  
+									},  
+								  xAxis: {
+									
+									  type: 'category',
+									  data: [],
+									  axisLabel: {
+									    interval: 0,  
+									    rotate: 30,
+										showMaxLabel:true,
+										formatter: function(value) {  
+										            const maxLength = 9;  
+										            if (value.length > maxLength) {  
+										              return value.substr(0, maxLength) + '...';  
+										            } else {  
+										              return value;  
+										            }  
+										          },  
+									  },
+									  
+								  },
+								  yAxis: {								
+									  type: 'value',
+								  },
+								  series: [
+									{
+									  type: 'line',
+									  data: [],
+									        markLine: {  
+									          silent: true, // 禁止交互  
+									          lineStyle: {  
+									            type: 'dashed', // 设置为虚线  
+									          },  
+									          data: [],  
+									        },
+									  emphasis: {
+									    // disabled: true,
+										scale:2,
+										label:{
+											fontSize:20
+										}
+									  },
+										areaStyle: {
+											        emphasis: {  
+											          color:{
+											            type: 'linear',
+											            x: 0,
+											            y: 0,
+											            x2: 0,
+											            y2: 1,
+											            colorStops: [{
+											          	  offset: 0, color: 'rgba(196, 140, 255, 1)' // 0% 处的颜色
+											            },{
+											          	  offset: 0.51, color: 'rgba(235, 223, 242, 0.7)' // 100% 处的颜色
+											            },{
+											          	  offset: 0.78, color: 'rgba(232, 237, 255, 0.5)' // 100% 处的颜色
+											            }, {
+											          	  offset: 1, color: 'rgba(255, 255, 255, 0)' // 100% 处的颜色
+											            }],
+											            global: false // 缺省为 false
+											          }
+											        },  
+												color:{
+												  type: 'linear',
+												  x: 0,
+												  y: 0,
+												  x2: 0,
+												  y2: 1,
+												  colorStops: [{
+													  offset: 0, color: 'rgba(196, 140, 255, 1)' // 0% 处的颜色
+												  },{
+													  offset: 0.51, color: 'rgba(235, 223, 242, 0.7)' // 100% 处的颜色
+												  },{
+													  offset: 0.78, color: 'rgba(232, 237, 255, 0.5)' // 100% 处的颜色
+												  }, {
+													  offset: 1, color: 'rgba(255, 255, 255, 0)' // 100% 处的颜色
+												  }],
+												  global: false // 缺省为 false
+												}
+										},
+										label: {
+										  show: true,
+										  fontSize: 10,
+										  color:'rgba(196, 140, 255, 1)',
+										  position:'top'
+										},
 
+									  itemStyle :{
+										  borderRadius: [999, 999, 0, 0],
+										  color: 'rgba(196, 140, 255, 1)' // 0% 处的颜色
+									  }
+									}
+								  ],
+							dataZoom: [  
+					      {  
+					        type: 'slider',  
+					        xAxisIndex: 0, // Apply dataZoom to the xAxis at index 0  
+					        start: 0, // Initial start percentage  
+					        end: 100, // Initial end percentage  
+					        showDataShadow: true, // Disable data shadow  
+					        showDetail: true, // Disable detail tooltip
+							bottom:'40',
+							right:'5',
+							height:'20'
+					      },
+							{
+							  type: 'inside',
+							  start: 0,
+							  end: 100
+							},
+					    ],
+						},
+					
 
 			};
 		},
@@ -105,6 +432,7 @@
 				default:
 					break;
 			}
+			this.setChartOptions();
 		},
 		computed: {
 		    end(){
@@ -127,16 +455,17 @@
 				}
 
 				const colorStops = [
-				 { color: { r: 22, g: 176, b: 188, a: 1 }, position: 0 },
-				  { color: { r: 74, g: 200, b: 185, a: 1 }, position: 4.16 },
-				  { color: { r: 46, g: 205, b: 217, a: 1 }, position: 9.26 },
-				  { color: { r: 164, g: 239, b: 245, a: 1 }, position: 25.93 },
-				  { color: { r: 110, g: 222, b: 230, a: 1 }, position: 39.81 },
-				  { color: { r: 220, g: 220, b: 220, a: 1 }, position: 56.27 },
-				  { color: { r: 189, g: 158, b: 255, a: 1 }, position: 80.28 },
-				  { color: { r: 129, g: 99, b: 199, a: 1 }, position: 87.5 },
-				  { color: { r: 90, g: 36, b: 240, a: 1 }, position: 94.91 }
+				  { color: { r: 22, g: 176, b: 188, a: 1 }, position: 0 },
+				  { color: { r: 134, g: 226, b: 235, a: 1 }, position: 16.32 },
+				  { color: { r: 162, g: 245, b: 231, a: 1 }, position: 27.02 },
+				  { color: { r: 204, g: 248, b: 252, a: 1 }, position: 37.07 },
+				  { color: { r: 223, g: 222, b: 251, a: 1 }, position: 51.83 },
+				  { color: { r: 208, g: 194, b: 253, a: 1 }, position: 63.52 },
+				  { color: { r: 202, g: 146, b: 222, a: 1 }, position: 76.61 },
+				  { color: { r: 127, g: 106, b: 183, a: 1 }, position: 89.31 },
+				  { color: { r: 95, g: 66, b: 173, a: 1 }, position: 100 }
 				];
+
 
 				const dataLength = this.pieData.length;
 
@@ -154,23 +483,66 @@
 				  dColorPalette.push(interpolatedColor);
 				}
 
-				console.log(dColorPalette);
 				return dColorPalette;
 			},
-			
+			huanOption(){
+				return{
+					toolbox: {
+					    feature: {
+					      saveAsImage: {}
+					    }
+					  },
+					tooltip: {
+					    trigger: 'item',
+						formatter: '{b}: {c} ({d}%)', // 显示名称、值和百分比  
+						position: 'auto'
+					  },
+					  
+					  series: [
+					    {
+					      type: 'pie',
+							label: {
+							  show: false,
+							  position: 'center',
+							  formatter: '{b} '// 显示名称和值  \n{c}'
+							},
+							      emphasis: {
+									
+							        label: {
+							          show: true,
+							          fontSize: 20,
+							          fontWeight: 'bold',
+							        }
+							      },
+					      radius: ['40%', '70%'],
+						  color: this.dynamicColorPalette,
+					      data: this.pieData,						  
+					    }
+					  ]
+				}
+			},
 			pieOption() {
 				return{
+					toolbox: {
+					    feature: {
+					      saveAsImage: {}
+					    }
+					  },
 				tooltip: {
-				    trigger: 'item'
+				    trigger: 'item',
+					formatter: '{b}: {c} ({d}%)', // 显示名称、值和百分比
+					position:'auto'
 				  },
 				  series: [
 				    {
-				      name: 'Access From',
 				      type: 'pie',
 				      radius: '50%',
-				      selectedMode: 'single',
+					  label:{
+						  color: 'auto',
+					  },
 					  color: this.dynamicColorPalette,
 				      data: this.pieData,
+					  // selectedMode: 'single',
 				      emphasis: {
 				        itemStyle: {
 				          shadowBlur: 10,
@@ -182,56 +554,44 @@
 				    }
 				  ]
 			}
-		}
-			
+		},
+		   
+				   
+				   
+				    
+					
 		},
 		methods:{
+			  setChartOptions() {
+			  	this.barOption.xAxis.data=this.pieData.map(item => item.name)
+			  	this.barOption.series[0].data=this.pieData.map(item => item.value)
+				this.tiaoOption.yAxis.data=this.pieData.map(item => item.name)
+				this.tiaoOption.series[0].data=this.pieData.map(item => item.value)
+				this.lineOption.xAxis.data=this.pieData.map(item => item.name)
+				this.lineOption.series[0].data=this.pieData.map(item => item.value)
+			  },
 			onSwiperChange(e) {
 			    const previousSwiper = this.currentSwiper;
 				  const currentSwiper = e.detail.current;
 			
 				  if (currentSwiper - previousSwiper === 1 || currentSwiper - previousSwiper === -1) {
 					this.currentSwiper = currentSwiper;
-					console.log(this.currentSwiper)
 					
 				  }
 				  if(currentSwiper - previousSwiper > 1)
 				  {
 					this.currentSwiper = previousSwiper+1;
-					console.log(this.currentSwiper)
 				  }
 				  if(currentSwiper - previousSwiper < -1)
 				  {
 					  this.currentSwiper = previousSwiper-1;
-					  console.log(this.currentSwiper)
 				  }
 			  },
 			
 			  onBottomItemClick(index) {
-				  console.log(index)
+
 			    this.currentSwiper=index
 			  },
-				onChartClick(params) {
-				  if (params.componentType === 'series' && params.seriesType === 'pie') {
-					const clickedName = params.name;
-					const clickedValue = params.value;
-
-					// Display the clicked name and value in the console or use them in your desired way
-					console.log('Clicked Name:', clickedName);
-					console.log('Clicked Value:', clickedValue);
-
-					// Update the pieOption to highlight the clicked slice
-					const newData = this.pieOption.series[0].data.map((item) => {
-					  if (item.name === clickedName) {
-						return { ...item, emphasis: { scale: true, focus: 'series' } };
-					  } else {
-						return { ...item, emphasis: { scale: false, focus: 'series' } };
-					  }
-					});
-					this.pieOption.series[0].data = newData;
-					this.$refs.chartContainer.refresh(); // Refresh the chart to apply the changes
-				  }
-				},
 		}
 	}
 </script>
@@ -246,7 +606,7 @@
   display: flex;
   flex-direction: column;
   width: 80vw;
-  min-height: 30vh;
+  min-height: 40vh;
   justify-content: space-between;
   box-sizing: border-box;
   padding: 3% 5% 5% 3%;
@@ -351,6 +711,13 @@
 	  width: 100%;
 	  height: 100%;
   }
+}
+.pppie{
+	display: flex;
+	flex-direction: column;  
+	align-items: center;  
+	justify-content: center;  
+	height: 100%;
 }
 
 </style>

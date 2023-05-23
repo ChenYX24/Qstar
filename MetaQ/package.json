@@ -1,6 +1,9 @@
 {
   "dependencies": {
+    "@dcloudio/uni-ui": "^1.4.27",
     "axios": "^1.4.0",
-    "echarts": "^5.4.2"
+    "echarts": "^5.4.2",
+    "echarts-gl": "^2.0.9",
+    "vue-echarts": "^6.5.5"
   }
 }

@@ -1,65 +1,116 @@
 <template>
 	<view class="background">
-		<view class="input_class">
-			<view class="textarea_border">
-				<textarea maxlength="900"
-						  ref="textareaDom"
-						  :style="{ height: h1 }"
-						  name="title"
-						  placeholder="请输入问卷标题"
-						  @input="test"></textarea>
-
-			</view>
-			<view class="textarea_border">
-				<textarea name="description" ref="descriptionTextarea" placeholder="请输入问卷简介"
-				>
-				</textarea>
+		<view>
+			<Title ref="title"></Title>
+			
+			<!-- <SingleChoice></SingleChoice> -->
+			<!-- <SingleChoice ref="danxuan"></SingleChoice> -->
+			<view class="" v-if="content.typeNum == 0">
+			<SingleChoice ref="danxuan"></SingleChoice>
 			</view>
 			
+			<view class="" v-else-if="content.typeNum == 1">
+			<SingleChoice ref="duoxuan"></SingleChoice>
+			</view>
+			
+			<view class="" v-else-if="content.typeNum == 2">
+			<!-- <SingleChoice></SingleChoice> -->
+			</view>
+			
+			<view class="" v-else-if="content.typeNum == 3">
+			<!-- <SingleChoice></SingleChoice> -->
+			<slider-setting ref="slider_set"></slider-setting>
+			</view>
+			
+			<setting></setting>
+			
+			
+			<view class="ok_or_no">
+				<view class="button_ok_or_no" @click="toEditQuestion">
+					确认
+				</view>
+				<view class="button_ok_or_no">
+					返回
+				</view>
+			</view>
 		</view>
-
-		<view class="add_question" @click="test">
-			<p>+</p>
-
-		</view>
-
-		<tab-bar :activeTab="tab"></tab-bar>
 	</view>
 </template>
 
 <script>
-	import TabBar from '/components/tabbar/tabbar.vue';
+	import Title from '/components/title/title.vue'
+	import SingleChoice from "/components/danxuan/danxuan.vue"
+	import setting from "/components/setting/setting.vue"
+	import sliderSetting from "/components/sliderSetting/sliderSetting.vue"
 	export default {
-		components: {
-			TabBar
+		components:{
+			// danxuansetting,
+			Title,
+			SingleChoice,
+			setting,
+			sliderSetting
 		},
-		onLoad: function(options) {
-			this.tab = options.tab
+		onLoad(options) {
+		  this.content.typeNum=options.typenum
+		  // console.log(this.content.typeNum)
 		},
 		data() {
 			return {
-				tab: '',
-				textareaDom:null,
-				h1:null,
-				textareaDom: null
-				// lineheight:0
-			}
+				content:{
+					type:Object,
+					default:{
+						title:"",
+						typeNum:0,
+						choice:[],
+					}
+					
+				}
+			};
 		},
- 	    mounted() {
-		  this.textareaDom = this.$refs.textareaDom;
-	    },
 		methods:{
-			test(){
-				const textarea = this.$refs.textareaDom;
-				const lines = textarea.value.split(/\r\n|\r|\n/).length;
-				const lineHeight = parseInt(getComputedStyle(textarea).lineHeight, 10);
-				this.h1 = `${lines * lineHeight}px`;
-			}
+			toEditQuestion(){
+				 // const titleComponent = this.$refs.title // 获取标题组件实例
+				 this.content.title= this.$refs.title.content.title; // 获取标题数据
+				 console.log(this.content.title)
+				 console.log('-------------------')
+				 console.log(this.content.typeNum)
+				 switch(parseInt(this.content.typeNum)){
+					 case 0:
+							this.content.choice=this.$refs.danxuan.text_copy;
+							console.log(this.content.choice);
+							break;
+					 case 1:
+							this.content.choice=this.$refs.duoxuan.text_copy;
+							console.log(this.content.choice);
+							break;
+					 case 2:
+							break;
+					 case 3:
+							this.content.choice=this.$refs.slider_set.setting;
+							console.log(this.content.choice);
+							break;
+					 default:
+							break;
+							
+
+					};
+				 },
+				 generateQuestion(){
+					 uni.navigateTo({
+					 	url: '/pages/editQuestionnire/editQuestionnire?content='+this.content
+			
+					 })
+				 }
+				 
+			
 		}
-	};
+		
+	}
 </script>
 
-<style scoped lang="less">
+
+
+<style lang="less">
 .background{
 	.title{
 		font-size: 16pt;
@@ -79,76 +130,34 @@
 	left:0;
 	background: linear-gradient(225deg, rgba(245, 224, 230, 1) 0%, rgba(228, 218, 241, 1) 38.89%, rgba(237, 248, 255, 1) 67.78%, rgba(230, 224, 250, 1) 100%);
 }
-	.input{
-		  display: flex;
-		  justify-content: center;
-		  align-items: center;
-	}
-	
-	.textarea_border{
-		border: 2px dashed #fff;
-		display: flex;
-	}
-	.input_class .textarea_border:first-child {
-		margin-top: 4vh;
-		height: 12vh;
-		width: 80vw;
-		display: flex;
-	}
-	.input_class .textarea_border:nth-child(2){
-			margin-top: 2vh;
-			height: 8vh;
-			width: 80vw;
-			size: size;
-			display: flex;
-	}
-	
-	.textarea_border{
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		textarea{
-			border: 2px solid red;
-			display: flex;
-			overflow-wrap: break-word;
-			white-space: normal;
-			text-align: center;
-			overflow-y: auto;
-		}
-		
-	}
-	
 
-	.textarea_border:first-child textarea {
-		height: 3vh;
-		width: 80vw;
-		// line-height: 12vh;
-	}
+.ok_or_no{
+	margin-top: 5vh;
+	width: 100vw;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+.button_ok_or_no{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 80vw;
+	height: 5vh;
+	border-radius: 10px;
+	border: 0.5px solid black;
+}
+// 确认按钮的设置
+.button_ok_or_no:first-child{
+	margin-bottom: 2vh;
+	background:linear-gradient(90deg,#b3aefd 0%,rgba(255,235,244,0.75)100%);
+	box-shadow: 0px 2px 4px 0px rgba(136,63,143,0.25);
+}
 
-	.textarea_border:last-child textarea {
-		// margin-top: 2vh;
-		height: 3vh;
-		width: 80vw;
-		// line-height: 8vh;
-	}
+.button_ok_or_no:last-child{
+	background-color: aquamarine;
+	background-color: rgba(230,230,240,1);
+}
 
-	.add_question {
-		margin: 2vh;
-		height: 15vh;
-		width: 80vw;
-		border: 2px solid #fff;
-		border-radius: 5vw;
-		background-color: #fff;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-
-	}
-
-	.add_question p {
-		margin: 0;
-		text-align: center;
-		font-size: 15vw;
-		color: #E4C2FF;
-	}
 </style>
