@@ -31,6 +31,31 @@ try {
       });
     },
   });
+  //自动登录
+  const token = localStorage.getItem('token');
+  console.log(token);
+  if (token) {
+    // 发送请求进行自动登录
+    axios.post(/*'https://metaq.scutbot.icu/login'*/
+    			'http://localhost:8080/login', {token})
+        .then(response => {
+          var response = response.data;
+    	  if(response == " ")
+    	  {
+    		  alert("登录失败");
+    	  }
+    	  console.log(response);
+    	  localStorage.setItem('token', JSON.stringify(response));
+    	  console.log(localStorage.getItem('token'));
+		  console.log("自动登录成功！");
+		  uni.navigateTo({
+		  	url:"/pages/myQ/myQ"
+		  })
+        })
+        .catch(error => {
+          console.log(error);
+        });
+  }
 } catch (error) { }
 
 const app = new Vue({

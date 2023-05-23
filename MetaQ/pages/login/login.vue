@@ -49,7 +49,8 @@ import axios from 'axios';
 		},
 		methods: {
 		    submitForm() {
-				axios.post('http://localhost:8080/login', {
+				axios.post(/*'https://metaq.scutbot.icu/login'*/
+							'http://localhost:8080/login', {
 		            email: this.formData.email,
 					password: this.formData.password
 					})
@@ -59,12 +60,13 @@ import axios from 'axios';
 					  {
 						  alert("登录失败");
 					  }
-					  console.log(this.token);
+					  console.log("token",this.token);
+					  localStorage.setItem('token', JSON.stringify(this.token));
+					  console.log("localStorage",localStorage.getItem('token'));
 		            })
 		            .catch(error => {
 		              console.log(error);
 		            });
-				
 		    },
 			checkEmail(){
 				this.check = true;

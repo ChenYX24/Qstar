@@ -74,13 +74,13 @@ import axios from 'axios';
 		},
 		methods: {
 		    changepasswd() {
-				axios.post('http://localhost:8080/checkcode', {
+				axios.post('https://metaq.scutbot.icu/checkcode', {
 				  email: this.formData.email,
 				  code:  this.formData.verification
 				})
 				.then(response => {
 					if(response.data == true){
-						axios.post('http://localhost:8080/changepasswd', {
+						axios.post('https://metaq.scutbot.icu/changepasswd', {
 							email:    this.formData.email,
 							password: this.formData.password
 						})
@@ -115,7 +115,7 @@ import axios from 'axios';
 			},
 			startTime(){
 				if(this.enableGetcode && this.check){
-					axios.post('http://localhost:8080/sendcode', {
+					axios.post('https://metaq.scutbot.icu/sendcode', {
 					  email: this.formData.email
 					})
 					.then(response => {
