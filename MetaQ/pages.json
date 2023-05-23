@@ -72,18 +72,7 @@
             }
             
         }
-        ,{
 
-            "path" : "pages/analysis/analysis",
-
-            
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
         ,{
             "path" : "components/setting/setting",
 
@@ -112,26 +101,8 @@
             }
             
         }
-        ,{
-            "path" : "pages/try/try",
 
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/try/try",
 
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
         ,{
             "path" : "pages/test/test",
             "style" :                                                                                    
