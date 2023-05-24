@@ -81,10 +81,44 @@ public class Controller {
         }
         return success;
     }
+    @RequestMapping("/autologin")
+    public String autologin(@RequestBody String request) {
+        String json = userio.getKeyValueofJson(request, "token");
+        String result = " ";
+        String email = "";
+        String password = "";
+        email = userio.getKeyValueofJson(json, "_email");
+        password = userio.getKeyValueofJson(json, "_passwd");
+        if(userService.MatchEmailtoPasswd(email, password)){
+            result = userService.GetUserByEmail(email);
+            System.out.println(result);
+        }
+        return result;
+    }
     @RequestMapping("/test")
-    public void test(){
-        QRcodeGenerator qRcodeGenerator = new QRcodeGenerator();
-        qRcodeGenerator.generate("http://www.baidu.com");
+    public String test(@RequestBody String request) {
+        String json = userio.getKeyValueofJson(request, "token");
+        String result = " ";
+        String email = "";
+        String password = "";
+        email = userio.getKeyValueofJson(json, "_email");
+        password = userio.getKeyValueofJson(json, "_passwd");
+        if(userService.MatchEmailtoPasswd(email, password)){
+            result = userService.GetUserByEmail(email);
+            System.out.println(result);
+        }
+        return result;
+        // String json = request.get("token");
+        // ObjectMapper mapper = new ObjectMapper();
+        // try {
+        //     Token token = mapper.readValue(json, Token.class);
+        //     System.out.println(token.get_id());
+        //     // do something with the token object
+        //     return json;
+        // } catch (Exception e) {
+        //     e.printStackTrace();
+        //     return "Error processing request";
+        // }
     }
     @RequestMapping("/get")
     public void getuser(){

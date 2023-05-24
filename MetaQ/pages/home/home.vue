@@ -111,7 +111,7 @@ export default {
 	  goToIndex(){
 		if(!this.isInfoExpanded&&!this.isExpanded)
 		  uni.reLaunch({
-		  	url:'/pages/index/index'
+		  	url:'/pages/index/index?flag=true'
 		  })
 	  },
 	selectImage() {

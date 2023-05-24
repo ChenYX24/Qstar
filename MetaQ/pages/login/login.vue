@@ -13,7 +13,7 @@
 					<label class="label">密码：</label>
 					<input v-bind:type="this.visible ? 'text' : 'password'" maxlength="16" placeholder="请输入密码" class="Input" v-model="formData.password" required>
 					<image class="img"
-					v-bind:src="this.visible ? '../../static/login/visible.png' : '../../static/login/invisible.png'"
+					v-bind:src="this.visible ? '../../static/login/avisible.png' : '../../static/login/invisible.png'"
 					 @click="changeView"></image>
 					 <!-- :src="{'../../static/login/visible.png':this.visible,'../../static/login/invisible.png':!this.visible}" -->
 				</div>
@@ -49,7 +49,8 @@ import axios from 'axios';
 		},
 		methods: {
 		    submitForm() {
-				axios.post('http://localhost:8080/login', {
+				axios.post(/*'https://metaq.scutbot.icu/login'*/
+							'http://localhost:8080/login', {
 		            email: this.formData.email,
 					password: this.formData.password
 					})
@@ -59,12 +60,13 @@ import axios from 'axios';
 					  {
 						  alert("登录失败");
 					  }
-					  console.log(this.token);
+					  console.log("token",this.token);
+					  localStorage.setItem('token', JSON.stringify(this.token));
+					  console.log("localStorage",localStorage.getItem('token'));
 		            })
 		            .catch(error => {
 		              console.log(error);
 		            });
-				
 		    },
 			checkEmail(){
 				this.check = true;

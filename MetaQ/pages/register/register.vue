@@ -145,6 +145,7 @@ import axios from 'axios';
 				}
 			},
 			checkEmail(){
+				console.log(localStorage.getItem('token'));
 				this.check = true;
 				const emailPattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 				this.trueEmail = emailPattern.test(this.formData.email);

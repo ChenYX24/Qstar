@@ -18,13 +18,48 @@
 </template>
 
 <script>
+	import axios from 'axios';
 	export default {
 		data() {
 			return {
+				flag:false
 			}
 		},
-		onLoad() {
-			
+		onLoad(options) {
+			//console.log(options);
+			if(options){this.flag=options.flag}
+		},
+		mounted(options){
+			if(!this.flag){
+				//自动登录
+				const token = localStorage.getItem('token');
+				console.log(token);
+				var temp = JSON.stringify(token);
+				if (token) {
+				  // 发送请求进行自动登录
+				  axios.post(/*'https://metaq.scutbot.icu/login'*/
+				  			'http://localhost:8080/test', {token})
+				      .then(response => {
+				        var response = response.data;
+						console.log(response);
+				  	  if(response == " ")
+				  	  {
+				  		  alert("登录失败");
+				  	  }else{
+						  console.log(response);
+						  console.log(localStorage.getItem('token'));
+						  console.log("自动登录成功！");
+						  uni.reLaunch({
+						  		url:"/pages/myQ/myQ"
+						  	})
+						}
+					  })
+				      .catch(error=> {
+				        console.log(error);
+				      });
+				}
+			}
+
 		},
 		methods: {
 			Login(){
