@@ -28,7 +28,7 @@
 			</view>
 
 		</view>
-		<tab-bar :activeTab="tab"></tab-bar>
+		<tab-bar :activeTab="tab" :Type="1"></tab-bar>
 		
 		<!-- 下面是点击加号弹出选择题目 -->
 		<view class="question" id='question_page'   :style="{top: question_page_show ? '0' : '100%'}">

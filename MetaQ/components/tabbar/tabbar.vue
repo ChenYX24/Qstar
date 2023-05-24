@@ -1,14 +1,22 @@
 <template>
 <view class="tabContainer" :class="{'blur':isExpanded}">
   <view class="tab-bar">
-    <view class="tab-item"  @click="switchTab('question')">
+    <view v-if="Type==0" class="tab-item"  @click="switchTab('question')">
       <image class="imgGroup notebIcon leftIcon" :src="activeTab === 'question'?'/static/tabbar/Q2.png':'/static/tabbar/Q.png'"></image>
 	  	<view class="dot" :class="{active: activeTab === 'question'}"></view>
+    </view>
+    <view v-if="Type==1" class="tab-item"  @click="switchTab('setting')">
+      <image class="imgGroup notebIcon leftIcon" :src="activeTab === 'setting'?'/static/tabbar/setting2.png':'/static/tabbar/setting.png'"></image>
+	  	<view class="dot" :class="{active: activeTab === 'setting'}"></view>
     </view>
     <view class="tab-item add" @click="switchTab('add')">
       <image class="imgGroup addImg" src="/static/tabbar/add.png" ></image>
     </view>
-    <view class="tab-item"  @click="switchTab('home')">
+	<view v-if="Type==1" class="tab-item"  @click="switchTab('save')">
+	  <image class="imgGroup notebIcon leftIcon" :src="activeTab === 'save'?'/static/tabbar/save.png':'/static/tabbar/save.png'"></image>
+	  	<view class="dot" :class="{active: activeTab === 'save'}"></view>
+	</view>
+    <view v-if="Type==0" class="tab-item"  @click="switchTab('home')">
       <image class="imgGroup"  :src="activeTab === 'home'?'/static/tabbar/home2.png':'/static/tabbar/home.png'"></image>
 	  	<view class="dot" :class="{active: activeTab === 'home'}"></view>
     </view>
@@ -39,9 +47,13 @@ export default {
 	  isExpanded:{
 		  type:Boolean,
 		  default:false
+	  },
+	  Type:{
+		  type:Number,
+		  default:0
 	  }
     },
-  methods: {
+	methods: {
 	  changeAdd(){
 		  this.isAdd=!this.isAdd;
 	  },
