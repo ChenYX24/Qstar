@@ -43,9 +43,12 @@
 		},
 		methods:{
 			delete_options(item){
-				  this.text.splice(item,1)
-				  this.text_copy.splice(item,1)
-				  this.text=[...this.text_copy];
+				console.log(item)
+				this.text.splice(item,1)
+				this.text_copy.splice(item,1)
+				console.log(this.text)
+				console.log(this.text_copy)
+				this.text=[...this.text_copy];
 			},
 			add_options(){
 				this.text_copy.push('');
