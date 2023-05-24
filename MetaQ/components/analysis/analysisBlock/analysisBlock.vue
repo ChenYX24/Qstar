@@ -13,7 +13,7 @@
       <swiper-item class="chart" v-for="(item, index) in SData" :key="index" style="overflow-y: scroll;">
 	          <view v-if="index === 0" >
 	            <!-- 单选题列表 -->
-	            <my-table :Data="pieData"></my-table>
+	            <my-table :Data="chartData"></my-table>
 	          </view>
 	          <view v-if="index === 1" class="chartContainer">
 	            <!-- 饼状图 -->
@@ -63,6 +63,10 @@
 				type:String,
 				default:''
 			},
+			chartData:{
+				type:Array,
+				default:[]
+			}
 		},
 		components:{
 			MyTable  
@@ -74,22 +78,17 @@
 				SData:["列表","饼状","环状","柱状","条形","折线"],
 				displayText: "列表",
 				currentSwiper: 0,
-				chartData: [
-					{ name: '选项1', ratio: '50%', value: '10' },
-					{ name: '选项2', ratio: '25%', value: '5' },
-					{ name: '选项3', ratio: '25%', value: '5' },
-				],
-				pieData:[
-				  { value: 1048, name: 'Search Engine'},
-				  { value: 735, name: 'Direct'},
-				  { value: 580, name: 'Email'},
-				  { value: 484, name: 'Union Ads'},
-				  { value: 300, name: 'Video Ads'},
-				  { value: 300, name: 'Vdeo'},
-				  { value: 300, name: 'Vieo'},
-				  { value: 300, name: 'Vido'},
-				  { value: 300, name: 'Vide'},
-				],
+				// chartData:[
+				//   { value: 1048, name: 'Search Engine'},
+				//   { value: 735, name: 'Direct'},
+				//   { value: 580, name: 'Email'},
+				//   { value: 484, name: 'Union Ads'},
+				//   { value: 300, name: 'Video Ads'},
+				//   { value: 300, name: 'Vdeo'},
+				//   { value: 300, name: 'Vieo'},
+				//   { value: 300, name: 'Vido'},
+				//   { value: 300, name: 'Vide'},
+				// ],
 				tiaoOption:{
 					toolbox: {
 					    feature: {
@@ -467,7 +466,7 @@
 				];
 
 
-				const dataLength = this.pieData.length;
+				const dataLength = this.chartData.length;
 
 				const dColorPalette = [];
 				for (let i = 0; i < dataLength; i++) {
@@ -516,7 +515,7 @@
 							      },
 					      radius: ['40%', '70%'],
 						  color: this.dynamicColorPalette,
-					      data: this.pieData,						  
+					      data: this.chartData,						  
 					    }
 					  ]
 				}
@@ -541,7 +540,7 @@
 						  color: 'auto',
 					  },
 					  color: this.dynamicColorPalette,
-				      data: this.pieData,
+				      data: this.chartData,
 					  // selectedMode: 'single',
 				      emphasis: {
 				        itemStyle: {
@@ -563,12 +562,12 @@
 		},
 		methods:{
 			  setChartOptions() {
-			  	this.barOption.xAxis.data=this.pieData.map(item => item.name)
-			  	this.barOption.series[0].data=this.pieData.map(item => item.value)
-				this.tiaoOption.yAxis.data=this.pieData.map(item => item.name)
-				this.tiaoOption.series[0].data=this.pieData.map(item => item.value)
-				this.lineOption.xAxis.data=this.pieData.map(item => item.name)
-				this.lineOption.series[0].data=this.pieData.map(item => item.value)
+			  	this.barOption.xAxis.data=this.chartData.map(item => item.name)
+			  	this.barOption.series[0].data=this.chartData.map(item => item.value)
+				this.tiaoOption.yAxis.data=this.chartData.map(item => item.name)
+				this.tiaoOption.series[0].data=this.chartData.map(item => item.value)
+				this.lineOption.xAxis.data=this.chartData.map(item => item.name)
+				this.lineOption.series[0].data=this.chartData.map(item => item.value)
 			  },
 			onSwiperChange(e) {
 			    const previousSwiper = this.currentSwiper;

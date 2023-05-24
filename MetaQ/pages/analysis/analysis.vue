@@ -13,7 +13,7 @@
 		    >
 		      <swiper-item>
 				<view class="page1">
-					<AnalysisBlock v-for="(block, index) in blocks" :key="block.id" :title="block.title" :type="block.type"></AnalysisBlock>
+					<AnalysisBlock v-for="(block, index) in blocks" :key="block.id" :title="block.title" :type="block.type" :chartData="block.content"></AnalysisBlock>
 				</view>
 		      </swiper-item>
 		      <swiper-item>
@@ -69,6 +69,7 @@
 <script>
 import TabSwiper from "/components/tabSwiper/tabSwiper.vue";
 import AnalysisBlock from "/components/analysis/analysisBlock/analysisBlock.vue"
+import axios from 'axios';  
 	export default {
 		components: {
 			TabSwiper,
@@ -80,17 +81,25 @@ import AnalysisBlock from "/components/analysis/analysisBlock/analysisBlock.vue"
 				currentTab: 0,
 				text1:'分析',
 				text2:"编辑",
-				blocks:[
-					{ id: 1, title: '1.你住在几楼',type:'single'},
-				  { id: 2, title: '2.你住在几楼', type:'multiple'},
-				  { id: 3, title: '3.你住在几楼', type:'blank'},
-				],
+				//要传的
+				blocks:[],
 				isCopy:false,
 				isSave:false,
-				isDelete:false
+				isDelete:false,
 			};
 		},
+		mounted() {
+			this.fetchData(); 
+		},
 		methods: {
+			async fetchData() {  
+				try {  
+				  const response = await axios.get('/static/test.json'); // TODO
+				  this.blocks = response.data.data;  
+				} catch (error) {  
+				  console.error('Error fetching data:', error);  
+				}  
+			  }, 
 		  swiperChange(e) {
 		    this.currentTab = e.detail.current;
 		  },

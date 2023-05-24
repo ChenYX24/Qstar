@@ -72,7 +72,18 @@
             }
             
         }
+        ,{
 
+            "path" : "pages/analysis/analysis",
+
+            
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
         ,{
             "path" : "components/setting/setting",
 
@@ -101,8 +112,6 @@
             }
             
         }
-
-
         ,{
             "path" : "pages/test/test",
             "style" :                                                                                    
@@ -113,7 +122,16 @@
             
         }
 		,{
-            "path" : "pages/analysis/analysis",
+		    "path" : "components/operationEditQuestion/operationEditQuestion",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "",
+		        "enablePullDownRefresh": false
+		    }
+		    
+		}
+		,{
+		    "path" : "components/danxuanDisplay/danxuanDisplay",
 		    "style" :                                                                                    
 		    {
 		        "navigationBarTitleText": "",

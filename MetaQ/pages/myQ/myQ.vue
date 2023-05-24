@@ -37,6 +37,7 @@ import TabBar from '/components/tabbar/tabbar.vue';
 import TabSwiper from "/components/tabSwiper/tabSwiper.vue";
 import QBlock from '/components/myQ/QBlock/QBlock.vue';
 import QBlock2 from '/components/myQ/QBlock2/QBlock2.vue';
+import axios from 'axios';
 export default {
   components: {
     TabBar,
@@ -47,6 +48,9 @@ export default {
   onLoad: function (options) {
 	this.tab=options.tab
   },
+  mounted() {
+  	this.fetchData();
+  },
   data() {
   	return {
   		tab: '',
@@ -56,23 +60,22 @@ export default {
 		text2:"我填写的",
 		isEnd:true,
 		name:'尘',
-		blocks:[
-			{ id: 1, title: '关于早八是否会被饿死调查', isEnd: false, name: '尘' },
-		  { id: 2, title: 'Title 2', isEnd: false, name: '尘' },
-		  { id: 3, title: 'Title 3', isEnd: true, name: '尘' },
-		],
-		blocks1: [
-		  { id: 1,number: 2, title: '关于早八是否会被饿死调查', isPush: false },
-		  { id: 2,number: 20, title: 'Title 2', isPush: true },
-		  { id: 3,number: 3000, title: 'Title 3', isPush: false },
-		  { id: 4,number: 200, title: '关于早八是否会被饿死调查', isPush: false },
-		  { id: 5,number: 20000, title: 'Title 2', isPush: true },
-		  { id: 6,number: 3000, title: 'Title 3', isPush: false },
-		  // 添加更多的块数据...
-		]
+		//要传的值
+		blocks:[],
+		//要传的值
+		blocks1: []
   	}
   },
     methods: {
+		async fetchData() {
+			try {  
+			  const response = await axios.get('/static/test2.json'); // TODO
+			  this.blocks = response.data.data.blocks;
+			  this.blocks1=response.data.data.blocks1
+			} catch (error) {  
+			  console.error('Error fetching data:', error);  
+			}  
+		  },
       swiperChange(e) {
         this.currentTab = e.detail.current;
       },
@@ -81,7 +84,7 @@ export default {
 	  },
 	  test(e){
 		  console.log(e.target)
-	  }
+	  },
     }
 
 };

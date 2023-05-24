@@ -51,18 +51,17 @@
 			sliderSetting
 		},
 		onLoad(options) {
-		  this.content.typeNum=options.typenum
+			if(options.typenum){
+				this.content.typeNum=options.typenum
+			}
 		  // console.log(this.content.typeNum)
 		},
 		data() {
 			return {
 				content:{
-					type:Object,
-					default:{
-						title:"",
-						typeNum:0,
-						choice:[],
-					}
+					title:"",
+					typeNum:-1,
+					choice:[],
 					
 				}
 			};
@@ -70,6 +69,7 @@
 		methods:{
 			toEditQuestion(){
 				 // const titleComponent = this.$refs.title // 获取标题组件实例
+				 console.log(this.content.typeNum);
 				 this.content.title= this.$refs.title.content.title; // 获取标题数据
 				 console.log(this.content.title)
 				 console.log('-------------------')

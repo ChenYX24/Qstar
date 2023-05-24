@@ -23,6 +23,13 @@
 				</view>
 				
 			</view>
+			
+			<view class=""  v-for="(item,index) in all_content" :key=index>
+				<danxuanDisplay :content="all_content[index]"  :num="(index+1).toString()"></danxuanDisplay>
+			</view>
+			
+			
+			
 			<view class="add_question" @click="showQuestionChoose">
 				<p>+</p>
 			</view>
@@ -93,10 +100,12 @@
 
 <script>
 	import TabBar from '/components/tabbar/tabbar.vue';
+	import danxuanDisplay from '/components/danxuanDisplay/danxuanDisplay.vue';
 	// import Blank from '/components/blank/blank.vue';
 	export default {
 		components: {
 			TabBar,
+			danxuanDisplay
 			// Blank
 		},
 		onLoad: function(options) {
@@ -105,13 +114,32 @@
 		data() {
 			return {
 				tab: '',
-				//用来记录四种问题的数量
-				
+				// all_content:[],
+				all_content:[
+						{
+							title:"标题1",
+							type:'0',
+							choice:['a','b','c'],
+						},
+						{
+							title:"标题2",
+							type:'0',
+							choice:['m','n','b'],
+					    },
+						{
+							title:"标题2",
+							type:'0',
+							choice:['m','n','b'],
+						}],
 				//下面是决定两个页面互相切换的变量
 				questionnire_page_show:0,
 				question_page_show:0,
 			}
 		},
+		// created(){
+		// 	console.log(this.all_content[0])
+		// 	console.log(this.all_content[1])
+		// },
  	    mounted() {
 		  // this.textareaDom = this.$refs.textareaDom;
 	    },
@@ -231,7 +259,7 @@
 	.add_question {
 		margin: 2vh;
 		height: 15vh;
-		// min-height: 15vh;
+		min-height: 15vh;
 		width: 80vw;
 		border: 2px solid #fff;
 		border-radius: 5vw;
