@@ -11,6 +11,9 @@
 				<view class="button" @tap="Register">
 					注册
 				</view>
+				<view class="button2" @tap="findPassword">
+					找回密码
+				</view>
 			</view>
 		</view>
 	</view>
@@ -18,13 +21,48 @@
 </template>
 
 <script>
+	import axios from 'axios';
 	export default {
 		data() {
 			return {
+				flag:false
 			}
 		},
-		onLoad() {
-			
+		onLoad(options) {
+			//console.log(options);
+			if(options){this.flag=options.flag}
+		},
+		mounted(options){
+			if(!this.flag){
+				//自动登录
+				const token = localStorage.getItem('token');
+				console.log(token);
+				var temp = JSON.stringify(token);
+				if (token) {
+				  // 发送请求进行自动登录
+				  axios.post(/*'https://metaq.scutbot.icu/login'*/
+				  			'http://localhost:8080/test', {token})
+				      .then(response => {
+				        var response = response.data;
+						console.log(response);
+				  	  if(response == " ")
+				  	  {
+				  		  alert("登录失败");
+				  	  }else{
+						  console.log(response);
+						  console.log(localStorage.getItem('token'));
+						  console.log("自动登录成功！");
+						  uni.reLaunch({
+						  		url:"/pages/myQ/myQ"
+						  	})
+						}
+					  })
+				      .catch(error=> {
+				        console.log(error);
+				      });
+				}
+			}
+
 		},
 		methods: {
 			Login(){
@@ -35,6 +73,11 @@
 			Register(){
 				uni.navigateTo({
 					url:"/pages/register/register"
+				})
+			},
+			findPassword(){
+				uni.navigateTo({
+					url:"/pages/findPasswd/findPasswd"
 				})
 			}
 		}
@@ -75,11 +118,11 @@
 		font-family: 'ali', sans-serif;
 	}
 	.buttonGroup{
-		margin-top: 5.9375rem;
+		margin-top: 3rem;
 		display: grid;
 		justify-content: center;
 		justify-items: center;
-		gap: 5rem;
+		gap: 2rem;
 	}
 	.button{
 	  width: 80vw;
@@ -94,5 +137,20 @@
 	  display: flex;
 	  justify-content: center;
 	  align-items: center;
+	}
+	.button2{
+		width: 80vw;
+		height: 13vw;
+		opacity: 1;
+		border-radius: 12px;
+		background: rgba(230, 230, 240, 1);
+		box-shadow: 0px 2px 4px 0px rgba(136, 63, 143, 0.25);
+		backdrop-blur: 4px;
+		font-size: 20px;
+		font-weight: 400;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		color: rgba(128, 128, 128, 0.75);
 	}
 </style>

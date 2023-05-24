@@ -145,6 +145,7 @@ import axios from 'axios';
 				}
 			},
 			checkEmail(){
+				console.log(localStorage.getItem('token'));
 				this.check = true;
 				const emailPattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 				this.trueEmail = emailPattern.test(this.formData.email);
@@ -199,7 +200,6 @@ import axios from 'axios';
 		color: rgba(0, 0, 0, 0.75);
 		text-align: center;
 		vertical-align: top;
-		color: #000;
 		border-radius: 12px;
 		background: linear-gradient(90deg, rgba(224, 222, 250, 0.75) 0%, rgba(255, 235, 244, 0.75) 100%);
 		box-shadow: 0px 2px 4px 0px rgba(136, 63, 143, 0.25);
@@ -212,10 +212,9 @@ import axios from 'axios';
 		height: 10vh;
 		font-size: 24px;
 		font-weight: 400;
-		color: rgba(0, 0, 0, 0.75);
 		text-align: center;
 		vertical-align: top;
-		color: #000;
+		color: rgba(128, 128, 128, 1);
 		border-radius: 12px;
 		background-color: rgba(230, 230, 240, 1);
 		box-shadow: 0px 2px 4px 0px rgba(136, 63, 143, 0.25);
@@ -334,6 +333,10 @@ import axios from 'axios';
 	.link {
 		margin-top: 5px;
 		font-size: 14px;
+		color: rgba(128, 128, 128, 1);
+		border-radius: 12px;
+		background: rgba(230, 230, 240, 1);
+		box-shadow: 0px 2px 4px 0px rgba(136, 63, 143, 0.25);
 	}
 	.title {
 		display: flex;

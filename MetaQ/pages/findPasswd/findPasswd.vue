@@ -13,7 +13,7 @@
 			    	<label class="label">密码：</label>
 			    	<input v-bind:type="this.visible1 ? 'text' : 'password'" maxlength="16" placeholder="请输入密码" class="Input" v-model="formData.password" required>
 			    	<image class="img"
-			    	v-bind:src="this.visible1 ? '../../static/login/visible.png' : '../../static/login/invisible.png'"
+			    	v-bind:src="this.visible1 ? '../../static/login/avisible.png' : '../../static/login/invisible.png'"
 			    	 @click="changeView1"></image>
 			    </div>
 			    <div :class="{'Input-margin':isSame,'errorWrite':!isSame}">
@@ -74,13 +74,13 @@ import axios from 'axios';
 		},
 		methods: {
 		    changepasswd() {
-				axios.post('http://localhost:8080/checkcode', {
+				axios.post('https://metaq.scutbot.icu/checkcode', {
 				  email: this.formData.email,
 				  code:  this.formData.verification
 				})
 				.then(response => {
 					if(response.data == true){
-						axios.post('http://localhost:8080/changepasswd', {
+						axios.post('https://metaq.scutbot.icu/changepasswd', {
 							email:    this.formData.email,
 							password: this.formData.password
 						})
@@ -115,7 +115,7 @@ import axios from 'axios';
 			},
 			startTime(){
 				if(this.enableGetcode && this.check){
-					axios.post('http://localhost:8080/sendcode', {
+					axios.post('https://metaq.scutbot.icu/sendcode', {
 					  email: this.formData.email
 					})
 					.then(response => {
@@ -202,7 +202,6 @@ import axios from 'axios';
 		color: rgba(0, 0, 0, 0.75);
 		text-align: center;
 		vertical-align: top;
-		color: #000;
 		border-radius: 12px;
 		background: linear-gradient(90deg, rgba(224, 222, 250, 0.75) 0%, rgba(255, 235, 244, 0.75) 100%);
 		box-shadow: 0px 2px 4px 0px rgba(136, 63, 143, 0.25);
@@ -215,10 +214,9 @@ import axios from 'axios';
 		height: 10vh;
 		font-size: 24px;
 		font-weight: 400;
-		color: rgba(0, 0, 0, 0.75);
+		color: rgba(128, 128, 128, 1);
 		text-align: center;
 		vertical-align: top;
-		color: #000;
 		border-radius: 12px;
 		background-color: rgba(230, 230, 240, 1);
 		box-shadow: 0px 2px 4px 0px rgba(136, 63, 143, 0.25);
@@ -340,6 +338,10 @@ import axios from 'axios';
 	.link {
 		margin-top: 5px;
 		font-size: 14px;
+		color: rgba(128, 128, 128, 1);
+		border-radius: 12px;
+		background: rgba(230, 230, 240, 1);
+		box-shadow: 0px 2px 4px 0px rgba(136, 63, 143, 0.25);
 	}
 	.title {
 		display: flex;

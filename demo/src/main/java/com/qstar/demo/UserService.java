@@ -64,8 +64,13 @@ public class UserService {
 		String json = "";
 		json = GetUserByEmail(Email);
 		User user = userio.switchJsonToObject(json,User.class);
+		if(user == null)
+		{
+			return false;
+		}
 		if(user.get_passwd().hashCode() == Passwd.hashCode())
 		{
+			System.out.println("账号密码匹配正确");
 			return true;
 		}
 		return false;
