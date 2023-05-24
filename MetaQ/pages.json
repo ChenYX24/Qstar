@@ -139,6 +139,15 @@
 		    }
 		    
 		}
+        ,{
+            "path" : "pages/setting/setting",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationStyle": "custom"
