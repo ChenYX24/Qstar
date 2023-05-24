@@ -11,7 +11,10 @@
 				</view>
 			</view>
 
-			<operationEditQuestion :style="{display: operation_show ? 'flex' : 'none'}"></operationEditQuestion>
+			<operationEditQuestion 
+			:style="{display: operation_show ? 'flex' : 'none'}"
+			:num="num">
+			</operationEditQuestion>
 			
 		</view>
 		
@@ -42,10 +45,10 @@
 			},
 
 		},
-		created() {
-		  // console.log('---------------------------------')
-		  // console.log(this.content)
-		},
+		// created() {
+		//   console.log('---------------------------------')
+		//   console.log(this.content)
+		// },
 		// computed:{
 		// 	console.log(content)
 		// },
@@ -62,6 +65,7 @@
 
 <style lang="less">
 .danxuanDisplay{
+
 	margin-top: 10px;
 	display: flex;
 	width: 100vw;

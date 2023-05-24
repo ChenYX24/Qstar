@@ -1,4 +1,6 @@
 import App from './App'
+import store from './store'
+
 
 // #ifndef VUE3
 import Vue from 'vue'
@@ -34,6 +36,7 @@ try {
 } catch (error) { }
 
 const app = new Vue({
+	store,
   ...App
 })
 app.$mount()
@@ -41,8 +44,10 @@ app.$mount()
 
 // #ifdef VUE3
 import { createSSRApp } from 'vue'
+
 export function createApp() {
   const app = createSSRApp(App)
+  app.use(store)  
   return {
     app
   }

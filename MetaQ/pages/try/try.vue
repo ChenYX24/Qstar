@@ -60,7 +60,7 @@
 			return {
 				content:{
 					title:"",
-					typeNum:-1,
+					typeNum:1,
 					choice:[],
 					
 				}
