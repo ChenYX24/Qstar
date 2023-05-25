@@ -44,8 +44,11 @@ import { List } from 'echarts';
 			}    
 		},
 		mounted(){
+			// console.log(this.text_copy)
 			this.copy=[...this.text_copy]
+			this.text=[...this.text_copy]
 		},
+
 		methods:{    
 			delete_options(item){    
 				  this.copy.splice(item,1)     

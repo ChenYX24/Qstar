@@ -103,6 +103,7 @@
 <script>
 	import TabBar from '/components/tabbar/tabbar.vue';
 	import danxuanDisplay from '/components/danxuanDisplay/danxuanDisplay.vue';
+	import store from '/store/index.js'
 	// import Blank from '/components/blank/blank.vue';
 	export default {
 		components: {
@@ -112,6 +113,18 @@
 		},
 		onLoad: function(options) {
 			this.tab = options.tab
+			if(options.content){
+				let temp=JSON.parse(options.content);
+				//如果all_content的长度比当前正在操作的选择的序号大
+				if(this.all_content.length>this.$store.state.now_operate){
+					this.all_content[this.$store.state.now_operate]=temp;
+				}
+				else{
+					this.all_content.push(temp);
+				}
+				//重置这个值
+				this.$store.commit('setNowOperate',-1);
+			}
 		},
 		data() {
 			return {
@@ -137,16 +150,11 @@
 				question_page_show:0,
 			}
 		},
-		// created(){
-		// 	console.log(this.all_content[0])
-		// 	console.log(this.all_content[1])
-		// },
-		computed:{
-			count() {
-			       console.log(this.$store.state.count) 
-			    }
+		watch: {
+		  '$store.state.IsJump': function(newVal, oldVal) {
+				this.toEdit()
+		  }
 		},
-		
  	    mounted() {
 		  // this.textareaDom = this.$refs.textareaDom;
 	    },
@@ -154,7 +162,6 @@
 			test(e){
 					var node=document.getElementById(e.currentTarget.id);
 					node.style.height=`${e.detail.height}px`
-
 			},
 			showQuestionChoose(){
 					this.question_page_show=1;
@@ -167,11 +174,17 @@
 				this.creat(e.currentTarget.id);
 			},
 			creat(type_num){
-				// console.log(type_num)
 				uni.navigateTo({
 					url: '/pages/try/try?typenum=' + type_num  
 				})
 			},
+			toEdit(){
+				console.log(this.all_content[this.$store.state.now_operate])
+				uni.navigateTo({
+					url: '/pages/try/try?content='+JSON.stringify(this.all_content[this.$store.state.now_operate])
+							
+				})
+			}
 		}
 
 	};
