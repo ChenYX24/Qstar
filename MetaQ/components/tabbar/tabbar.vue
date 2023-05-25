@@ -83,6 +83,10 @@ export default {
 		        url: `/pages/home/home?tab=${tab}`,
 		      });
 		      break;
+			case 'setting':
+				wx.navigateTo({
+					url:`/pages/setting/setting?tab=${tab}`
+				})
 		  }
 		}
 	}
@@ -114,6 +118,11 @@ export default {
 		        url: `/pages/home/home?tab=${tab}`,
 		      });
 		      break;
+		  case 'setting':
+			uni.navigateTo({
+			  url: `/pages/setting/setting?tab=${tab}`,
+			});
+			break;
 		  }
 		}
 	}
