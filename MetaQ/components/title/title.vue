@@ -18,10 +18,6 @@
 	export default {
 		name:"Title",
 		props:{
-			num:{
-				type:String,
-				default:'1'
-			},
 			content:{
 				type:Object,
 				default:{

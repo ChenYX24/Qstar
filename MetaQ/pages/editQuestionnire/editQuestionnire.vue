@@ -25,7 +25,9 @@
 			</view>
 			
 			<view class=""  v-for="(item,index) in all_content" :key=index>
-				<danxuanDisplay :content="all_content[index]"  :num="(index+1).toString()"></danxuanDisplay>
+				<danxuanDisplay :content="all_content[index]"  
+				:num="(index+1).toString()"
+				></danxuanDisplay>
 			</view>
 			
 			
@@ -114,7 +116,6 @@
 		data() {
 			return {
 				tab: '',
-				// all_content:[],
 				all_content:[
 						{
 							title:"标题1",
@@ -140,6 +141,12 @@
 		// 	console.log(this.all_content[0])
 		// 	console.log(this.all_content[1])
 		// },
+		computed:{
+			count() {
+			       console.log(this.$store.state.count) 
+			    }
+		},
+		
  	    mounted() {
 		  // this.textareaDom = this.$refs.textareaDom;
 	    },
@@ -165,7 +172,6 @@
 					url: '/pages/try/try?typenum=' + type_num  
 				})
 			},
-
 		}
 
 	};
