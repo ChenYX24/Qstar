@@ -51,7 +51,12 @@
 		methods:{
 			toEdit(){
 				//修改当前正在操作的值
-				this.$store.commit('setNowOperate',this.num);   
+				// console.log(this.$store.state.now_operate)
+				this.$store.commit('setNowOperate',this.num-1);
+				this.$store.commit('setIsJump');
+				// console.log(this.$store.state.now_operate)
+				// console.log(this.$store.state.IsJump)
+				// console.log('--------------')
 			}
 		}
 	}

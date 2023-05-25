@@ -1,23 +1,22 @@
 <template>
 	<view class="background">
 		<view>
-			<Title ref="title"></Title>
+			<Title ref="title" :content="content"></Title>
 			
-			<!-- <SingleChoice></SingleChoice> -->
-			<!-- <SingleChoice ref="danxuan"></SingleChoice> -->
-			<view class="" v-if="content.typeNum == 0">
-			<SingleChoice ref="danxuan"></SingleChoice>
+			<view class="" v-if="content.type == 0">
+			<SingleChoice ref="danxuan" :text_copy="content.choice">
+			</SingleChoice>
 			</view>
 			
-			<view class="" v-else-if="content.typeNum == 1">
+			<view class="" v-else-if="content.type == 1">
 			<SingleChoice ref="duoxuan"></SingleChoice>
 			</view>
 			
-			<view class="" v-else-if="content.typeNum == 2">
+			<view class="" v-else-if="content.type == 2">
 			<!-- <SingleChoice></SingleChoice> -->
 			</view>
 			
-			<view class="" v-else-if="content.typeNum == 3">
+			<view class="" v-else-if="content.type == 3">
 			<!-- <SingleChoice></SingleChoice> -->
 			<slider-setting ref="slider_set"></slider-setting>
 			</view>
@@ -51,17 +50,20 @@
 			sliderSetting
 		},
 		onLoad(options) {
-			if(options.typenum){
-				this.content.typeNum=options.typenum
+			if(options.type){
+				this.content.type=options.type
 			}
-		  // console.log(this.content.typeNum)
+			if(options.content){
+				let temp=JSON.parse(options.content)
+				this.content=temp
+			}
 		},
 		data() {
 			return {
 				content:{
-					title:"",
-					typeNum:1,
-					choice:[],
+					title:"444",
+					type:'0',
+					choice:['3','5']
 					
 				}
 			};
@@ -69,18 +71,18 @@
 		methods:{
 			toEditQuestion(){
 				 // const titleComponent = this.$refs.title // 获取标题组件实例
-				 console.log(this.content.typeNum);
+				 // console.log(this.content.type);
 				 this.content.title= this.$refs.title.content.title; // 获取标题数据
-				 console.log(this.content.title)
-				 console.log('-------------------')
-				 console.log(this.content.typeNum)
-				 switch(parseInt(this.content.typeNum)){
+				 // console.log(this.content.title)
+				 // console.log('-------------------')
+				 // console.log(this.content.type)
+				 switch(parseInt(this.content.type)){
 					 case 0:
-							this.content.choice=this.$refs.danxuan.text_copy;
-							console.log(this.content.choice);
+							this.content.choice=this.$refs.danxuan.copy;
+							// console.log(this.content.choice);
 							break;
 					 case 1:
-							this.content.choice=this.$refs.duoxuan.text_copy;
+							this.content.choice=this.$refs.duoxuan.copy;
 							console.log(this.content.choice);
 							break;
 					 case 2:
@@ -92,13 +94,12 @@
 					 default:
 							break;
 							
-
 					};
+				this.generateQuestion();
 				 },
 				 generateQuestion(){
 					 uni.navigateTo({
-					 	url: '/pages/editQuestionnire/editQuestionnire?content='+this.content
-			
+					 	url: '/pages/editQuestionnire/editQuestionnire?content='+JSON.stringify(this.content)
 					 })
 				 }
 				 
