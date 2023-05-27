@@ -1,7 +1,6 @@
 <template>
-	<view class="background">
-		<view class="questionnire_page" id='questionnire_page' :style="{display: questionnire_page_show ? 'none' : 'flex'}">
-			
+	<view class="background" id="bg" ref="background">
+		<view class="questionnire_page" id='questionnire_page' :style="{display: questionnire_page_show ? 'none' : 'flex'}">		
 		
 			<view class="input_class" id='input_class_block'>
 				<view class="textarea_border">
@@ -10,21 +9,22 @@
 							  id="title"
 							  placeholder="请输入问卷标题"
 							  @linechange="test"
+							  v-model="nireTitle"
 							  ></textarea>
 				</view>
-				
 				<view class="textarea_border">
 							  <textarea maxlength="900"
 							  ref="textareaDom"
 							  id="descripition"
 							  placeholder="请输入问卷简介"
 							  @linechange="test"
+							  v-model="nireIntroduction"
 							  ></textarea>
 				</view>
 				
 			</view>
 			
-			<view class=""  v-for="(item,index) in all_content" :key=index>
+			<view class="" id='question-all'  v-for="(item,index) in all_content" :key=index>
 				<danxuanDisplay :content="all_content[index]"  
 				:num="(index+1).toString()"
 				></danxuanDisplay>
@@ -114,21 +114,31 @@
 		onLoad: function(options) {
 			this.tab = options.tab
 			if(options.content){
-				let temp=JSON.parse(options.content);
+				//重新获取all_content
+				this.all_content=this.$store.state.questionNire.all_content
+				const temp=JSON.parse(options.content);
 				//如果all_content的长度比当前正在操作的选择的序号大
+				// console.log(this.all_content.length,this.$store.state.now_operate)
 				if(this.all_content.length>this.$store.state.now_operate){
 					this.all_content[this.$store.state.now_operate]=temp;
+					this.isAdd=this.$store.state.now_operate;
 				}
 				else{
 					this.all_content.push(temp);
+					this.isAdd=-1;
 				}
 				//重置这个值
 				this.$store.commit('setNowOperate',-1);
 			}
 		},
+		mounted(){
+			this.toButton()
+		},
 		data() {
 			return {
 				tab: '',
+				nireTitle:'',
+				nireIntroduction:'',
 				all_content:[
 						{
 							title:"标题1",
@@ -148,6 +158,8 @@
 				//下面是决定两个页面互相切换的变量
 				questionnire_page_show:0,
 				question_page_show:0,
+				isAdd:-2
+
 			}
 		},
 		watch: {
@@ -155,9 +167,6 @@
 				this.toEdit()
 		  }
 		},
- 	    mounted() {
-		  // this.textareaDom = this.$refs.textareaDom;
-	    },
 		methods:{
 			test(e){
 					var node=document.getElementById(e.currentTarget.id);
@@ -174,17 +183,56 @@
 				this.creat(e.currentTarget.id);
 			},
 			creat(type_num){
+				var length=this.all_content.length
+				var content_temp={
+					title:'',
+					type:type_num,
+					choice:[]
+				}
+				//每次跳转前都要把信息转存
+				this.$store.commit('set_all_content',this.all_content);
 				uni.navigateTo({
-					url: '/pages/try/try?typenum=' + type_num  
+					url: '/pages/try/try?content='+JSON.stringify(content_temp)+'&length='+length  
 				})
 			},
 			toEdit(){
-				console.log(this.all_content[this.$store.state.now_operate])
+				// console.log(this.all_content[this.$store.state.now_operate])
+				//每次跳转前都要把信息转存
+				this.$store.commit('set_all_content',this.all_content);
 				uni.navigateTo({
 					url: '/pages/try/try?content='+JSON.stringify(this.all_content[this.$store.state.now_operate])
 							
 				})
+			},
+			//更改页面当前显示位置的函数,为了使添加了新题目，滑动到最下面
+			toButton(){
+				this.$nextTick(()=>{
+					const questionnire_page = document.getElementById("questionnire_page");
+					if(this.isAdd==-1){
+					// const backgroundElement = this.$refs.background;
+					// console.log(backgroundElement.scrollHeight)
+					var scrollHeight=questionnire_page.scrollHeight;
+					var offsetHeight=questionnire_page.offsetHeight;
+					questionnire_page.scrollTop=scrollHeight>0?scrollHeight-offsetHeight:0;
+					}
+					else{
+					// 	var question_all=document.getElementById('question-all')
+					// 	var temp=this.$store.state.offsetHeight
+					// 	var scrollHeight=questionnire_page.scrollHeight;
+					// 	console.log(questionnire_page.scrollTop,scrollHeight-temp,temp,scrollHeight)
+					// 	questionnire_page.scrollTo(0,temp)
+					// 	console.log(questionnire_page.scrollTop,scrollHeight-temp,temp,scrollHeight)
+						console.log(this.isAdd)
+			
+					
+					}
+					
+					
+				})
+
+
 			}
+			
 		}
 
 	};

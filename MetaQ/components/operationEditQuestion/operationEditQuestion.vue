@@ -50,13 +50,12 @@
 		},
 		methods:{
 			toEdit(){
+				// console.log(e.target.offsetTop)
+				// this.$store.commit('setOffsetHeight',e.target.offsetTop);
 				//修改当前正在操作的值
-				// console.log(this.$store.state.now_operate)
 				this.$store.commit('setNowOperate',this.num-1);
 				this.$store.commit('setIsJump');
-				// console.log(this.$store.state.now_operate)
-				// console.log(this.$store.state.IsJump)
-				// console.log('--------------')
+
 			}
 		}
 	}

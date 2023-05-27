@@ -41,6 +41,7 @@
 	import SingleChoice from "/components/danxuan/danxuan.vue"
 	import setting from "/components/setting/setting.vue"
 	import sliderSetting from "/components/sliderSetting/sliderSetting.vue"
+	import store from '/store/index.js'
 	export default {
 		components:{
 			// danxuansetting,
@@ -50,10 +51,14 @@
 			sliderSetting
 		},
 		onLoad(options) {
-			if(options.type){
-				this.content.type=options.type
+			// console.log(options.length)
+			if(options.length){
+				let temp=JSON.parse(options.content);
+				let length=options.length;
+				this.content=temp;
+				this.$store.commit('setNowOperate',100000);
 			}
-			if(options.content){
+			else if(options.content){//这里是对已经存在的问题进行编辑
 				let temp=JSON.parse(options.content)
 				this.content=temp
 			}
@@ -79,6 +84,8 @@
 				 switch(parseInt(this.content.type)){
 					 case 0:
 							this.content.choice=this.$refs.danxuan.copy;
+							//去除空值
+							this.content.choice=this.content.choice.filter(item => item !== null && item !== undefined && item !== "");  // 过滤空值
 							// console.log(this.content.choice);
 							break;
 					 case 1:
@@ -129,6 +136,7 @@
 	position: relative;
 	top: 0;
 	left:0;
+    overflow-y: scroll;
 	background: linear-gradient(225deg, rgba(245, 224, 230, 1) 0%, rgba(228, 218, 241, 1) 38.89%, rgba(237, 248, 255, 1) 67.78%, rgba(230, 224, 250, 1) 100%);
 }
 
@@ -157,6 +165,7 @@
 }
 
 .button_ok_or_no:last-child{
+	margin-bottom: 15vh;
 	background-color: aquamarine;
 	background-color: rgba(230,230,240,1);
 }
