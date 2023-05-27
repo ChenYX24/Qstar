@@ -1,5 +1,5 @@
 <template>
-	<view class="danxuanDisplay">
+	<view class="danxuanDisplay" id="test">
 		<view class="box">
 			<view class="inbox" @click="showOperation">
 				<view class="title">
@@ -13,7 +13,9 @@
 
 			<operationEditQuestion 
 			:style="{display: operation_show ? 'flex' : 'none'}"
-			:num="num">
+			:num="num"
+			@clickSon="getOffsetTop"
+			 >
 			</operationEditQuestion>
 			
 		</view>
@@ -56,9 +58,25 @@
 			operationEditQuestion
 		},
 		methods:{
+			getOffsetTop: function() {
+				let viewElements = document.querySelectorAll("#test");  
+				if(viewElements)
+				{
+					let target_view = viewElements[(this.num-1)];
+					// target_view={'targetView_height':target_view.offsetHeight,'targetView_offset_top':target_view.offsetTop)}
+					target_view={'targetView_height':target_view.offsetHeight,'targetView_offset_top':target_view.offsetTop}
+					this.$store.commit('setTargetView',target_view);
+				}
+
+			},
 			showOperation(){
 					this.operation_show=!this.operation_show
-			}
+			},
+			// getTop()
+			// {
+			// 	console.log(111)
+			// 	this.$emit('clickSon')
+			// }
 		}
 	}
 </script>

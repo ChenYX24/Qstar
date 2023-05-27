@@ -24,10 +24,11 @@
 				
 			</view>
 			
-			<view class="" id='question-all'  v-for="(item,index) in all_content" :key=index>
+			<view class="" id='question-all' v-for="(item,index) in all_content" :key=index>
 				<danxuanDisplay :content="all_content[index]"  
 				:num="(index+1).toString()"
 				></danxuanDisplay>
+				
 			</view>
 			
 			
@@ -168,6 +169,7 @@
 		  }
 		},
 		methods:{
+
 			test(e){
 					var node=document.getElementById(e.currentTarget.id);
 					node.style.height=`${e.detail.height}px`
@@ -216,15 +218,16 @@
 					questionnire_page.scrollTop=scrollHeight>0?scrollHeight-offsetHeight:0;
 					}
 					else{
-					// 	var question_all=document.getElementById('question-all')
-					// 	var temp=this.$store.state.offsetHeight
-					// 	var scrollHeight=questionnire_page.scrollHeight;
-					// 	console.log(questionnire_page.scrollTop,scrollHeight-temp,temp,scrollHeight)
-					// 	questionnire_page.scrollTo(0,temp)
-					// 	console.log(questionnire_page.scrollTop,scrollHeight-temp,temp,scrollHeight)
-						console.log(this.isAdd)
-			
-					
+						var question_all = document.getElementById('question-all');  
+						var targetView = this.$store.state.targetView;
+						var editHeight = this.$store.state.editHeight;
+						var question_all_height = questionnire_page.clientHeight;
+						var targetView_height = targetView.targetView_height;  
+						var targetView_offset_top = targetView.targetView_offset_top;  
+						var scroll_position = targetView_offset_top-(question_all_height- (targetView_height-editHeight)) / 2;  
+						console.log(question_all_height , targetView_height,editHeight)
+						questionnire_page.scrollTo(0, scroll_position);  
+
 					}
 					
 					

@@ -9,7 +9,8 @@ const store = createStore({
 		nireIntroduction:'',
 		all_content:[]
 	},
-	offsetHeight:0
+	targetView:null,
+	editHeight:0
   }, 
   mutations: {  
 		setNowOperate(state, id){
@@ -21,10 +22,12 @@ const store = createStore({
 		set_all_content(state,all_content){
 			state.questionNire.all_content=all_content;
 		},
-		setOffsetHeight(state,height){
-			state.offsetHeight=height;
-		}
-			  
+		setTargetView(state,targetView){
+			state.targetView=targetView;
+		},
+		setEditHeight(state,editHeight){
+			state.editHeight=editHeight;
+		}  
   },
 //   actions: {  
 //     incrementAsync({ commit }) {  

@@ -49,13 +49,14 @@
 			}
 		},
 		methods:{
-			toEdit(){
-				// console.log(e.target.offsetTop)
-				// this.$store.commit('setOffsetHeight',e.target.offsetTop);
+			toEdit(e){
+				let editHeight=this.$el.clientHeight
+				console.log(this.$el.clientHeight)
+				this.$store.commit('setEditHeight',editHeight);
 				//修改当前正在操作的值
 				this.$store.commit('setNowOperate',this.num-1);
 				this.$store.commit('setIsJump');
-
+				this.$emit('clickSon')
 			}
 		}
 	}
