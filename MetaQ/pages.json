@@ -148,6 +148,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/fillQuestionnaire/fillQuestionnaire",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationStyle": "custom"
