@@ -217,6 +217,10 @@
 					var offsetHeight=questionnire_page.offsetHeight;
 					questionnire_page.scrollTop=scrollHeight>0?scrollHeight-offsetHeight:0;
 					}
+					else if(this.isAdd==-2)
+					{
+						
+					}
 					else{
 						var question_all = document.getElementById('question-all');  
 						var targetView = this.$store.state.targetView;
@@ -227,7 +231,6 @@
 						var scroll_position = targetView_offset_top-(question_all_height- (targetView_height-editHeight)) / 2;  
 						console.log(question_all_height , targetView_height,editHeight)
 						questionnire_page.scrollTo(0, scroll_position);  
-
 					}
 					
 					

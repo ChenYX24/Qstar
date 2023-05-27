@@ -16,7 +16,7 @@
 	  <image class="imgGroup addImg" src="/static/tabbar/add.png" ></image>
 	</view>
 	<view v-if="Type==1" class="tab-item"  @click="switchTab('save')">
-	  <image class="imgGroup notebIcon leftIcon" :src="activeTab === 'save'?'/static/tabbar/save.png':'/static/tabbar/save.png'"></image>
+	  <image class="imgGroup notebIcon leftIcon" :src="activeTab === 'save'?'/static/tabbar/save2.png':'/static/tabbar/save.png'"></image>
 	  	<view class="dot" :class="{active: activeTab === 'save'}"></view>
 	</view>
     <view v-if="Type==0" class="tab-item"  @click="switchTab('home')">
@@ -66,6 +66,10 @@ export default {
 	  },
 	 changeSave(){
 		 this.isSave=!this.isSave;
+		 if(!this.isSave)
+		 {
+		 	this.activeTab=''
+		 }
 	 },
 	//#ifdef MP-WEIXIN
 	switchTab(tab) {
@@ -102,6 +106,10 @@ export default {
 				break;
 			case 'save':
 				this.isSave=!this.isSave
+				if(!this.isSave)
+				{
+					this.activeTab=''
+				}
 				break;
 		  }
 		}
@@ -144,6 +152,10 @@ export default {
 			break;
 		  case 'save':
 		  	this.isSave=!this.isSave
+			if(!this.isSave)
+			{
+				this.activeTab=''
+			}
 			break;
 		  }
 		}
