@@ -24,7 +24,7 @@
 				b1:0,
 				isQrcode:false,
 				checkImg:'/static/save/checkImg.png',
-				qrcode:'/static/save/qrcode.png'
+				qrcode:'/static/save/qrcode.png'//TODO
 			};
 		},
 		computed:{
@@ -81,12 +81,12 @@
 			copyText() {
 			if(this.b1==0)
 			{
-				const textToCopy = 'This is the text to be copied to the clipboard.';
+				const textToCopy = 'This is the text to be copied to the clipboard.';//TODO
 				uni.setClipboardData({  
 				  data: textToCopy,  
 				  success: () => {  
 				    uni.showToast({  
-				      title: 'Text copied to clipboard',  
+				      title: '已复制到剪贴板',  
 				      icon: 'success',  
 				    });
 						this.b1=1
@@ -94,7 +94,7 @@
 				  fail: (err) => {  
 				    console.error('Error copying text: ', err);  
 				    uni.showToast({  
-				      title: 'Failed to copy text',  
+				      title: '复制失败',  
 				      icon: 'none',  
 				    });  
 						this.b1=0
@@ -102,10 +102,59 @@
 				});  
 			}
 			},
-			saveQRCode(){
-				this.isQrcode=true
-				this.b1=2
-			}
+			isMobileDevice() {  
+			    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);  
+			  },
+			saveQRCode() {  
+			  if (!this.isQrcode) {  
+				  //TODO获取qrcode
+				this.isQrcode = !this.isQrcode ;  
+				this.b1 = 2;  
+			  } else {  
+				if (this.isMobileDevice()) {    
+					uni.downloadFile({  
+					  url: this.qrcode,  
+					  success: (res) => {  
+						if (res.statusCode === 200) {  
+						  uni.saveImageToPhotosAlbum({  
+							filePath: res.tempFilePath,  
+							success: () => {  
+							  uni.showToast({  
+								title: '二维码已保存',  
+								icon: 'success',  
+							  });  
+							},  
+							fail: (err) => {  
+							  console.error('Error saving image: ', err);  
+							  uni.showToast({  
+								title: '保存失败',  
+								icon: 'none',  
+							  });  
+							},  
+						  });  
+						}  
+					  },  
+					  fail: (err) => {  
+						console.error('Error downloading image: ', err);  
+						uni.showToast({  
+						  title: '保存失败',  
+						  icon: 'none',  
+						});  
+					  },  
+					});
+				} else {  
+				  const link = document.createElement('a');  
+				  link.href = this.qrcode;  
+				  link.download = 'mataQ.png';  
+				  link.style.display = 'none';  
+				  document.body.appendChild(link);  
+				  link.click();  
+				  document.body.removeChild(link);  
+				}  
+			  }  
+			}  
+ 
+
 		}
 	}
 </script>
