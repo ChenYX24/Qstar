@@ -27,20 +27,24 @@
 <!-- 	<add v-if="isAdd"></add> -->
   </view>
   <add :class="{show:isAdd}" :isShow="isAdd" @updateAdd="changeAdd"></add>
+  <save :class="{show:isSave}" :isShow="isSave" @updateSave="changeSave"></save>
   </view>
 </template>
 
 <script>
 import add from "/components/add/add.vue"
+import save from "/components/save/save.vue"
 export default {
   components: {
     add,
+	save
   },
   data() {
     return {
 		activeTab: this.tab,
 		isAdd:false,
-    };
+		isSave:false,
+	};
   },
    props: {
       tab: {
@@ -60,7 +64,9 @@ export default {
 	  changeAdd(){
 		  this.isAdd=!this.isAdd;
 	  },
-
+	 changeSave(){
+		 this.isSave=!this.isSave;
+	 },
 	//#ifdef MP-WEIXIN
 	switchTab(tab) {
 	if(!this.isExpanded)
@@ -93,6 +99,10 @@ export default {
 				wx.navigateTo({
 					url:`/pages/setting/setting?tab=${tab}`
 				})
+				break;
+			case 'save':
+				this.isSave=!this.isSave
+				break;
 		  }
 		}
 	}
@@ -131,6 +141,9 @@ export default {
 			uni.navigateTo({
 			  url: `/pages/setting/setting?tab=${tab}`,
 			});
+			break;
+		  case 'save':
+		  	this.isSave=!this.isSave
 			break;
 		  }
 		}
