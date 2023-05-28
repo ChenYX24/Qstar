@@ -37,10 +37,10 @@
 </template>
 
 <script>
-	import Title from '/components/title/title.vue'
-	import SingleChoice from "/components/danxuan/danxuan.vue"
-	import setting from "/components/setting/setting.vue"
-	import sliderSetting from "/components/sliderSetting/sliderSetting.vue"
+	import Title from '/components/questionEdit/title/title.vue'
+	import SingleChoice from "/components/questionEdit/danxuan/danxuan.vue"
+	import setting from "/components/questionEdit/setting/setting.vue"
+	import sliderSetting from "/components/questionEdit/sliderSetting/sliderSetting.vue"
 	import store from '/store/index.js'
 	export default {
 		components:{
@@ -90,13 +90,13 @@
 							break;
 					 case 1:
 							this.content.choice=this.$refs.duoxuan.copy;
-							console.log(this.content.choice);
+							this.content.choice=this.content.choice.filter(item => item !== null && item !== undefined && item !== "");  // 过滤空值
+							// console.log(this.content.choice);
 							break;
 					 case 2:
 							break;
 					 case 3:
 							this.content.choice=this.$refs.slider_set.setting;
-							console.log(this.content.choice);
 							break;
 					 default:
 							break;

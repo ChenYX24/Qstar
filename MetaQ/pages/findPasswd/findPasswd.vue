@@ -20,7 +20,7 @@
 			    	<label class="confirm_label">确认密码：</label>
 			    	<input class="confirm_input" v-bind:type="this.visible2 ? 'text' : 'password'" maxlength="16" placeholder="请再次输入密码" v-model="formData.confirm" required>
 			    	<image class="img"
-			    	v-bind:src="this.visible2 ? '../../static/login/visible.png' : '../../static/login/invisible.png'"
+			    	v-bind:src="this.visible2 ? '../../static/login/avisible.png' : '../../static/login/invisible.png'"
 			    	 @click="changeView2"></image>
 			    </div>
 			    <div id="gbutton">
