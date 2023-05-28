@@ -25,10 +25,30 @@
 			</view>
 			
 			<view class="" id='question-all' v-for="(item,index) in all_content" :key=index>
-				<danxuanDisplay :content="all_content[index]"  
-				:num="(index+1).toString()"
-				></danxuanDisplay>
-				
+				<!-- 单选组件 -->
+				<view class="" v-if="item.type==0">
+					<danxuanDisplay :content="all_content[index]"
+					:num="(index+1).toString()"
+					></danxuanDisplay>
+				</view>
+				<!-- 多选 -->
+				<view class="" v-if="item.type==1">
+					<danxuanDisplay :content="all_content[index]"
+					:num="(index+1).toString()"
+					></danxuanDisplay>
+				</view>
+				<!-- 填空 -->
+				<view class="" v-else-if="item.type==2">
+					<tiankongDisplay :content="all_content[index]"
+					:num="(index+1).toString()"
+					></tiankongDisplay>
+				</view>
+				<!-- 滑动条 -->
+				<view class="" v-else-if="item.type==3">
+					<sliderDisplay :content="all_content[index]"
+					:num="(index+1).toString()"
+					></sliderDisplay>
+				</view>
 			</view>
 			
 			
@@ -103,13 +123,18 @@
 
 <script>
 	import TabBar from '/components/tabbar/tabbar.vue';
-	import danxuanDisplay from '/components/danxuanDisplay/danxuanDisplay.vue';
+	import danxuanDisplay from '/components/questionShow/danxuanDisplay/danxuanDisplay.vue';
 	import store from '/store/index.js'
+	import tiankongDisplay from '/components/questionShow/tiankongDisplay/tiankongDisplay.vue'
+	import sliderDisplay from '/components/questionShow/sliderDisplay/sliderDisplay.vue'
+	
 	// import Blank from '/components/blank/blank.vue';
 	export default {
 		components: {
 			TabBar,
-			danxuanDisplay
+			danxuanDisplay,
+			tiankongDisplay,
+			sliderDisplay
 			// Blank
 		},
 		onLoad: function(options) {
@@ -147,6 +172,16 @@
 							choice:['a','b','c'],
 						},
 						{
+							title:"填空题",
+							type:2,
+							choice:[]
+						},
+						{
+							title:"滑动条",
+							type:3,
+							choice:[]
+						},
+						{
 							title:"标题2",
 							type:'0',
 							choice:['m','n','b'],
@@ -155,7 +190,8 @@
 							title:"标题2",
 							type:'0',
 							choice:['m','n','b'],
-						}],
+						}
+],
 				//下面是决定两个页面互相切换的变量
 				questionnire_page_show:0,
 				question_page_show:0,
@@ -229,7 +265,7 @@
 						var targetView_height = targetView.targetView_height;  
 						var targetView_offset_top = targetView.targetView_offset_top;  
 						var scroll_position = targetView_offset_top-(question_all_height- (targetView_height-editHeight)) / 2;  
-						console.log(question_all_height , targetView_height,editHeight)
+						// console.log(question_all_height , targetView_height,editHeight)
 						questionnire_page.scrollTo(0, scroll_position);  
 					}
 					

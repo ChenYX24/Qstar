@@ -26,12 +26,12 @@
 				
 			</view>
 			
-			<view class=""  v-for="(item,index) in all_content" :key=index>
+<!-- 			<view class=""  v-for="(item,index) in all_content" :key=index>
 				<questions :content="all_content[index]"  
 				:num="(index+1).toString()"
 				></questions>
-			</view>
-			
+			</view> -->
+<!-- 			<components :is="danxun"></components> -->
 			
 
 		</view>
@@ -43,11 +43,11 @@
 
 <script>
 	import store from '/store/index.js'
-	import questions from '/components/questions/questions.vue'
+	// import questions from '/components/questions/questions.vue'
 	import single_ans from '/components/ans/single_ans/single_ans.vue'
 	export default {
 		components: {
-			questions,
+			// questions,
 			single_ans
 		},
 		onLoad: function(options) {
