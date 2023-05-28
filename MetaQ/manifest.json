@@ -74,6 +74,9 @@
     },
     "vueVersion" : "3",
     "h5" : {
+		"devServer": {  
+		    "disableHostCheck": true  
+		  },  
         "router" : {
             "mode" : "hash",
             "base" : "./"

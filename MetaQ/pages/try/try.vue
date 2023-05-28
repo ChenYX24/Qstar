@@ -1,23 +1,22 @@
 <template>
 	<view class="background">
 		<view>
-			<Title ref="title"></Title>
+			<Title ref="title" :content="content"></Title>
 			
-			<!-- <SingleChoice></SingleChoice> -->
-			<!-- <SingleChoice ref="danxuan"></SingleChoice> -->
-			<view class="" v-if="content.typeNum == 0">
-			<SingleChoice ref="danxuan"></SingleChoice>
+			<view class="" v-if="content.type == 0">
+			<SingleChoice ref="danxuan" :text_copy="content.choice">
+			</SingleChoice>
 			</view>
 			
-			<view class="" v-else-if="content.typeNum == 1">
+			<view class="" v-else-if="content.type == 1">
 			<SingleChoice ref="duoxuan"></SingleChoice>
 			</view>
 			
-			<view class="" v-else-if="content.typeNum == 2">
+			<view class="" v-else-if="content.type == 2">
 			<!-- <SingleChoice></SingleChoice> -->
 			</view>
 			
-			<view class="" v-else-if="content.typeNum == 3">
+			<view class="" v-else-if="content.type == 3">
 			<!-- <SingleChoice></SingleChoice> -->
 			<slider-setting ref="slider_set"></slider-setting>
 			</view>
@@ -42,6 +41,7 @@
 	import SingleChoice from "/components/danxuan/danxuan.vue"
 	import setting from "/components/setting/setting.vue"
 	import sliderSetting from "/components/sliderSetting/sliderSetting.vue"
+	import store from '/store/index.js'
 	export default {
 		components:{
 			// danxuansetting,
@@ -51,17 +51,24 @@
 			sliderSetting
 		},
 		onLoad(options) {
-			if(options.typenum){
-				this.content.typeNum=options.typenum
+			// console.log(options.length)
+			if(options.length){
+				let temp=JSON.parse(options.content);
+				let length=options.length;
+				this.content=temp;
+				this.$store.commit('setNowOperate',100000);
 			}
-		  // console.log(this.content.typeNum)
+			else if(options.content){//这里是对已经存在的问题进行编辑
+				let temp=JSON.parse(options.content)
+				this.content=temp
+			}
 		},
 		data() {
 			return {
 				content:{
-					title:"",
-					typeNum:-1,
-					choice:[],
+					title:"444",
+					type:'0',
+					choice:['3','5']
 					
 				}
 			};
@@ -69,18 +76,20 @@
 		methods:{
 			toEditQuestion(){
 				 // const titleComponent = this.$refs.title // 获取标题组件实例
-				 console.log(this.content.typeNum);
+				 // console.log(this.content.type);
 				 this.content.title= this.$refs.title.content.title; // 获取标题数据
-				 console.log(this.content.title)
-				 console.log('-------------------')
-				 console.log(this.content.typeNum)
-				 switch(parseInt(this.content.typeNum)){
+				 // console.log(this.content.title)
+				 // console.log('-------------------')
+				 // console.log(this.content.type)
+				 switch(parseInt(this.content.type)){
 					 case 0:
-							this.content.choice=this.$refs.danxuan.text_copy;
-							console.log(this.content.choice);
+							this.content.choice=this.$refs.danxuan.copy;
+							//去除空值
+							this.content.choice=this.content.choice.filter(item => item !== null && item !== undefined && item !== "");  // 过滤空值
+							// console.log(this.content.choice);
 							break;
 					 case 1:
-							this.content.choice=this.$refs.duoxuan.text_copy;
+							this.content.choice=this.$refs.duoxuan.copy;
 							console.log(this.content.choice);
 							break;
 					 case 2:
@@ -92,13 +101,12 @@
 					 default:
 							break;
 							
-
 					};
+				this.generateQuestion();
 				 },
 				 generateQuestion(){
 					 uni.navigateTo({
-					 	url: '/pages/editQuestionnire/editQuestionnire?content='+this.content
-			
+					 	url: '/pages/editQuestionnire/editQuestionnire?content='+JSON.stringify(this.content)
 					 })
 				 }
 				 
@@ -128,6 +136,7 @@
 	position: relative;
 	top: 0;
 	left:0;
+    overflow-y: scroll;
 	background: linear-gradient(225deg, rgba(245, 224, 230, 1) 0%, rgba(228, 218, 241, 1) 38.89%, rgba(237, 248, 255, 1) 67.78%, rgba(230, 224, 250, 1) 100%);
 }
 
@@ -156,6 +165,7 @@
 }
 
 .button_ok_or_no:last-child{
+	margin-bottom: 15vh;
 	background-color: aquamarine;
 	background-color: rgba(230,230,240,1);
 }

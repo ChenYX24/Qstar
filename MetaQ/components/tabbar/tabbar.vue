@@ -9,11 +9,14 @@
       <image class="imgGroup notebIcon leftIcon" :src="activeTab === 'setting'?'/static/tabbar/setting2.png':'/static/tabbar/setting.png'"></image>
 	  	<view class="dot" :class="{active: activeTab === 'setting'}"></view>
     </view>
-    <view class="tab-item add" @click="switchTab('add')">
+    <view class="tab-item add" @click="switchTab('add')"  v-if="Type==0" >
       <image class="imgGroup addImg" src="/static/tabbar/add.png" ></image>
     </view>
+	<view class="tab-item add" @click="switchTab('add')"  v-if="Type==1" >
+	  <image class="imgGroup addImg" src="/static/tabbar/add.png" ></image>
+	</view>
 	<view v-if="Type==1" class="tab-item"  @click="switchTab('save')">
-	  <image class="imgGroup notebIcon leftIcon" :src="activeTab === 'save'?'/static/tabbar/save.png':'/static/tabbar/save.png'"></image>
+	  <image class="imgGroup notebIcon leftIcon" :src="activeTab === 'save'?'/static/tabbar/save2.png':'/static/tabbar/save.png'"></image>
 	  	<view class="dot" :class="{active: activeTab === 'save'}"></view>
 	</view>
     <view v-if="Type==0" class="tab-item"  @click="switchTab('home')">
@@ -24,20 +27,24 @@
 <!-- 	<add v-if="isAdd"></add> -->
   </view>
   <add :class="{show:isAdd}" :isShow="isAdd" @updateAdd="changeAdd"></add>
+  <save :class="{show:isSave}" :isShow="isSave" @updateSave="changeSave"></save>
   </view>
 </template>
 
 <script>
 import add from "/components/add/add.vue"
+import save from "/components/save/save.vue"
 export default {
   components: {
     add,
+	save
   },
   data() {
     return {
 		activeTab: this.tab,
 		isAdd:false,
-    };
+		isSave:false,
+	};
   },
    props: {
       tab: {
@@ -57,18 +64,27 @@ export default {
 	  changeAdd(){
 		  this.isAdd=!this.isAdd;
 	  },
-
+	 changeSave(){
+		 this.isSave=!this.isSave;
+		 if(!this.isSave)
+		 {
+		 	this.activeTab=''
+		 }
+	 },
 	//#ifdef MP-WEIXIN
 	switchTab(tab) {
 	if(!this.isExpanded)
 	{
-		if (tab === 'add') {
+		if (tab === 'add'&&this.Type==0) {
 		  // 点击加号按钮跳转到相应页面
-		  // wx.reLaunch({
-		  //   url: '/pages/add/add',
-		  // });
-				this.isAdd=!this.isAdd
-		} else {
+		  uni.navigateTo({
+		    url: '/pages/editQuestionnire/editQuestionnire',
+		  });
+		} 
+		else if(tab === 'add'&&this.Type==1){
+			this.isAdd=!this.isAdd
+		}
+		 else {
 		  // 切换选中的tab
 		  this.activeTab = tab;
 		  // 根据选中的tab跳转到相应页面
@@ -83,6 +99,18 @@ export default {
 		        url: `/pages/home/home?tab=${tab}`,
 		      });
 		      break;
+			case 'setting':
+				wx.navigateTo({
+					url:`/pages/setting/setting?tab=${tab}`
+				})
+				break;
+			case 'save':
+				this.isSave=!this.isSave
+				if(!this.isSave)
+				{
+					this.activeTab=''
+				}
+				break;
 		  }
 		}
 	}
@@ -93,13 +121,16 @@ export default {
 	switchTab(tab) {
 	if(!this.isExpanded)
 	{
-		if (tab === 'add') {
+		if (tab === 'add'&&this.Type==0) {
 		  // 点击加号按钮跳转到相应页面
-		  // uni.reLaunch({
-		  //   url: '/pages/add/add',
-		  // });
-				this.isAdd=!this.isAdd
-		} else {
+		  uni.navigateTo({
+		    url: '/pages/editQuestionnire/editQuestionnire',
+		  });
+		} 
+		else if(tab === 'add'&&this.Type==1){
+			this.isAdd=!this.isAdd
+		}
+		else {
 		  // 切换选中的tab
 		  this.activeTab = tab;
 		  // 根据选中的tab跳转到相应页面
@@ -114,6 +145,18 @@ export default {
 		        url: `/pages/home/home?tab=${tab}`,
 		      });
 		      break;
+		  case 'setting':
+			uni.navigateTo({
+			  url: `/pages/setting/setting?tab=${tab}`,
+			});
+			break;
+		  case 'save':
+		  	this.isSave=!this.isSave
+			if(!this.isSave)
+			{
+				this.activeTab=''
+			}
+			break;
 		  }
 		}
 	}

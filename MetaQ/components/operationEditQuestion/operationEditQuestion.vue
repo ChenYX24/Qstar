@@ -3,8 +3,8 @@
 		<view class="operation">
 			<view class="outbox">
 				<view class="box">
-					<view class="opration-concrete">
-						<img src="/static/operationEditQuestion/edit.png" alt="">
+					<view class="opration-concrete" @click="toEdit">
+						<img src="/static/operationEditQuestion/edit.png" alt="" >
 						编辑
 					</view>
 					<view class="opration-concrete">
@@ -34,24 +34,44 @@
 </template>
 
 <script>
+	import store from '/store/index.js'
 	export default {
 		name:'operationEditQuestion',
 		data() {
 			return {
 				
 			};
+		},
+		props:{
+			num:{
+				type:String,
+				default:'-1'
+			}
+		},
+		methods:{
+			toEdit(e){
+				let editHeight=this.$el.clientHeight
+				console.log(this.$el.clientHeight)
+				this.$store.commit('setEditHeight',editHeight);
+				//修改当前正在操作的值
+				this.$store.commit('setNowOperate',this.num-1);
+				this.$store.commit('setIsJump');
+				this.$emit('clickSon')
+			}
 		}
 	}
 </script>
 
 <style lang="less">
 .operation{
+	
 	width: 100vw;
 	display: flex;
 	// justify-content: center;
 	
 }
 .outbox{
+    box-sizing: border-box;
 	width: 90vw;
 	height: 10vh;
 	border: 1px dashed green;

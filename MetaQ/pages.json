@@ -140,7 +140,16 @@
 		    
 		}
         ,{
-            "path" : "pages/test2/test2",
+            "path" : "pages/setting/setting",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/fillQuestionnaire/fillQuestionnaire",
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "",
