@@ -1,7 +1,7 @@
-package com.wenjuan.wenjuandemo.pojo.writeAndRead;
+package com.qstar.demo.pojo.writeAndRead;
 
 import com.alibaba.fastjson.JSON;
-import com.wenjuan.wenjuandemo.pojo.User;
+import com.qstar.demo.pojo.User;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;

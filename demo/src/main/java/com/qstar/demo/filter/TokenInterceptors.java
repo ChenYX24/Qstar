@@ -1,4 +1,4 @@
-package com.wenjuan.wenjuandemo.filter;
+package com.qstar.demo.filter;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

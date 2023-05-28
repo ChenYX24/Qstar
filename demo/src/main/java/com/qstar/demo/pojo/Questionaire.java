@@ -1,6 +1,6 @@
-package com.wenjuan.wenjuandemo.pojo;
+package com.qstar.demo.pojo;
 
-import com.wenjuan.wenjuandemo.pojo.Result.StatisticsResult;
+import com.qstar.demo.pojo.Result.StatisticsResult;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -23,8 +23,11 @@ public class Questionaire {//创建的问卷
         info=new QuestionaireInfo(title,id);
         this.questions=questions;
         this.description=description;
-        this.attachFile=attachFile;
+        //this.attachFile=attachFile;
         statistics=new ArrayList<>(questions.size());
+    }
+    public Questionaire(int id,String title,int filled,boolean commit){
+        info = new QuestionaireInfo(id,title,filled,commit);
     }
     public boolean save(String description,String attachFile,List<Question> questions){//问卷的保存
         if(info.isCommit()){

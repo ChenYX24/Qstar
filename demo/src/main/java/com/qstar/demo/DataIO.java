@@ -194,4 +194,20 @@ public class DataIO {
         }
         return result;
     }
+    //获取文件中所有json信息，返回一个String数组
+    public Vector<String> getUsers(){
+        Vector<String> users = new Vector<String>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(this.path))){
+            String line = "";
+            line = reader.readLine();
+            while(line != null){
+                users.addElement(line);
+                line = reader.readLine();
+            }
+            reader.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return users;
+    }
 }

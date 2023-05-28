@@ -1,7 +1,7 @@
 package com.qstar.demo;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import com.qstar.demo.pojo.User;
 // import java.util.List;
 
 // import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +37,6 @@ public class UserService {
 		// User user = users.isEmpty() ? null : users.get(0);
 		// ObjectMapper objectMapper = new ObjectMapper();
 		// result = objectMapper.writeValueAsString(user);
-		userio = new DataIO(path);
 		int id = userio.getIDofObject("_email", Email);
 		result = userio.getJsonById(id);
 		return result;

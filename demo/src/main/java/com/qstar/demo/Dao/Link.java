@@ -3,9 +3,11 @@ package com.qstar.demo.Dao;
 import com.qstar.demo.pojo.*;
 import com.qstar.demo.pojo.Result.ResultForCheck;
 import com.qstar.demo.pojo.Result.ResultForFill;
-import com.qstar.demo.Result.StatisticsResult;
+import com.qstar.demo.pojo.Result.StatisticsResult;
 import com.qstar.demo.pojo.writeAndRead.ObjReader;
-import com.qstar.demo.writeAndRead.ObjWriter;
+import com.qstar.demo.pojo.writeAndRead.ObjWriter;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
+import com.qstar.demo.DataIO;
 @Repository
 public class Link {
     private final Map<String,User> map=new HashMap<String, User>();//储存token-用户对象对，登录时加入
@@ -24,6 +27,8 @@ public class Link {
     private String attachRoad="";   //附件储存的文件夹
     private ObjReader reader;
     private ObjWriter writer;
+    @Autowired
+    DataIO userio;
     public Link(){
         reader=new ObjReader(base);
         writer=new ObjWriter(base);
@@ -188,4 +193,9 @@ public class Link {
     public boolean checkID(int id,String token){
         return id<map.get(token).getIdDistribute();
     }
+    public void SaveUser(String token,User user){
+        System.out.println("map:"+token);
+        map.put(token,user);
+    }
+    
 }

@@ -1,4 +1,4 @@
-package com.wenjuan.wenjuandemo.pojo;
+package com.qstar.demo.pojo;
 
 import lombok.Data;
 

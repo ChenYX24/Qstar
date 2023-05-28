@@ -41,7 +41,7 @@
 				if (token) {
 				  // 发送请求进行自动登录
 				  axios.post(/*'https://metaq.scutbot.icu/login'*/
-				  			'http://localhost:8080/test', {token})
+				  			'http://localhost:8080/autologin', {token})
 				      .then(response => {
 				        var response = response.data;
 						console.log(response);

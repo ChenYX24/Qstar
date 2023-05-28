@@ -16,187 +16,36 @@ import com.qstar.demo.pojo.Result.Result;
 import com.qstar.demo.pojo.Result.ResultForCheck;
 import com.qstar.demo.pojo.Result.ResultForFill;
 import com.qstar.demo.pojo.Result.StatisticsResult;
-import java.util.Scanner;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
+import com.qstar.demo.Dao.Link;
 @RestController
 @CrossOrigin
 public class Controller {
     @Autowired
     private Handle handle;
     @Autowired
-    EmailSender emailSender;
-    @Autowired
-    UserService userService;
-    @Autowired
-    DataIO userio;
+    Link link;
     @RequestMapping("/hello")
     public String handle01(){
         return "helloworld!";
     }
-    //登录功能，解析前端输入的json，判断邮箱与密码是否对应，返回值为该用户的json或者为空格。
-    @RequestMapping("/login")
-    public String login(@RequestBody String json){
-        System.out.println(json);
-        String result = " ";
-        String email = "";
-        String password = "";
-        email = userio.getKeyValueofJson(json, "email");
-        password = userio.getKeyValueofJson(json, "password");
-        if(userService.MatchEmailtoPasswd(email, password)){
-            result = userService.GetUserByEmail(email);
-            System.out.println(result);
-        }
-        return result;
-    }
-    @RequestMapping("/register")
-    public String saveuser(@RequestBody String json){
-        System.out.println(json);
-        String result = " ";
-        String username = " ";
-        String email = " ";
-        String password = " ";
-        username = userio.getKeyValueofJson(json, "username");
-        email = userio.getKeyValueofJson(json, "email");
-        System.out.println(email);
-        password = userio.getKeyValueofJson(json, "password");
-        User user = new User(username, email, password);
-        userService.SaveUser(user);
-        result = userService.GetUserByEmail(email);
-        return result;
-    }
-    @RequestMapping("/sendcode")
-    public String sendcode(@RequestBody String json){
-        System.out.println(json);
-        String success = "false";
-        String email = userio.getKeyValueofJson(json, "email");
-        emailSender.sendcode(email);
-        success = "true";
-        return success;
-    }
-    @RequestMapping("/checkcode")
-    public String checkcode(@RequestBody String json){
-        System.out.println(json);
-        String success = "false";
-        String email = userio.getKeyValueofJson(json, "email");
-        String code = userio.getKeyValueofJson(json, "code");
-        success = emailSender.checkcode(email, code);
-        System.out.println(success);
-        return success;
-    }
-    @RequestMapping("/changepasswd")
-    public String changepasswd(@RequestBody String json){
-        String success = "false";
-        String passwd = userio.getKeyValueofJson(json, "password");
-        String email = userio.getKeyValueofJson(json, "email");
-        userService.ChangePasswdByEmail(email, passwd);
-        String userjson = userService.GetUserByEmail(email);
-        if(userio.getKeyValueofJson(userjson, "_passwd").hashCode() == passwd.hashCode()){
-            success = "true";
-        }
-        return success;
-    }
-    @RequestMapping("/autologin")
-    public String autologin(@RequestBody String request) {
-        String json = userio.getKeyValueofJson(request, "token");
-        String result = " ";
-        String email = "";
-        String password = "";
-        email = userio.getKeyValueofJson(json, "_email");
-        password = userio.getKeyValueofJson(json, "_passwd");
-        if(userService.MatchEmailtoPasswd(email, password)){
-            result = userService.GetUserByEmail(email);
-            System.out.println(result);
-        }
-        return result;
-    }
-    @RequestMapping("/test")
-    public String test(@RequestBody String request) {
-        String json = userio.getKeyValueofJson(request, "token");
-        String result = " ";
-        String email = "";
-        String password = "";
-        email = userio.getKeyValueofJson(json, "_email");
-        password = userio.getKeyValueofJson(json, "_passwd");
-        if(userService.MatchEmailtoPasswd(email, password)){
-            result = userService.GetUserByEmail(email);
-            System.out.println(result);
-        }
-        return result;
-        // String json = request.get("token");
-        // ObjectMapper mapper = new ObjectMapper();
-        // try {
-        //     Token token = mapper.readValue(json, Token.class);
-        //     System.out.println(token.get_id());
-        //     // do something with the token object
-        //     return json;
-        // } catch (Exception e) {
-        //     e.printStackTrace();
-        //     return "Error processing request";
-        // }
-    }
-    // @RequestMapping("/get")
-    // public void getuser(){
-    //     Runnable task = () -> {
-    //         try (Scanner sc = new Scanner(System.in)){
-    //             String result = " ";
-    //             System.out.println("   要使用id查询还是邮箱查询");
-    //             System.out.println("id查询: 0         邮箱查询: 1");
-    //             int flag = sc.nextInt();
-    //             if(flag == 0){
-    //                 System.out.println("请输入要查询的id");
-    //                 int id = sc.nextInt();
-    //                 result = userService.GetUserById(id);
-    //                 System.out.println(result);
-    //             }
-    //             else if(flag == 1){
-    //                 System.out.println("请输入要查询的邮箱");
-    //                 sc.nextLine();//把缓冲区里的回车吞掉
-    //                 String Email = sc.nextLine();
-    //                 result = userService.GetUserByEmail(Email);
-    //                 System.out.println(result);
-    //             }
-    //             else{
-    //                 System.out.println("error!!!");
-    //             }
-    //             sc.nextLine();
-    //             sc.close();
-    //             return;
-    //         } catch (Exception e) {
-    //             System.out.println(e.getMessage());
-    //         }
-    //     };
-    //     new Thread(task).start();
-    // }
-    // @RequestMapping("/change")
-    // public void changepasswd(){
-    //     Runnable task = () -> {
-    //         try(Scanner sc = new Scanner(System.in);){
-    //             System.out.println("请输入你的邮箱");
-    //             String Email = sc.nextLine();
-    //             System.out.println("请输入新的密码");
-    //             String Passwd = sc.nextLine();
-    //             userService.ChangePasswdByEmail(Email, Passwd);
-    //             sc.close();
-    //         }
-    //         catch(Exception e){
-    //             System.out.println(e.getMessage());
-    //         }
-    //     };
-    //     new Thread(task).start();
-    // }
+    //获取已经用户已经创建的问卷，用于MyQ.vue
     @GetMapping("/getCreated")
     public Result getCreated(@RequestHeader("token") String token){
+        System.out.println("要获取问卷的token:"+token);
         List<QuestionaireInfo> infos=handle.getCreated(token);
         return Result.success(infos);
     }
+    //创建问卷
     @PostMapping("/create")
     public Result create(@RequestBody CreatedReceive receive, @RequestHeader("token") String token) throws IOException {
         String attach=handleFile(receive);
         int id=handle.create(receive.getTitle(),receive.getDescription(),attach,receive.getList(),token);
         return Result.success(id);
     }
+    //查看已经创建问卷的详细信息
     @GetMapping("/check")
     public Result check(Integer id,@RequestHeader("token") String token){
         ResultForCheck result=handle.check(id,token);
@@ -205,6 +54,7 @@ public class Controller {
         }
         return Result.fail("问卷id有误！");
     }
+    //保存问卷
     @PostMapping("/save")
     public Result save(@RequestBody QuestionaireReceive receive, @RequestHeader("token") String token) throws IOException {
         if(handle.checkID(receive.getId(),token)) {
@@ -215,6 +65,7 @@ public class Controller {
             return Result.fail("问卷id有误！");
         }
     }
+    //提交问卷
     @PostMapping("/commit")
     public Result commit(@RequestBody QuestionaireReceive receive,@RequestHeader("token") String token) throws IOException {
         if(handle.checkID(receive.getId(),token)) {
@@ -250,7 +101,7 @@ public class Controller {
     }
 
 
-
+    //返回要填写的问卷的信息
     @GetMapping("/fill")
     public Result fill(Integer id,String creator,@RequestHeader("token") String token) throws IOException {
         ResultForCheck list=handle.fill(id,creator,token);
@@ -259,10 +110,12 @@ public class Controller {
         }
         return Result.success(list);
     }
+    //返回已经填写的问卷的信息
     @GetMapping("/fillRecord")
     public Result getFillRecord(@RequestHeader("token") String token){//获取填写记录
         return Result.success(handle.getFillRecord(token));
     }
+    //保存已经填写的数据
     @PostMapping("/saveFill")   //可能有文件传入
     public Result saveFill(@RequestBody SaveFillReceive receive,@RequestHeader("token") String token) throws IOException {
         String attach=handleFile(receive);
@@ -275,6 +128,7 @@ public class Controller {
         boolean b=handle.saveFill(receive.getId(),receive.getCreator(),receive.getData(),set,attach,token);
         return b?Result.success():Result.fail("问卷id或者作者名错误!");
     }
+    //查看已经填写过的问卷
     @GetMapping("/checkFill")
     public Result checkFill(Integer id,String creator,@RequestHeader("token") String token) throws IOException {
         ResultForFill result=handle.checkFill(id,creator,token);
@@ -283,6 +137,7 @@ public class Controller {
         }
         return Result.fail("问卷id或者作者名错误!");
     }
+    //提交填写
     @PostMapping("/commitFill")
     public Result commitFill(@RequestBody SaveFillReceive receive,@RequestHeader("token") String token) throws IOException {
         String attach=handleFile(receive);
@@ -298,6 +153,7 @@ public class Controller {
         }
         return handle.commitFill(receive.getId(),receive.getCreator(),token)?Result.success():Result.fail("已提交!");
     }
+    //获取数据
     @GetMapping("/statistics/{index}")
     public Result statistics(@PathVariable Integer index,Integer id,@RequestHeader("token") String token){
         StatisticsResult result=handle.statistics(index,id,token);
