@@ -1,4 +1,4 @@
-package com.wenjuan.wenjuandemo.pojo;
+package com.qstar.demo.pojo;
 
 public class Account {
     private String name;

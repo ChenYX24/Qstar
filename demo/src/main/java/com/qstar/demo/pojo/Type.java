@@ -1,4 +1,4 @@
-package com.wenjuan.wenjuandemo.pojo;
+package com.qstar.demo.pojo;
 
 public enum Type {//定义问题的类型
     SINGLE,

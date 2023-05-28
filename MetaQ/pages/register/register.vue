@@ -78,13 +78,17 @@ import axios from 'axios';
 		},
 		methods: {
 		    submitForm() {
-				axios.post('https://metaq.scutbot.icu/checkcode', {
+				axios.post(
+				// 'https://metaq.scutbot.icu/checkcode'
+				'http://localhost:8080/checkcode', {
 				  email: this.formData.email,
 				  code:  this.formData.verification
 				})
 				.then(response => {
 					if(response.data == true){
-						axios.post('https://metaq.scutbot.icu/register', {
+						axios.post(
+						// 'https://metaq.scutbot.icu/register'
+						'http://localhost:8080/register', {
 						  username:this.formData.username,
 						  email: this.formData.email,
 						password: this.formData.password
@@ -118,7 +122,9 @@ import axios from 'axios';
 			},
 			startTime(){
 				if(this.enableGetcode && this.check){
-					axios.post('https://metaq.scutbot.icu/sendcode', {
+					axios.post(
+					// 'https://metaq.scutbot.icu/sendcode'
+						'http://localhost:8080/sendcode', {
 					  email: this.formData.email
 					})
 					.then(response => {
@@ -145,7 +151,7 @@ import axios from 'axios';
 				}
 			},
 			checkEmail(){
-				console.log(localStorage.getItem('token'));
+				//console.log(localStorage.getItem('token'));
 				this.check = true;
 				const emailPattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 				this.trueEmail = emailPattern.test(this.formData.email);

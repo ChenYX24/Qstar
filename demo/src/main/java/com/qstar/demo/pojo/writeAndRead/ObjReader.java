@@ -1,8 +1,8 @@
-package com.wenjuan.wenjuandemo.pojo.writeAndRead;
+package com.qstar.demo.pojo.writeAndRead;
 
 import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.annotation.JacksonStdImpl;
-import com.wenjuan.wenjuandemo.pojo.User;
+import com.qstar.demo.pojo.User;
 import org.springframework.asm.TypeReference;
 
 import java.io.*;

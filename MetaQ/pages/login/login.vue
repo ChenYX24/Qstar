@@ -59,10 +59,14 @@ import axios from 'axios';
 					  if(this.token == " ")
 					  {
 						  alert("登录失败");
+					  }else{
+						  console.log("token",this.token);
+						  localStorage.setItem('token', JSON.stringify(this.token));
+						  console.log("localStorage",localStorage.getItem('token'));
+						  uni.reLaunch({
+						  		url:"/pages/myQ/myQ"
+						  	})
 					  }
-					  console.log("token",this.token);
-					  localStorage.setItem('token', JSON.stringify(this.token));
-					  console.log("localStorage",localStorage.getItem('token'));
 		            })
 		            .catch(error => {
 		              console.log(error);

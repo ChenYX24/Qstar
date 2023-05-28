@@ -1,8 +1,9 @@
-package com.wenjuan.wenjuandemo.pojo;
-
+package com.qstar.demo.pojo;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 
 @Data
+@JsonPropertyOrder({"id", "filled", "title", "commit"})//规定转为json的格式
 public class QuestionaireInfo {//单个问卷的相关数据，能在"/created"访问时直接返回
     private String title;
     private int filled;//填写的人数
@@ -15,7 +16,12 @@ public class QuestionaireInfo {//单个问卷的相关数据，能在"/created"�
         this.commit = false;
         this.id=id;
     }
-
+    public QuestionaireInfo(int id,String title,int filled,boolean commit){
+        this.id = id;
+        this.title = title;
+        this.filled = filled;
+        this.commit = commit;
+    }
     public void commit() {
         this.commit =true;
     }

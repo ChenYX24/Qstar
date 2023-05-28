@@ -1,4 +1,4 @@
-package com.wenjuan.wenjuandemo.pojo;
+package com.qstar.demo.pojo;
 
 import lombok.Data;
 
@@ -9,13 +9,12 @@ import java.util.List;
 public class FilledQuestionaire {//已填写的问卷
     private String creator;     //问卷作者
     private int id;    //问卷名字
-
+    private String title;//问卷标题
     private Questionaire questionaire;
     private String[] data;  //已填写的数据，可为空
     private String attach;
     private boolean hasAttach;
     private boolean committed;  //是否已提交
-
 
     public FilledQuestionaire(String creator,int id,Questionaire questionaire){
         this.creator=creator;
@@ -25,7 +24,7 @@ public class FilledQuestionaire {//已填写的问卷
         this.questionaire=questionaire;
     }
     public FilledQuestionaireInfo getInfo(){
-        return new FilledQuestionaireInfo(id,creator,committed);
+        return new FilledQuestionaireInfo(id,creator,committed,title);
     }
     public List<Question> getQuestions(){
         return questionaire.getQuestions();

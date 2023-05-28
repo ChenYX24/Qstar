@@ -1,10 +1,10 @@
-package com.wenjuan.wenjuandemo.Service;
+package com.qstar.demo.Service;
 
-import com.wenjuan.wenjuandemo.Dao.Link;
-import com.wenjuan.wenjuandemo.pojo.*;
-import com.wenjuan.wenjuandemo.pojo.Result.ResultForCheck;
-import com.wenjuan.wenjuandemo.pojo.Result.ResultForFill;
-import com.wenjuan.wenjuandemo.pojo.Result.StatisticsResult;
+import com.qstar.demo.Dao.Link;
+import com.qstar.demo.pojo.*;
+import com.qstar.demo.pojo.Result.ResultForCheck;
+import com.qstar.demo.pojo.Result.ResultForFill;
+import com.qstar.demo.pojo.Result.StatisticsResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

@@ -17,12 +17,12 @@
 		    >
 		      <swiper-item>
 				<view class="page1">
-				  <QBlock v-for="(block, index) in blocks1" :key="block.id" :onumber="block.number" :title="block.title" :isPush="block.isPush"></QBlock>
+				  <QBlock v-for="(block, index) in blocks1" :key="block.id" :onumber="block.filled" :title="block.title" :isPush="block.commit"></QBlock>
 				</view>
 		      </swiper-item>
 		      <swiper-item>
 				<view class="page2">
-				  <QBlock2 v-for="item in blocks" :key="item.id" :title="item.title" :isEnd="item.isEnd" :name="item.name"></QBlock2>
+				  <QBlock2 v-for="item in blocks" :key="item.id" :title="item.title" :isEnd="item.commited" :name="item.creator"></QBlock2>
 				</view>
 		      </swiper-item>
 		    </swiper>
@@ -68,13 +68,34 @@ export default {
   },
     methods: {
 		async fetchData() {
+			axios.defaults.headers.common['token'] = localStorage.getItem('token');
+			axios.get(/*'https://metaq.scutbot.icu/login'*/
+						'http://localhost:8080/getCreated')
+			    .then(response => {
+			      console.log(response.data);
+				  this.blocks1 = response.data.data;
+				  console.log("blocks1",this.blocks1);
+			    })
+			    .catch(error => {
+			      console.log(error);
+			    });
 			try {  
-			  const response = await axios.get('/static/test2.json'); // TODO
-			  this.blocks = response.data.data.blocks;
-			  this.blocks1=response.data.data.blocks1
+			  // const response = await axios.get('/static/test2.json'); // TODO
+			  // this.blocks = response.data.data.blocks;
+			  // this.blocks1=response.data.data.blocks1
 			} catch (error) {  
 			  console.error('Error fetching data:', error);  
-			}  
+			}
+			axios.get(/*'https://metaq.scutbot.icu/login'*/
+						'http://localhost:8080/fillRecord')
+			    .then(response => {
+			      console.log(response.data);
+			      this.blocks = response.data.data;
+			      console.log("blocks",this.blocks);
+			    })
+			    .catch(error => {
+			      console.log(error);
+			    });
 		  },
       swiperChange(e) {
         this.currentTab = e.detail.current;
