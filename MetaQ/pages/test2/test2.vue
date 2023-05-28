@@ -3,6 +3,7 @@
 		<view class="bg">
 			<input type="text" v-model="testdata">
 			<button @tap="test">tests</button>
+			<img :src="base64Image">
 		</view>
 	</view>
 </template>
@@ -12,20 +13,23 @@ import axios from 'axios';
 	export default {
 		data() {
 			return {
-				testdata:""
+				testdata:"",
+				base64Image:""
 			};
 		},
 		methods: {
 			test() {
-				axios.defaults.headers.common['token'] = this.testdata;
-				axios.get('http://localhost:8080/getCreated')
+				axios.defaults.headers.common['token'] = localStorage.getItem('token');
+				axios.get('http://localhost:8080/getqrcode')
 					.then(response => {
+						this.base64Image="data:image/png;base64," + response.data;
+						console.log("base64",this.base64Image);
 						console.log("response",response.data);
 					})
 					.catch(error => {
 					    console.log(error);
 					});
-				console.log("testdata",this.testdata);
+				//console.log("testdata",this.testdata);
 			}
 		}
 	}
@@ -56,5 +60,9 @@ import axios from 'axios';
 	}
 	.bg input {
 		border: 1px solid rgba(0,0,0,0.6);
+	}
+	.bg img {
+		height: 200px;
+		width: 200px;
 	}
 </style>

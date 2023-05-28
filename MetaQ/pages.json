@@ -122,6 +122,15 @@
             
         }
 		,{
+            "path" : "pages/test2/test2",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+		,{
 		    "path" : "components/operationEditQuestion/operationEditQuestion",
 		    "style" :                                                                                    
 		    {

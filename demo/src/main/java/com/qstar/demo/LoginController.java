@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.*;
 import com.qstar.demo.Dao.Link;
 import com.qstar.demo.pojo.User;
 @RestController
@@ -107,6 +108,14 @@ public class LoginController {
              System.out.println(result);
          }
          return result;
+     }
+     //获取二维码base64
+     @RequestMapping("/getqrcode")
+     public String getqrcode(@RequestHeader("token") String token) {
+        String qrcode = "";
+        String id = userio.getKeyValueofJson(token,"id");
+        qrcode = QRcodeGenerator.generate("https://www.baidu.com",id);
+        return qrcode;
      }
      //测试用
      @RequestMapping("/test")
