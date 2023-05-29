@@ -33,7 +33,6 @@ export default {
   },
   data() {
     return {
-      pushText: '已发布',
 
     };
   },
@@ -64,6 +63,15 @@ export default {
         return this.onumber;
       }
     },
+	pushText(){
+		if(this.isPush)
+		{
+			return "已发布"
+		}
+		else{
+			return "未发布"
+		}
+	},
     fontSize() {
       let len = this.number.toString().length;
       if (len <= 1) {
