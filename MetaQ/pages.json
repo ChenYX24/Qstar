@@ -122,7 +122,16 @@
         }
 
         ,{
-            "path" : "pages/page3/page3",
+            "path" : "components/answerQuestion/duoxuanAnswer/duoxuanAnswer",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "components/answerQuestion/huadongtiaoAnswer/huadongtiaoAnswer",
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "",

@@ -3,15 +3,16 @@
 		<view class="box">
 			<view class="inbox">
 				<view class="title">
-					{{num}}.{{content.title}}
+					{{num}}.{{content.title}}<text>(多选题)</text>
 				</view>
-				<radio-group name="" @change="getValue">
-					<view class="danxuan_radio" v-for="(item,index) in content.choice" :key="index">
-						<label class="radio">
-							<radio :value="index.toString()" color="#c695ff"/><text>{{item}}</text>
-						</label>
-					</view>
-				</radio-group>
+					<checkbox-group name="" @change="getValue">
+						<view class="duoxuan-checkbox" v-for="(item,index) in content.choice" :key="index">
+							<label>
+								<checkbox :value="(index+1).toString()" color="#c695ff" class="checkBox"/>
+								<text class="duoxuantext">{{item}}</text>
+							</label>
+						</view>
+					</checkbox-group>
 			</view>
 		</view>
 		
@@ -58,6 +59,7 @@
 			// },
 			getValue(e){
 				this.answer=e.detail
+				// console.log(e.detail)
 			}
 		}
 	}
@@ -91,7 +93,7 @@
 	align-items: center
 }
 
-.danxuan_radio{
+.duoxuan-checkbox{
 	display: flex;
 	// border: 2px solid red;
 	height: 5vh;
@@ -100,10 +102,21 @@
 }
 
 
-.danxuan_text{
+.duoxuan-text{
 	margin-left: 10px;
 	
 }
+
+.title text{
+	margin-left: 5px;
+	color: red;
+	font-size: 14px;
+}
+
+/deep/.uni-checkbox-input {
+    background-color: #ffffff;;
+	border-radius: 50%
+  }
 
 
 </style>
