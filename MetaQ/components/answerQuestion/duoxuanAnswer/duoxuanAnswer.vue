@@ -3,11 +3,11 @@
 		<view class="box">
 			<view class="inbox">
 				<view class="title">
-					{{num}}.{{content.title}}<text>(多选题)</text>
+					{{num}}.{{content.title}}<text>[多选题]</text>
 				</view>
-					<checkbox-group name="" @change="getValue">
+					<checkbox-group name="" @change="getValue" class="checkboxGroup">
 						<view class="duoxuan-checkbox" v-for="(item,index) in content.choice" :key="index">
-							<label>
+							<label class="checkbox">
 								<checkbox :value="(index+1).toString()" color="#c695ff" class="checkBox"/>
 								<text class="duoxuantext">{{item}}</text>
 							</label>
@@ -47,19 +47,9 @@
 
 		},
 		methods:{
-			// getOffsetTop: function() {
-			// 	let viewElements = document.querySelectorAll("#test");  
-			// 	if(viewElements)
-			// 	{
-			// 		let target_view = viewElements[(this.num-1)];
-			// 		// target_view={'targetView_height':target_view.offsetHeight,'targetView_offset_top':target_view.offsetTop)}
-			// 		target_view={'targetView_height':target_view.offsetHeight,'targetView_offset_top':target_view.offsetTop}
-			// 		this.$store.commit('setTargetView',target_view);
-			// 	}
-			// },
 			getValue(e){
-				this.answer=e.detail
-				// console.log(e.detail)
+				this.answer=e.detail.value
+				// console.log(e.detail.value)
 			}
 		}
 	}
@@ -76,31 +66,37 @@
 }
 .box{
 	width: 90vw;
+	border-radius: 20px;
+	background: rgba(255, 255, 255, 0.8);
+	box-shadow: 2px 2px 20px 0px rgba(136, 63, 143, 0.15);
 }
 .inbox{
-	border: 1px dashed green;
+	// border: 1px dashed green;
 }
 .title{
+	margin:10px 0px 5px 20px;
 	font-size: 20px;
-	// color: aqua;
-	// border: 2px solid red;
 }
 
-.options{
-	height: 5vh;
-	// border: 2px solid green;
-	display: flex;
-	align-items: center
+.checkboxGroup{
+	margin: 10px 20px 35px 20px;
 }
 
 .duoxuan-checkbox{
-	display: flex;
-	// border: 2px solid red;
-	height: 5vh;
+	border-radius: 3px;
+	border: 1px solid rgba(225, 225, 235, 1);
 	align-items: center;
-	margin-left: 8px;
+	
 }
 
+.checkbox{
+	height: 8vh;
+	background: rgba(255, 255, 255, 0.8);
+	margin-left: 5px;
+	width: 100%;
+	display: flex;
+	align-items: center;
+}
 
 .duoxuan-text{
 	margin-left: 10px;
@@ -109,7 +105,7 @@
 
 .title text{
 	margin-left: 5px;
-	color: red;
+	color: rgb(143 68 238);
 	font-size: 14px;
 }
 

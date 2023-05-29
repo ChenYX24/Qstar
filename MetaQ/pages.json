@@ -121,24 +121,6 @@
             
         }
 
-        ,{
-            "path" : "components/answerQuestion/duoxuanAnswer/duoxuanAnswer",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "components/answerQuestion/huadongtiaoAnswer/huadongtiaoAnswer",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
     ],
 	"globalStyle": {
 		"navigationStyle": "custom"

@@ -19,19 +19,23 @@
 							  v-model="description"
 							  disabled
 							  ></textarea>
-				</view>
-				
+				</view>		
 			</view>
 			<view class="question-all" v-for="(item,index) in all_content" :key="index">
 				<component
+				ref="questionAnswerRef"
 				:num="(index+1).toString()"
 				:content="item"
 				:is="chooseComponent(index)">
 				</component>
 			</view>
 			
-
 			<view class="">
+				<view class="block">
+				</view>
+			</view>
+
+			<view class="" v-if="mode==0">
 				<view class="submit" @click="submitSuccess">
 					提交
 				</view>
@@ -59,10 +63,14 @@
 			duoxuanAnswer
 		},
 		onLoad: function(options) {
+			if(options.mode){
+				this.mode=options.mode
+			}
 		},
 		data() {
 			return {
 				answer:[],
+				mode:0,
 				componentName:['danxuanAnswer','duoxuanAnswer',
 				'tiankongAnswer','huadongtiaoAnswer'],
 				title:'关于c10居住学生学校住宿感受的的调研',
@@ -91,7 +99,7 @@
 						{
 							title:"滑动条",
 							type:'3',
-							choice:['m','n','b'],
+							choice:[10,'非常差',1000,'非常好',0],
 						}],
 			}
 		},
@@ -105,7 +113,10 @@
 				return this.componentName[temp];
 			},
 			submitSuccess(){
-				
+				this.$refs.questionAnswerRef.forEach(childComponent => {
+						this.answer.push(childComponent.answer);
+				});
+				console.log(this.answer)
 				
 			}
 		}
@@ -197,9 +208,15 @@
 	width: 100%;
 	// line-height: 8vh;
 }
-	
+
+.block{
+	display: flex;
+	width: 100%;
+	height: 50px;
+}
+
 .submit{
-	margin-top: 20px;
+	// margin-top: 20px;
 	margin-bottom: 50px;
 	display: flex;
 	align-items: center;
@@ -209,7 +226,7 @@
 	border: 1px solid #9c3ced;
 	border-radius: 10px;
 	background: linear-gradient(58deg, #b094f8 0%, #e4daf1 38.89%, #f2f2f2 67.78%, #e4b8f5 100%);
-	
+	// background: inear-gradient(90deg,#b3aefd 0%,rgba(255,235,244,0.75)100%);;
 }
 
 
