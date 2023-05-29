@@ -1,17 +1,10 @@
 <template>  
   <view class="contentBox">  
-    <view class="select" @tap="toggleSelect">  
-      <image :src="selected[0] ? '/static/setting/selected.png' : '/static/setting/noSelected.png'" class="icon" />  
-      <view class="text">记录用户昵称</view>  
-    </view>  
-    <view class="select" @tap="toggleSelect(1)">  
-      <image :src="selected[1] ? '/static/setting/selected.png' : '/static/setting/noSelected.png'" class="icon" />  
-      <view class="text">每个用户只能回答一次</view>  
-    </view>  
-    <view class="select" @tap="toggleSelect(2)">  
-      <image :src="selected[2] ? '/static/setting/selected.png' : '/static/setting/noSelected.png'" class="icon" />  
-      <view class="text">积分奖励（待开发）</view>  
-    </view>  
+<input type="radio" name="radios" value="1" v-model="param"><label>one</label>
+<br>
+<input type="radio" name="radios" value="2" v-model="param"><label>two</label>
+<br>
+<input type="radio" name="radios" value="3" v-model="param"><label>three</label>
   </view>  
 </template>  
   
@@ -20,6 +13,7 @@ export default {
   data() {  
     return {  
       selected: [false, false, false],  
+	   param:'1' 
     };  
   },  
   methods: {  

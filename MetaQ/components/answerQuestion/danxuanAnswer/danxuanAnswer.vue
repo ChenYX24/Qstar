@@ -1,23 +1,18 @@
 <template>
 	<view class="danxuanDisplay" id="test">
 		<view class="box">
-			<view class="inbox" @click="showOperation">
+			<view class="inbox">
 				<view class="title">
 					{{num}}.{{content.title}}
 				</view>
-				<view class="options" v-for="(item,index) in content.choice" :key=index>
-					<view class="circle"></view>
-					{{item}}
-				</view>
+				<radio-group name="" @change="getValue" class="radioGroup">
+					<view class="danxuan_radio" v-for="(item,index) in content.choice" :key="index">
+						<label class="radio" >
+							<radio :value="index.toString()" color="#c695ff"/><text>{{item}}</text>
+						</label>
+					</view>
+				</radio-group>
 			</view>
-
-			<operationEditQuestion 
-			:style="{display: operation_show ? 'flex' : 'none'}"
-			:num="num"
-			@clickSon="getOffsetTop"
-			 >
-			</operationEditQuestion>
-			
 		</view>
 		
 		
@@ -25,14 +20,17 @@
 </template>
 
 <script>
-	import operationEditQuestion from "/components/questionShow/operationEditQuestion/operationEditQuestion.vue"
 	export default {
 		data() {
 			return {
-				operation_show:false
+				answer:''
 			};
 		},
 		props:{
+			//是预览模式还是填写模式
+			mode:{
+				default:0
+			},
 			num:{
 				type:String,
 				default:'1'
@@ -40,43 +38,28 @@
 			content:{
 				type:Object,
 				default:{
-					title:"3333",
+					title:"5555",
 					type:'blank',
 					choice:['1','2','3','4'],
 				}
-			},
+			}
 
-		},
-		// created() {
-		//   console.log('---------------------------------')
-		//   console.log(this.content)
-		// },
-		// computed:{
-		// 	console.log(content)
-		// },
-		components:{
-			operationEditQuestion
 		},
 		methods:{
-			getOffsetTop: function() {
-				let viewElements = document.querySelectorAll("#test");  
-				if(viewElements)
-				{
-					let target_view = viewElements[(this.num-1)];
-					// target_view={'targetView_height':target_view.offsetHeight,'targetView_offset_top':target_view.offsetTop)}
-					target_view={'targetView_height':target_view.offsetHeight,'targetView_offset_top':target_view.offsetTop}
-					this.$store.commit('setTargetView',target_view);
-				}
-
-			},
-			showOperation(){
-					this.operation_show=!this.operation_show
-			},
-			// getTop()
-			// {
-			// 	console.log(111)
-			// 	this.$emit('clickSon')
-			// }
+			// getOffsetTop: function() {
+			// 	let viewElements = document.querySelectorAll("#test");  
+			// 	if(viewElements)
+			// 	{
+			// 		let target_view = viewElements[(this.num-1)];
+			// 		// target_view={'targetView_height':target_view.offsetHeight,'targetView_offset_top':target_view.offsetTop)}
+			// 		target_view={'targetView_height':target_view.offsetHeight,'targetView_offset_top':target_view.offsetTop}
+			// 		this.$store.commit('setTargetView',target_view);
+			// 	}
+			// },
+			getValue(e){
+				this.answer=e.detail.value
+				// console.log(this.answer)
+			}
 		}
 	}
 </script>
@@ -87,35 +70,44 @@
 	margin-top: 10px;
 	display: flex;
 	width: 100vw;
-	// height: 100vh;
 	justify-content: center;
 }
 .box{
 	width: 90vw;
+	border-radius: 20px;
+	background: rgba(255, 255, 255, 0.8);
+	box-shadow: 2px 2px 20px 0px rgba(136, 63, 143, 0.15);
 }
 .inbox{
-	border: 1px dashed green;
+	// border: 1px dashed green;
 }
 .title{
+	margin:10px 0px 5px 20px;
 	font-size: 20px;
-	// color: aqua;
-	// border: 2px solid red;
+}
+.radioGroup{
+	margin: 10px 20px 35px 20px;
+}
+.danxuan_radio{
+
+	border-radius: 3px;
+	border: 1px solid rgba(225, 225, 235, 1);
+	align-items: center;
+	
+}
+.radio{
+	height: 8vh;
+	background: rgba(255, 255, 255, 0.8);
+	margin-left: 5px;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	
 }
 
-.options{
-	height: 5vh;
-	// border: 2px solid green;
-	display: flex;
-	align-items: center
-}
-.circle{
-  width: 15px;
-  height: 15px; 
-  // background-color: red;
-  border: 2px solid gray;
-  border-radius: 50%;
-  margin-left: 5px;
-  margin-right: 5px;
+.danxuan_text{
+	margin-left: 10px;
+
 }
 
 

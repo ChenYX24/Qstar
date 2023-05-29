@@ -4,6 +4,9 @@
 			<view class="inbox" @click="showOperation">
 				<view class="title">
 					{{num}}.{{content.title}}
+					<view class="" v-if="content.type==1">
+						<text>(多选题)</text>
+					</view>
 				</view>
 				<view class="options" v-for="(item,index) in content.choice" :key=index>
 					<view class="circle"></view>
@@ -97,9 +100,9 @@
 	border: 1px dashed green;
 }
 .title{
+	display: flex;
 	font-size: 20px;
-	// color: aqua;
-	// border: 2px solid red;
+
 }
 
 .options{
@@ -118,7 +121,11 @@
   margin-right: 5px;
 }
 
-
+.title text{
+	margin-left: 5px;
+	color: red;
+	font-size: 14px;
+}
 
 
 </style>

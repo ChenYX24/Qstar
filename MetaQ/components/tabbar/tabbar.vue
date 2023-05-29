@@ -82,7 +82,10 @@ export default {
 		  });
 		} 
 		else if(tab === 'add'&&this.Type==1){
-			this.isAdd=!this.isAdd
+			// this.isAdd=!this.isAdd
+			uni.navigateTo({
+			  url: '/pages/fillQuestionnaire/fillQuestionnaire',
+			});
 		}
 		 else {
 		  // 切换选中的tab
@@ -129,6 +132,9 @@ export default {
 		} 
 		else if(tab === 'add'&&this.Type==1){
 			this.isAdd=!this.isAdd
+			// uni.navigateTo({
+			//   url: '/pages/fillQuestionnaire/fillQuestionnaire',
+			// });
 		}
 		else {
 		  // 切换选中的tab

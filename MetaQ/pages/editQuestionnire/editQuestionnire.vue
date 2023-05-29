@@ -179,11 +179,11 @@
 						{
 							title:"滑动条",
 							type:3,
-							choice:[]
+							choice:[10,'非常差',1000,'非常好',0],
 						},
 						{
 							title:"标题2",
-							type:'0',
+							type:'1',
 							choice:['m','n','b'],
 					    },
 						{

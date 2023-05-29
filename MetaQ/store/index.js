@@ -10,7 +10,6 @@ const store = createStore({
 		all_content:[]
 	},
 	targetView:null,
-	editHeight:0
   }, 
   mutations: {  
 		setNowOperate(state, id){
@@ -27,7 +26,7 @@ const store = createStore({
 		},
 		setEditHeight(state,editHeight){
 			state.editHeight=editHeight;
-		}  
+		},
   },
 //   actions: {  
 //     incrementAsync({ commit }) {  
