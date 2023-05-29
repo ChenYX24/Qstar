@@ -17,20 +17,23 @@ import danxuanAnswer from '/components/answerQuestion/danxuanAnswer/danxuanAnswe
 		},
 		data() {
 			return {
-				testdata:""
+				testdata:"",
+				base64Image:""
 			};
 		},
 		methods: {
 			test() {
-				axios.defaults.headers.common['token'] = this.testdata;
-				axios.get('http://localhost:8080/getCreated')
+				axios.defaults.headers.common['token'] = localStorage.getItem('token');
+				axios.get('http://localhost:8080/getqrcode')
 					.then(response => {
+						this.base64Image="data:image/png;base64," + response.data;
+						console.log("base64",this.base64Image);
 						console.log("response",response.data);
 					})
 					.catch(error => {
 					    console.log(error);
 					});
-				console.log("testdata",this.testdata);
+				//console.log("testdata",this.testdata);
 			}
 		}
 	}
@@ -61,5 +64,9 @@ import danxuanAnswer from '/components/answerQuestion/danxuanAnswer/danxuanAnswe
 	}
 	.bg input {
 		border: 1px solid rgba(0,0,0,0.6);
+	}
+	.bg img {
+		height: 200px;
+		width: 200px;
 	}
 </style>
