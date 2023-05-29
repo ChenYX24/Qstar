@@ -18,9 +18,9 @@ import java.util.*;
 import com.qstar.demo.DataIO;
 @Repository
 public class Link {
-    private final Map<String,User> map=new HashMap<String, User>();//储存token-用户对象对，登录时加入
+    private final Map<String,User> map=new HashMap<String, User>();//储存token-用户对象对，登录时加入，表示现在在线的用户
     //每次用户登录时会生成token，从硬盘导入对象，所以这二者大致同步，每次登录就加入到map中
-    private final Map<String,User> usernameMap=new HashMap<>();//储存用户名和用户的键值对，填写问卷需要时加入
+    private final Map<String,User> usernameMap=new HashMap<>();//储存用户邮箱和用户的键值对，填写问卷需要时加入，表示需要用到的用户数据
     private String base="";//基本地址，自行设置
     private String picSonRoad="";  //存储图片的子路径（相对路径）
     private String userRoad="";     //储存用户类的文件夹（相对路径）
@@ -53,9 +53,11 @@ public class Link {
         return null;
     }
     public boolean save(int id, String description,String filename,List<Question> list,String token){//标题的修改不应该在问卷的保存这里
-        Questionaire questionaire=map.get(token).getQuestionaire(id);
+        User user=map.get(token);
+        Questionaire questionaire=user.getQuestionaire(id);
         if(questionaire!=null) {
             deleteFile(questionaire.getAttachFile()); //删除原有的文件，因为已经被覆盖了
+            user.setModified(true);
             return questionaire.save(description,filename,list);
         }
         return false;
@@ -73,22 +75,22 @@ public class Link {
         }
         return false;
     }
-    public boolean read(String username) throws IOException {//读取指定用户的对象文件,并放入usernameMap中
-        User user=reader.read(userRoad,username);
+    public boolean read(String email) throws IOException {//读取指定用户的对象文件,并放入usernameMap中  得用邮箱匹配了
+        User user=reader.read(userRoad,email);
         if(user!=null) {
-            usernameMap.put(username, user);
+            usernameMap.put(email, user);
             return true;
         }else{
             return false;
         }
     }
-    public ResultForCheck fill(int id,String creator,String token) throws IOException {//填写问卷时返回问题，并在加到自己的填写记录上
+    public ResultForCheck fill(int id,String email,String token) throws IOException {//填写问卷时返回问题，并在加到自己的填写记录上
 
-        if(usernameMap.keySet().contains(creator)) {
-            Questionaire questionaire=usernameMap.get(creator).getQuestionaire(id);
+        if(containEmail(email)) {//检验这个邮箱是否有效
+            Questionaire questionaire=usernameMap.get(email).getQuestionaire(id);
             if(questionaire.commit()) {
-                map.get(token).addFilled(creator, id, questionaire);//添加填写问卷对象
-                return getfill(id, creator, token);
+                map.get(token).addFilled(email, id, questionaire);//添加填写问卷对象
+                return getfill(id, email, token);
             }else{
                 return null;
             }
@@ -96,14 +98,19 @@ public class Link {
             return null;
         }
     }
-    public ResultForCheck getfill(int id,String creator,String token) throws IOException{//获取指定问卷
-        if(!usernameMap.containsKey(creator)) {
-            if(!read(creator)) {        //可能给的作者名有误，返回为空
-                return null;
+    public boolean containEmail(String email) throws IOException {//检验这个邮箱是否有效
+        if(!usernameMap.keySet().contains(email)){
+            if(!read(email)) {        //可能给的作者邮箱有误，返回为空
+                return false;
             }
         }
-        Questionaire questionaire=usernameMap.get(creator).getQuestionaire(id);
-        if(questionaire!=null) {//检验是否提交
+        return true;
+    }
+    public ResultForCheck getfill(int id,String email,String token) throws IOException{//获取指定问卷
+        User user=usernameMap.get(email);
+        Questionaire questionaire=user.getQuestionaire(id);
+        if(questionaire!=null&&questionaire.commit()) {//检验是否提交
+            user.setModified(true);
             return new ResultForCheck(questionaire.getDescription(),questionaire.getQuestions(),questionaire.getAttachFile());
         }
         return null;
@@ -112,12 +119,14 @@ public class Link {
         return map.get(token).getFilledInfo();
     }
     public boolean saveFill(int id,String creator,String[] data, Set<Integer> set,String attach,String token){
-        FilledQuestionaire filledQuestionaire=map.get(token).findFilled(id,creator);
+        User user=map.get(token);
+        FilledQuestionaire filledQuestionaire=user.findFilled(id,creator);
         if(filledQuestionaire!=null) {
             deleteFilledFiles(filledQuestionaire,set);
         filledQuestionaire.setData(data);
         deleteFile(filledQuestionaire.getAttach());
         filledQuestionaire.setAttach(attach);
+        user.setModified(true);
         return true;
         }
         return false;
@@ -130,20 +139,25 @@ public class Link {
             }
         }
     }
-    public ResultForFill checkFill(int id, String creator, String token) throws IOException {
+    public ResultForFill checkFill(int id, String email, String token) throws IOException {
+        if(containEmail(email)) {
             List<Question> questions;
             String[] filled;    //已填写的数据
-            ResultForCheck check=getfill(id,creator,token);
-            filled=map.get(token).getFilled(id,creator);
-            if(check!=null) {
+            ResultForCheck check = getfill(id, email, token);
+            filled = map.get(token).getFilled(id, email);
+            if (check != null) {
                 return new ResultForFill(check, filled);
             }
-            return null;
+        }
+        return null;
     }
     public boolean commitFill(int id, String creator, String token){//返回错误，可能是用户名和问卷id错误或者是已经提交
-        FilledQuestionaire questionaire=map.get(token).findFilled(id,creator);
+        User user =map.get(token);
+        FilledQuestionaire questionaire=user.findFilled(id,creator);
         if(questionaire!=null) {
-            return questionaire.commit();
+            boolean result= questionaire.commit();
+            user.setModified(result);
+            return result;
         }
         return false;
     }
@@ -197,5 +211,33 @@ public class Link {
         System.out.println("map:"+token);
         map.put(token,user);
     }
-    
+
+    public boolean put(String token,User user){ //用于给已登录的map添加的，给登录系统用
+        if(!map.containsKey(token)){
+            map.put(token,user);
+            return true;
+        }
+        return false;
+    }
+
+    public User getUser(String email) throws IOException {//可能为空  用于登录系统的验证
+        return reader.read(email);
+    }
+
+    public void storeMap() throws IOException {//把map存储到文件中
+        Collection<User> users=map.values();
+        Collection<User> users2=usernameMap.values();
+
+        for(User user:users){
+            if(user.isModified()){
+                writer.write(user,userRoad);
+            }
+        }
+        for(User user:users2){
+            if(user.isModified()){
+                writer.write(user,userRoad);
+            }
+        }
+    }
+
 }

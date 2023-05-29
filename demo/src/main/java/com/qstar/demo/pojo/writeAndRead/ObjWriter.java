@@ -14,8 +14,8 @@ public class ObjWriter {//把对象储存，需要储存的应该就User对象
     public ObjWriter(String base){
         this.base=base;
     }
-    public void write(User user) throws IOException {
-        Writer w=new BufferedWriter(new FileWriter(base+user.getName()+".txt"));
+    public void write(User user,String subroad) throws IOException {//用邮箱作为文件名
+        Writer w=new BufferedWriter(new FileWriter(base+"/"+subroad+"/"+user.get_email()+".txt"));
         w.write(JSON.toJSONString(user));
         w.close();
     }

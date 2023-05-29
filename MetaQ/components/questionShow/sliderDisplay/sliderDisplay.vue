@@ -6,12 +6,17 @@
 					{{num}}.{{content.title}}
 
 				</view>
-				<slider @change="" 
-				show-value="true" 
-				block-color="#76a9f0" 
-				activeColor='#4f2dd0'
-				value=25 
-				/>
+				<view class="slider-box">
+					<slider @change=""
+					class="sliderShow"
+					show-value="true" 
+					block-color="#76a9f0" 
+					activeColor='#4f2dd0'
+					value=25
+					:min="content.choice[0]"
+					:max="content.choice[2]"
+					/>
+				</view>
 			</view>
 
 			<operationEditQuestion 
@@ -109,10 +114,14 @@ import operationEditQuestion from "/components/questionShow/operationEditQuestio
   margin-right: 5px;
 }
 
+
+
 /deep/.uni-slider-value{
 	color: #7902ac;
 	font-size: 17px;
 }
-
+/deep/.uni-slider-handle-wrapper{
+	height:5px;
+}
 
 </style>

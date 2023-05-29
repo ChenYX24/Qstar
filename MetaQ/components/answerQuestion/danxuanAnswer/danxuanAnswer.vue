@@ -5,9 +5,9 @@
 				<view class="title">
 					{{num}}.{{content.title}}
 				</view>
-				<radio-group name="" @change="getValue">
+				<radio-group name="" @change="getValue" class="radioGroup">
 					<view class="danxuan_radio" v-for="(item,index) in content.choice" :key="index">
-						<label class="radio">
+						<label class="radio" >
 							<radio :value="index.toString()" color="#c695ff"/><text>{{item}}</text>
 						</label>
 					</view>
@@ -57,7 +57,8 @@
 			// 	}
 			// },
 			getValue(e){
-				this.answer=e.detail
+				this.answer=e.detail.value
+				// console.log(this.answer)
 			}
 		}
 	}
@@ -69,41 +70,47 @@
 	margin-top: 10px;
 	display: flex;
 	width: 100vw;
-	// height: 100vh;
 	justify-content: center;
 }
 .box{
 	width: 90vw;
+	border-radius: 20px;
+	background: rgba(255, 255, 255, 0.8);
+	box-shadow: 2px 2px 20px 0px rgba(136, 63, 143, 0.15);
 }
 .inbox{
-	border: 1px dashed green;
+	// border: 1px dashed green;
 }
 .title{
+	margin:10px 0px 5px 20px;
 	font-size: 20px;
-	// color: aqua;
-	// border: 2px solid red;
 }
-
-.options{
-	height: 5vh;
-	// border: 2px solid green;
-	display: flex;
-	align-items: center
+.radioGroup{
+	margin: 10px 20px 35px 20px;
 }
-
 .danxuan_radio{
-	display: flex;
-	// border: 2px solid red;
-	height: 5vh;
-	align-items: center;
-	margin-left: 8px;
-}
 
+	border-radius: 3px;
+	border: 1px solid rgba(225, 225, 235, 1);
+	align-items: center;
+	
+}
+.radio{
+	height: 8vh;
+	background: rgba(255, 255, 255, 0.8);
+	margin-left: 5px;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	
+}
 
 .danxuan_text{
 	margin-left: 10px;
-	
+
 }
+
+
 
 
 </style>

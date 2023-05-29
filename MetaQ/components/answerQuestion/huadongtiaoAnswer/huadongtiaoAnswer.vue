@@ -1,20 +1,22 @@
 <template>
 	<view class="danxuanDisplay" id="test">
 		<view class="box">
-			<view class="inbox" >
+			<view class="inbox">
 				<view class="title">
 					{{num}}.{{content.title}}
-
 				</view>
-				<slider @change="" 
-				show-value="true" 
-				block-color="#76a9f0" 
-				activeColor='#4f2dd0'
-				value=25 
-				/>
+				<view class="slider-box">
+					<slider @change=""
+					class="sliderShow"
+					show-value="true" 
+					block-color="#76a9f0" 
+					activeColor='#4f2dd0'
+					:value='answer'
+					:min="content.choice[0]"
+					:max="content.choice[2]"
+					/>
+				</view>
 			</view>
-
-			
 		</view>
 		
 		
@@ -22,10 +24,10 @@
 </template>
 
 <script>
-	export default {
+export default {
 		data() {
 			return {
-				operation_show:false
+				answer:200
 			};
 		},
 		props:{
@@ -72,36 +74,28 @@
 }
 .box{
 	width: 90vw;
+	border-radius: 20px;
+	background: rgba(255, 255, 255, 0.8);
+	box-shadow: 2px 2px 20px 0px rgba(136, 63, 143, 0.15);
 }
 .inbox{
-	border: 1px dashed green;
+	// border: 1px dashed green;
 }
 .title{
+	margin:10px 0px 5px 20px;
 	font-size: 20px;
-	// color: aqua;
-	// border: 2px solid red;
 }
 
-.options{
-	height: 5vh;
-	// border: 2px solid green;
-	display: flex;
-	align-items: center
-}
-.circle{
-  width: 15px;
-  height: 15px; 
-  // background-color: red;
-  border: 2px solid gray;
-  border-radius: 50%;
-  margin-left: 5px;
-  margin-right: 5px;
+.slider-box{
+	margin: 20px 20px 20px 20px;
 }
 
 /deep/.uni-slider-value{
 	color: #7902ac;
 	font-size: 17px;
 }
-
+/deep/.uni-slider-handle-wrapper{
+	height:5px;
+}
 
 </style>

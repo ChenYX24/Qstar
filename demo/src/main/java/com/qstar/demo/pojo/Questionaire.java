@@ -15,16 +15,23 @@ public class Questionaire {//创建的问卷
     private String attachFile;      //附件文件
     private List<Question> questions;   //问题的集合
     private List<Statistics> statistics;    //统计数据
+    private String creator;
+    private List<String>  authorizeEditID;    //被授权允许编辑的用户的邮箱
+    private List<String> authorizeCheckID;     //被授权允许查看的用户的邮箱
+    private boolean multiCommit;            //是否允许多次提交
+    private boolean recordFillerName;          //是否记录名字
+
     public boolean judge(String title){//判断是否为这个问卷,用于填写问卷时找到对应的问卷
         return title.equals(info.getTitle());
     }
 
-    public Questionaire(String title,String description,String attachFile,List<Question> questions,int id){//初始化问卷对象，其中数据统计对象是和问题对象高度绑定的
+    public Questionaire(String title,String description,String attachFile,List<Question> questions,int id,String creator){//初始化问卷对象，其中数据统计对象是和问题对象高度绑定的
         info=new QuestionaireInfo(title,id);
         this.questions=questions;
         this.description=description;
         //this.attachFile=attachFile;
         statistics=new ArrayList<>(questions.size());
+        this.creator=creator;
     }
     public Questionaire(int id,String title,int filled,boolean commit){
         info = new QuestionaireInfo(id,title,filled,commit);
@@ -82,4 +89,10 @@ public class Questionaire {//创建的问卷
         return null;
     }
 
+    public void addauthorizeEditEmail(String email){
+        authorizeEditID.add(email);
+    }
+    public void addAuthorizeCheckEmail(String email){
+        authorizeCheckID.add(email);
+    }
 }
