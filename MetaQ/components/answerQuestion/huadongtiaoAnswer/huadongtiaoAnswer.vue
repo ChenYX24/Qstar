@@ -1,25 +1,19 @@
 <template>
 	<view class="danxuanDisplay" id="test">
 		<view class="box">
-			<view class="inbox" @click="showOperation">
+			<view class="inbox" >
 				<view class="title">
 					{{num}}.{{content.title}}
-					<view class="" v-if="content.type==1">
-						<text>(多选题)</text>
-					</view>
+
 				</view>
-				<view class="options" v-for="(item,index) in content.choice" :key=index>
-					<view class="circle"></view>
-					{{item}}
-				</view>
+				<slider @change="" 
+				show-value="true" 
+				block-color="#76a9f0" 
+				activeColor='#4f2dd0'
+				value=25 
+				/>
 			</view>
 
-			<operationEditQuestion 
-			:style="{display: operation_show ? 'flex' : 'none'}"
-			:num="num"
-			@clickSon="getOffsetTop"
-			 >
-			</operationEditQuestion>
 			
 		</view>
 		
@@ -28,7 +22,6 @@
 </template>
 
 <script>
-	import operationEditQuestion from "/components/questionShow/operationEditQuestion/operationEditQuestion.vue"
 	export default {
 		data() {
 			return {
@@ -44,21 +37,13 @@
 				type:Object,
 				default:{
 					title:"3333",
-					type:'blank',
-					choice:['1','2','3','4'],
+					type:'3',
+					choice:[10,'非常差',1000,'非常好',0],
 				}
 			},
 
 		},
-		// created() {
-		//   console.log('---------------------------------')
-		//   console.log(this.content)
-		// },
-		// computed:{
-		// 	console.log(content)
-		// },
 		components:{
-			operationEditQuestion
 		},
 		methods:{
 			getOffsetTop: function() {
@@ -72,14 +57,6 @@
 				}
 
 			},
-			showOperation(){
-					this.operation_show=!this.operation_show
-			},
-			// getTop()
-			// {
-			// 	console.log(111)
-			// 	this.$emit('clickSon')
-			// }
 		}
 	}
 </script>
@@ -100,9 +77,9 @@
 	border: 1px dashed green;
 }
 .title{
-	display: flex;
 	font-size: 20px;
-
+	// color: aqua;
+	// border: 2px solid red;
 }
 
 .options{
@@ -121,10 +98,9 @@
   margin-right: 5px;
 }
 
-.title text{
-	margin-left: 5px;
-	color: red;
-	font-size: 14px;
+/deep/.uni-slider-value{
+	color: #7902ac;
+	font-size: 17px;
 }
 
 

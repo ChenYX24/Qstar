@@ -1,15 +1,20 @@
 <template>
 	<view>
-		<view class="bg">
+<!-- 		<view class="bg">
 			<input type="text" v-model="testdata">
 			<button @tap="test">tests</button>
-		</view>
+		</view> -->
+		<danxuanAnswer></danxuanAnswer>
 	</view>
 </template>
 
 <script>
-import axios from 'axios';
+// import axios from 'axios';
+import danxuanAnswer from '/components/answerQuestion/danxuanAnswer/danxuanAnswer.vue'
 	export default {
+		components:{
+			danxuanAnswer
+		},
 		data() {
 			return {
 				testdata:""

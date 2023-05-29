@@ -28,7 +28,7 @@
 </template>
 
 <script>
-	import operationEditQuestion from "/components/questionShow/operationEditQuestion/operationEditQuestion.vue"
+import operationEditQuestion from "/components/questionShow/operationEditQuestion/operationEditQuestion.vue"
 	export default {
 		data() {
 			return {
@@ -50,13 +50,6 @@
 			},
 
 		},
-		// created() {
-		//   console.log('---------------------------------')
-		//   console.log(this.content)
-		// },
-		// computed:{
-		// 	console.log(content)
-		// },
 		components:{
 			operationEditQuestion
 		},
@@ -74,7 +67,6 @@
 			},
 			showOperation(){
 					this.operation_show=!this.operation_show
-					console.log(this.content.choice[0],typeof(this.content.choice[0]))
 			},
 		}
 	}
@@ -117,7 +109,10 @@
   margin-right: 5px;
 }
 
-
+/deep/.uni-slider-value{
+	color: #7902ac;
+	font-size: 17px;
+}
 
 
 </style>
