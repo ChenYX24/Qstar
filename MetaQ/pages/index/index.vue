@@ -46,7 +46,10 @@
 						console.log(response);
 				  	  if(response == " ")
 				  	  {
-				  		  alert("登录失败");
+				  		  uni.showToast({
+				  		    title: '登录失败',  
+				  		    icon: 'none'
+				  		  }); 
 				  	  }else{
 						  console.log(response);
 						  console.log(localStorage.getItem('token'));

@@ -74,26 +74,32 @@ import axios from 'axios';
 		},
 		methods: {
 		    changepasswd() {
-				axios.post('https://metaq.scutbot.icu/checkcode', {
+				axios.post('http://localhost:8080/checkcode', {
 				  email: this.formData.email,
 				  code:  this.formData.verification
 				})
 				.then(response => {
 					if(response.data == true){
-						axios.post('https://metaq.scutbot.icu/changepasswd', {
+						axios.post('http://localhost:8080/changepasswd', {
 							email:    this.formData.email,
 							password: this.formData.password
 						})
 						.then(response => {
 							console.log("响应值",response.data);
 							if(response.data == true){
-								alert("修改密码成功！");
+								uni.showToast({
+								  title: '修改密码成功',  
+								  icon: 'none'
+								}); 
 								uni.navigateTo({
 									url:"/pages/login/login"
 								})
 							}
 							else{
-								alert("修改密码失败！");
+								uni.showToast({
+								  title: '修改密码失败',  
+								  icon: 'none'
+								}); 
 							}
 						})
 						.catch(error => {
@@ -101,7 +107,10 @@ import axios from 'axios';
 						});
 					}
 					else{
-						alert("验证码错误!");
+						uni.showToast({
+						  title: '验证码错误',  
+						  icon: 'none'
+						}); 
 					}
 				})
 				.catch(error => {
@@ -115,12 +124,15 @@ import axios from 'axios';
 			},
 			startTime(){
 				if(this.enableGetcode && this.check){
-					axios.post('https://metaq.scutbot.icu/sendcode', {
+					axios.post('http://localhost:8080/sendcode', {
 					  email: this.formData.email
 					})
 					.then(response => {
 						if(response.data == false){
-							alert("获取验证码失败!");
+							uni.showToast({
+							  title: '获取验证码失败',  
+							  icon: 'none'
+							}); 
 						}
 					})
 					.catch(error => {
