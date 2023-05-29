@@ -17,12 +17,12 @@
 		    >
 		      <swiper-item>
 				<view class="page1">
-				  <QBlock v-for="(block, index) in blocks1" :key="block.id" :onumber="block.filled" :title="block.title" :isPush="block.commit"></QBlock>
+				  <QBlock v-for="(block, index) in blocks1" :key="block.id" :onumber="block.filled" :title="block.title" :isPush="block.isPush"></QBlock>
 				</view>
 		      </swiper-item>
 		      <swiper-item>
 				<view class="page2">
-				  <QBlock2 v-for="item in blocks" :key="item.id" :title="item.title" :isEnd="item.commited" :name="item.creator"></QBlock2>
+				  <QBlock2 v-for="item in blocks" :key="item.id" :title="item.title" :isEnd="item.isEnd" :name="item.name"></QBlock2>
 				</view>
 		      </swiper-item>
 		    </swiper>
