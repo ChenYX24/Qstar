@@ -121,6 +121,15 @@
             
         }
 
+        ,{
+            "path" : "pages/page3/page3",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationStyle": "custom"

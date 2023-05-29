@@ -37,7 +37,6 @@
 				//自动登录
 				const token = localStorage.getItem('token');
 				console.log(token);
-				var temp = JSON.stringify(token);
 				if (token) {
 				  // 发送请求进行自动登录
 				  axios.post(/*'https://metaq.scutbot.icu/login'*/
