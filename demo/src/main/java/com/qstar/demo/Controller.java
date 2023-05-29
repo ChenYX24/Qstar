@@ -103,10 +103,10 @@ public class Controller {
 
     //返回要填写的问卷的信息
     @GetMapping("/fill")
-    public Result fill(Integer id,String creator,@RequestHeader("token") String token) throws IOException {
-        ResultForCheck list=handle.fill(id,creator,token);
+    public Result fill(Integer id,String email,@RequestHeader("token") String token) throws IOException {
+        ResultForCheck list=handle.fill(id,email,token);
         if(list==null){
-            return Result.fail("问卷id或者作者名错误或访问的问卷未提交！");
+            return Result.fail("问卷id或者作者邮箱错误或访问的问卷未提交！");
         }
         return Result.success(list);
     }
@@ -125,17 +125,17 @@ public class Controller {
         }else{
             set=null;
         }
-        boolean b=handle.saveFill(receive.getId(),receive.getCreator(),receive.getData(),set,attach,token);
-        return b?Result.success():Result.fail("问卷id或者作者名错误!");
+        boolean b=handle.saveFill(receive.getId(),receive.getEmail(),receive.getData(),set,attach,token);
+        return b?Result.success():Result.fail("问卷id或者作者邮箱错误!");
     }
     //查看已经填写过的问卷
     @GetMapping("/checkFill")
-    public Result checkFill(Integer id,String creator,@RequestHeader("token") String token) throws IOException {
-        ResultForFill result=handle.checkFill(id,creator,token);
+    public Result checkFill(Integer id,String email,@RequestHeader("token") String token) throws IOException {
+        ResultForFill result=handle.checkFill(id,email,token);
         if(result!=null) {
             return Result.success(result);
         }
-        return Result.fail("问卷id或者作者名错误!");
+        return Result.fail("问卷id或者作者邮箱错误!");
     }
     //提交填写
     @PostMapping("/commitFill")
@@ -147,11 +147,11 @@ public class Controller {
         }else{
             set=null;
         }
-        boolean b=handle.saveFill(receive.getId(),receive.getCreator(),receive.getData(),set,attach,token);
+        boolean b=handle.saveFill(receive.getId(),receive.getEmail(),receive.getData(),set,attach,token);
         if(!b){
-            return Result.fail("问卷id或者作者名错误!");
+            return Result.fail("问卷id或者作者邮箱错误!");
         }
-        return handle.commitFill(receive.getId(),receive.getCreator(),token)?Result.success():Result.fail("已提交!");
+        return handle.commitFill(receive.getId(),receive.getEmail(),token)?Result.success():Result.fail("已提交!");
     }
     //获取数据
     @GetMapping("/statistics/{index}")
