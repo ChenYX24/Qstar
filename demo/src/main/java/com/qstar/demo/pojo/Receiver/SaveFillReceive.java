@@ -9,7 +9,6 @@ import java.util.Map;
 @Data
 public class SaveFillReceive{
     private Integer id;
-    private String email;
     private String[] data;
     private Map<Integer, MultipartFile> files;  //对应于第几题的上传文件
     private MultipartFile attach;       //附件

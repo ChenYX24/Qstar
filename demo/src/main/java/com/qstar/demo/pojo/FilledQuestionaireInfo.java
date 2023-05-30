@@ -11,4 +11,5 @@ public class FilledQuestionaireInfo {
     private String creator;
     private boolean committed;
     private String title;
+    private int committedCount;
 }

@@ -10,6 +10,7 @@ import java.util.Map;
 @Data
 public class QuestionaireReceive extends FileReceive{//用于问卷的接受对象
     private Integer id;
+    private String title;
     private String description;
     private List<Question> list;
     private Map<Integer,List<MultipartFile>> files;
