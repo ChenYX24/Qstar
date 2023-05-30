@@ -11,17 +11,14 @@ import java.io.IOException;
 public class CycleStoreThread extends Thread{//放在监听器的初始方法会好点
     @Autowired
     private Link link;
-    @Value("${thread.cycle}")
-    private int cycle;      //计时，从配置文件中读取
-    private boolean start;
-    public CycleStoreThread(){
-        start=true;
-    }
+    @Value("${thread.cycleMinute}")
+    private int cycle;      //周期，从配置文件中读取，分钟
+    private boolean start=true;
     @Override
     public void run(){
         while(start) {   //周期性地检测写回
             try {
-                Thread.sleep(cycle);
+                Thread.sleep(cycle*60*1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
