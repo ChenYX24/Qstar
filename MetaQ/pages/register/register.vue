@@ -96,13 +96,19 @@ import axios from 'axios';
 						.then(response => {
 							this.token = response.data;
 							console.log(this.token);
+							uni.navigateTo({
+								url:"/pages/login/login"
+							})
 						})
 						.catch(error => {
 						    console.log(error);
 						});
 					}
 					else{
-						alert("验证码错误!");
+						uni.showToast({
+						  title: '验证码错误',  
+						  icon: 'none'
+						}); 
 					}
 				})
 				.catch(error => {
@@ -129,7 +135,10 @@ import axios from 'axios';
 					})
 					.then(response => {
 						if(response.data == false){
-							alert("获取验证码失败!");
+							uni.showToast({
+							  title: '获取验证码失败',  
+							  icon: 'none'
+							}); 
 						}
 					})
 					.catch(error => {

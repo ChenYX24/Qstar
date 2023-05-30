@@ -58,7 +58,10 @@ import axios from 'axios';
 		              this.token = response.data;
 					  if(this.token == " ")
 					  {
-						  alert("登录失败");
+						  uni.showToast({
+						    title: '登录失败',  
+						    icon: 'none'
+						  }); 
 					  }else{
 						  console.log("token",this.token);
 						  localStorage.setItem('token', JSON.stringify(this.token));

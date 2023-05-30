@@ -29,21 +29,25 @@ public class User {//用户
     private transient List<FilledQuestionaire> filledQuestionaires = null;
     @JsonIgnore
     private transient int idDistribute = 0;   //id分配，其实就是问卷创建的顺序
+    private boolean modified;   //赃位，验证是否修改
     public User(){
         questionaires=new ArrayList<>();
         filledQuestionaires=new ArrayList<>();
         idDistribute=0;
+        modified=false;
     }
     public User(String Name,String Email,String Passwd){
         this._name = Name;
         this._email = Email;
         this._passwd = Passwd;
+        modified=false;
     }
     public User(int Id,String Name,String Email,String Passwd){
         this._id = Id;
         this._name = Name;
         this._email = Email;
         this._passwd = Passwd;
+        modified=false;
     }
     // @JsonIgnore
     // public List<Questionaire> get_questionaires(){
@@ -88,8 +92,9 @@ public class User {//用户
     }
     @JsonIgnore
     public int addQuestionaire(String title,String description,String filename,List<Question> questions){//添加问卷
-        questionaires.add(new Questionaire(title,description,filename,questions,idDistribute));
+        questionaires.add(new Questionaire(title,description,filename,questions,idDistribute,this.get_name()));
         idDistribute++;
+        modified=true;
         return idDistribute-1;
     }
     @JsonIgnore
@@ -120,6 +125,7 @@ public class User {//用户
     @JsonIgnore
     public void addFilled(String creator,int id,Questionaire questionaire){//添加到填写记录
         filledQuestionaires.add(new FilledQuestionaire(creator,id,questionaire));
+        modified=true;
     }
     @JsonIgnore
     public FilledQuestionaire findFilled(int id,String creator){//查找指定的填写

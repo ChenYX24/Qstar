@@ -11,7 +11,7 @@
 		<view class="bottomBox">
 		   <view class="pushBox">
 			<view :class="{ 'active-dot': isPush, 'dot': !isPush }"></view>
-			<view class="push">{{pushText}}</view>
+			<view class="push">{{number}}</view>
 		   </view>
 		   <view class="text">
 			答卷数量
@@ -39,10 +39,18 @@
 		  },
 		data() {
 			return {
-				pushText:"已发布",
+
 			};
 		},
 		computed: {
+			pushText(){
+				if(this.isPush){
+					return "已发布"
+				}
+				else{
+					return "未发布"
+				}
+			},
 		      number(){
 		          let len = this.onumber.toString().length;
 		          if(len == 4) {

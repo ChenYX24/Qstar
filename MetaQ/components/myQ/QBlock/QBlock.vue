@@ -51,6 +51,14 @@ export default {
     },
   },
   computed: {
+	  pushText(){
+	  	if(this.isPush){
+	  		return "已发布"
+	  	}
+	  	else{
+	  		return "未发布"
+	  	}
+	  },
     number() {
       let len = this.onumber.toString().length;
       if (len == 4) {

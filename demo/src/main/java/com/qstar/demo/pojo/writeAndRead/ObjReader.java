@@ -14,8 +14,8 @@ public class ObjReader {//读取user对象，根据用户的名字读取，用�
     public ObjReader(String base) {//注意：这个base是储存的根目录，需要在最后加上\\
         this.base = base;
     }
-    public User read(String name) throws IOException {
-        File file=new File(base+"/"+name+".txt");   //储存user对象的文件是txt格式的
+    public User read(String email) throws IOException {
+        File file=new File(base+"/"+email+".txt");   //储存user对象的文件是txt格式的
         if(file.exists()) {//先检验文件是否存在，防止报错
             Reader r = new BufferedReader(new FileReader(file));
             String objstr = "";
