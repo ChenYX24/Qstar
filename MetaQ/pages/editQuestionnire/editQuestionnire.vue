@@ -75,21 +75,21 @@
 		    
 		    <view class="square">
 		      <view class="square-part" @click="generateQuestion" id="0">
-				  <img src="/static/editQuestion/danxuan.png" alt="">
+				  <image src="/static/editQuestion/danxuan.png" mode="aspectFit"></image>
 				  <!-- <view class="square-part-word">单选题</view> -->
 				  <p>单选题</p>
 			  </view>
 		      <view class="square-part" @click="generateQuestion" id="1">
-				  <img src="/static/editQuestion/duoxuan.png" alt="">
+				  <image src="/static/editQuestion/duoxuan.png" mode="aspectFit"></image>
 				  <!-- <view class="square-part-word">单选题</view> -->
 				  <p>多选题</p>
 			  </view>
 		      <view class="square-part" @click="generateQuestion" id="2">
-				  <img src="/static/editQuestion/tiankong.png" alt="">
+				  <image src="/static/editQuestion/tiankong.png" mode="aspectFit"></image>
 				  <p>填空题</p>
 			  </view>
 		      <view class="square-part" @click="generateQuestion" id="3">
-				  <img src="/static/editQuestion/huadongtiao.png" alt="">
+				  <image src="/static/editQuestion/huadongtiao.png" mode="aspectFit"></image>
 				  <p>滑动条</p>
 			  </view>
 		    </view>
@@ -104,15 +104,15 @@
 			  
 			  <view class="rectangle">
 				  <view class="rectangle_square">
-					  <img src="/static/editQuestion/shouji.png" alt="">
+					  <image src="/static/editQuestion/shouji.png" mode="aspectFit"></image>
 					  <p>手机</p>
 				  </view>
 				  <view class="rectangle_square">
-					  <img src="/static/editQuestion/riqi.png" alt="">
+					  <image src="/static/editQuestion/riqi.png" mode="aspectFit"></image>
 					  <p>日期</p>
 				  </view>
 				  <view class="rectangle_square">
-					  <img src="/static/editQuestion/didian.png" alt="">
+					  <image src="/static/editQuestion/didian.png" mode="aspectFit"></image>
 					  <p>地点</p>
 				  </view>
 			  </view>
@@ -492,6 +492,9 @@
 	  position: relative;
 	  left: 50%;
 	  transform: translate(-50%);
+	  border-radius: 20px;
+	  box-shadow: 2px 2px 20px 0px rgba(136, 63, 143, 0.15);
+	  overflow: hidden;
 	}
 	.square-part {
 	  // display: flex; /* 使用 flex 布局 */
@@ -499,14 +502,12 @@
 	  width: 100%;
 	  height: 100%;
 	  box-sizing: border-box;
-	  border: 1px solid rgb(237,217,252);
-	  background-color: rgba(255, 255, 255, 0.5); /* 红色，透明度为 50% */
-	  //定义圆角变量
-	  --border_radius:25%;
+	  background: rgba(255, 255, 255, 0.8);
 	  display: flex;
 	  flex-direction: column;
 	  align-items: center;
 	  justify-content: center;
+
 	}
 	
 	
@@ -523,9 +524,9 @@
 	  border-bottom-right-radius: var(--border_radius); 
 	}
 	
-	.square-part img{
-		width: 40%;
-		height: 40%;
+	.square-part image{
+		width: 30%;
+		height: 30%;
 		position: relative;
 		// top: 30%;
 		// left: 30%;
@@ -533,6 +534,9 @@
 	}
 	.square-part p{
 		position: relative;
+		line-height: 27.44px;
+		color: rgba(0, 0, 0, 0.36);
+		font-size: 12pt;
 		// top:25%;
 		// left: 30%;
 	}
@@ -551,17 +555,19 @@
 		height: 120%;
 		width: 32%;
 		border: 1px solid rgb(237,217,252);
-		background-color: rgba(255, 255, 255, 0.5); 
+		background: rgba(255, 255, 255, 0.8);
 		--border_radius:20%;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
+		background: rgba(255, 255, 255, 0.8);
+		box-shadow: 2px 2px 20px 0px rgba(136, 63, 143, 0.15);
 	}
 	
-	.rectangle_square img{
-		width: 50%;
-		height: 50%;
+	.rectangle_square image{
+		width: 40%;
+		height: 40%;
 		position: relative;
 		// top: 21%;
 		// left: 30%;
@@ -569,6 +575,9 @@
 	
 	.rectangle_square p{
 		position: relative;
+		line-height: 27.44px;
+		color: rgba(0, 0, 0, 0.36);
+		font-size: 12pt;
 		// top:15%;
 		// left: 39%;
 	}
