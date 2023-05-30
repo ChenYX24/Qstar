@@ -6,9 +6,9 @@
 					{{num}}.{{content.title}}<text>[多选题]</text>
 				</view>
 					<checkbox-group name="" @change="getValue" class="checkboxGroup">
-						<view class="duoxuan-checkbox" v-for="(item,index) in content.choice" :key="index">
+						<view class="duoxuan-checkbox" v-for="(item,index) in content.choice" :key="index" :class="{'active':answer.includes(index.toString())&&answer!=''}">
 							<label class="checkbox">
-								<checkbox :value="(index+1).toString()" color="#c695ff" class="checkBox"/>
+								<checkbox :value="index.toString()" color="#c695ff" class="checkBox"/>
 								<text class="duoxuantext">{{item}}</text>
 							</label>
 						</view>
@@ -49,7 +49,7 @@
 		methods:{
 			getValue(e){
 				this.answer=e.detail.value
-				// console.log(e.detail.value)
+				console.log(e.detail.value)
 			}
 		}
 	}
@@ -84,14 +84,22 @@
 
 .duoxuan-checkbox{
 	border-radius: 3px;
-	border: 1px solid rgba(225, 225, 235, 1);
+	border: 2px solid rgba(225, 225, 235, 1);
 	align-items: center;
+	background: rgba(255, 255, 255, 0.8);
 	
 }
-
+ .duoxuan-checkbox + .duoxuan-checkbox {  
+    margin-top: -2px; /* 使边框重叠 */  
+  } 
+ .duoxuan-checkbox.active{
+	  border: 2px solid rgba(221, 183, 247, 1);
+	  z-index: 2;
+	  box-shadow: 1px 1px 10px 0px rgba(136, 63, 143, 0.15);
+	  position: relative;
+  }
 .checkbox{
 	height: 8vh;
-	background: rgba(255, 255, 255, 0.8);
 	margin-left: 5px;
 	width: 100%;
 	display: flex;
@@ -113,6 +121,4 @@
     background-color: #ffffff;;
 	border-radius: 50%
   }
-
-
 </style>

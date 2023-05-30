@@ -5,6 +5,7 @@
 				
 				<view class="textarea_border2">
 					<textarea maxlength="900"
+							  id="title2"
 							  placeholder="请输入问卷标题"
 							  @linechange="autoChange"
 							  v-model="title"
@@ -13,6 +14,7 @@
 				</view>
 				<view class="textarea_border2">
 							  <textarea maxlength="900"
+							  id="descripition2"
 							  placeholder="请输入问卷简介"
 							  @linechange="autoChange"
 							  v-model="description"
