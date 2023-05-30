@@ -1,11 +1,11 @@
 <template>
 	<view class="addContainer" :class="{show:isShow}">
-		<view class="questionnire_page" id='questionnire_page'>
-			<view class="input_class2" id='input_class2_block'>
+		<view class="questionnire_page" >
+			<view class="input_class2">
 				
 				<view class="textarea_border2">
 					<textarea maxlength="900"
-							  id="title"
+							  id="title2"
 							  placeholder="请输入问卷标题"
 							  @linechange="autoChange"
 							  v-model="title"
@@ -14,7 +14,7 @@
 				</view>
 				<view class="textarea_border2">
 							  <textarea maxlength="900"
-							  id="descripition"
+							  id="descripition2"
 							  placeholder="请输入问卷简介"
 							  @linechange="autoChange"
 							  v-model="description"
@@ -51,16 +51,11 @@
 			huadongtiaoAnswer,
 			duoxuanAnswer
 		},
-		onLoad: function(options) {
-			if(options.mode){
-				this.mode=options.mode
-			}
-		},
 		props:{
-			all_content:{
-				type:Array,
-				default:[]
-			},
+			// all_content:{
+			// 	type:Array,
+			// 	default:[]
+			// },
 			isShow:{
 				type:Boolean,
 				default:false

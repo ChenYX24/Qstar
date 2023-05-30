@@ -6,7 +6,13 @@
 					{{num}}.{{content.title}}
 				</view>
 				<view class="slider-box">
-					<slider @change=""
+					<sliderBar
+					:value='answer'
+					:min="content.choice[0]"
+					:max="content.choice[2]"
+					@changeVal="changeValue"
+					></sliderBar>
+<!-- 					<slider
 					class="sliderShow"
 					show-value="true" 
 					block-color="#76a9f0" 
@@ -14,7 +20,7 @@
 					:value='answer'
 					:min="content.choice[0]"
 					:max="content.choice[2]"
-					/>
+					/> -->
 				</view>
 			</view>
 		</view>
@@ -24,7 +30,11 @@
 </template>
 
 <script>
+import sliderBar from '/components/sliderBar/sliderBar.vue'
 export default {
+			components: {
+				sliderBar
+			},
 		data() {
 			return {
 				answer:200
@@ -59,6 +69,9 @@ export default {
 				}
 
 			},
+			changeValue(val){
+				this.answer=val
+			}
 		}
 	}
 </script>
