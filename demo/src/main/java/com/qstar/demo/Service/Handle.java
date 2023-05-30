@@ -25,7 +25,7 @@ public class Handle {
     public List<QuestionaireInfo> getCreated(String token){
         return link.getCreated(token);
     }
-    public int create(String title, String description,String filename,List<Question> questions,String token){
+    public int create(String title, String description,String filename,List<Question> questions,String token) throws IOException {
          return link.create(title,description,filename,questions,token);
     }
     public ResultForCheck check(int id, String token) throws IOException {
@@ -34,10 +34,10 @@ public class Handle {
     public boolean save(int id ,String title,String description,String filename,List<Question> list,String token) throws IOException {
         return link.save(id,title,description,filename,list,token);
     }
-    public boolean commit(int id,String token) throws IOException {
+    public Result commit(int id,String token) throws IOException {
         return link.commit(id,token);
     }
-    public ResultForCheck fill(int id,String token) throws IOException{
+    public Result fill(int id,String token) throws IOException{
         return link.fill(id,token);
     }
     public List<FilledQuestionaireInfo> getFillRecord(String token){
@@ -49,10 +49,10 @@ public class Handle {
     public ResultForFill checkFill(int id, String token) throws IOException{
         return link.checkFill(id,token);
     }
-    public boolean commitFill(int id, String token) throws IOException {
+    public Result commitFill(int id, String token) throws IOException {
         return link.commitFill(id,token);
     }
-    public StatisticsResult statistics(int index, int id, String token) throws IOException {
+    public Result statistics(int index, int id, String token) throws IOException {
         return link.statistics(index,id,token);
     }
 

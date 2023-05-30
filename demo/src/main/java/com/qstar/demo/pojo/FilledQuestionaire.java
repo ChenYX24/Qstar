@@ -15,13 +15,15 @@ public class FilledQuestionaire {//已填写的问卷
     private boolean hasAttach;
     private boolean committed;  //是否已提交
     private int commitCount;     //提交次数，只有问卷允许提交多次才能大于1
+    private int index;      //相当于填写的问卷的id
 
-    public FilledQuestionaire(String creator,int id,Questionaire questionaire){
+    public FilledQuestionaire(String creator,int id,Questionaire questionaire,int index){
         this.creator=creator;
         this.id=id;
         hasAttach=false;
         committed=false;
         commitCount=0;
+        this.index=index;
     }
     public FilledQuestionaireInfo getInfo(){
         return new FilledQuestionaireInfo(id,creator,committed,title,commitCount);
@@ -56,7 +58,7 @@ public class FilledQuestionaire {//已填写的问卷
             hasAttach=false;
         }
     }
-    public void setCommitted(boolean committed){
+    public void setCommitted(boolean committed){//设置这个填写记录是否提交
         if(this.committed==false){
             this.committed=committed;
         }

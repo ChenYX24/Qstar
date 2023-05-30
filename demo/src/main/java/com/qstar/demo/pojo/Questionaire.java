@@ -1,6 +1,7 @@
 package com.qstar.demo.pojo;
 
 import com.qstar.demo.pojo.Receiver.QuestionMiniUnit;
+import com.qstar.demo.pojo.Result.Result;
 import com.qstar.demo.pojo.Result.ResultForSetting;
 import com.qstar.demo.pojo.Result.StatisticsResult;
 import lombok.Data;
@@ -91,7 +92,10 @@ public class Questionaire {//创建的问卷
             return false;
         }
     }
-    public boolean upload(String[] data){//上传填写数据到统计对象
+    public boolean isCommit(){
+        return info.isCommit();
+    }
+    public Result upload(String[] data){//上传填写数据到统计对象
         if(Arrays.asList(data).contains(null)) {//检测是否还有数据没有填完的
             Date date=new Date();
             if((begin!=null&&date.after(begin)||begin==null)) {       //验证是否在规定时间内提交，如果没设置时间，可以直接过
@@ -100,11 +104,12 @@ public class Questionaire {//创建的问卷
                         statistics.get(i).add(data[i]);
                     }
                     this.modified = true;
-                    return true;
+                    return Result.success();
                 }
             }
+            return Result.fail("已超时");
         }
-        return false;
+        return Result.fail("有些问题没有回答");
     }
     public void uploadUsername(String filledName){
         fillerNames.add(filledName);
