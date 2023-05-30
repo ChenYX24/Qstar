@@ -17,7 +17,7 @@
 					show-value="true" 
 					block-color="#76a9f0" 
 					activeColor='#4f2dd0'
-					:value='answer'
+					:value="answer"
 					:min="content.choice[0]"
 					:max="content.choice[2]"
 					/> -->
