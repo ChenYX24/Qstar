@@ -62,6 +62,9 @@
 		
 		<!-- 下面是点击加号弹出选择题目 -->
 		<view class="question" id='question_page'   :style="{top: question_page_show ? '0' : '100%'}">
+		   <view class="navBar">
+		   	<image src="../../static/save/back.png" mode="aspectFit" class="back" @tap="goBack"></image>
+		   </view>
 		   <!-- 题型选择 -->
 		  <view id="tixing">
 			  <view class="titleBox" id="tixing_title">
@@ -215,6 +218,10 @@
 					this.questionnire_page_show=1;
 					// this.show=0;
 			},
+			goBack(){
+				this.question_page_show=0;
+				this.questionnire_page_show=0;
+			},
 			generateQuestion(e){
 				this.question_page_show=0;
 				this.questionnire_page_show=0;
@@ -281,6 +288,10 @@
 </script>
 
 <style scoped lang="less">
+	*{
+		margin: 0%;
+		box-sizing: border-box;
+	}
 .background{
 	.title{
 		font-size: 16pt;
@@ -308,7 +319,8 @@
 			height: 85%;
 			flex-direction: column;
 			align-items: center;
-			
+			display: flex;
+			flex-direction: column;
 	}
 	
 	.input_class{
@@ -327,6 +339,8 @@
 		height: 12vh;
 		width: 80vw;
 		display: flex;
+		align-items: center;
+		padding: 2% 5% 2% 5%;
 	}
 	.input_class .textarea_border:nth-child(2){
 			margin-top: 2vh;
@@ -334,34 +348,48 @@
 			width: 80vw;
 			size: size;
 			display: flex;
+		    padding: 2% 5% 2% 5%;
 	}
 	
 	.textarea_border{
 		display: flex;
 		flex-direction: column;
-		justify-content: center;
-		textarea{
-			border: 2px solid red;
-			display: flex;
-			overflow-wrap: break-word;
-			white-space: normal;
-			text-align: center;
-			overflow-y: auto;
-		}
-		
+		justify-content: center;		
 	}
 	
 
 	.textarea_border:first-child textarea {
 		height: 3vh;
-		width: 80vw;
+		display: flex;
+		overflow-wrap: break-word;
+		white-space: normal;
+		text-align: center;
+		width: 100%;
+		font-size: 24px;
+		color: rgba(0, 0, 0, 1);
+		line-height: 32.93px;
 		// line-height: 12vh;
+		::placeholder{
+			font-size: 24px;
+			line-height: 32.93px;
+		}
 	}
 
 	.textarea_border:last-child textarea {
 		// margin-top: 2vh;
 		height: 3vh;
-		width: 80vw;
+		line-height: 27.44px;
+		color: rgba(0, 0, 0, 0.36);
+		font-size: 20px;
+		width: 100%;
+		
+		::placeholder{
+			font-size: 20px;
+			line-height: 27.44px;
+			display: flex;
+			text-align: center;
+			width: 100%;
+		}
 		// line-height: 8vh;
 	}
 
@@ -385,7 +413,7 @@
 		font-size: 15vw;
 		color: #E4C2FF;
 	}
-	
+
 	
 	// //为生成的新的div设置样式
 	// .danxuan{
@@ -405,13 +433,25 @@
 		  top: 100%;
 		  left: 0;
 		  transition: top 0.5s ease-in-out;
-		  
+		  height: 85vh;
+		  width: 100vw;
+		  .navBar{
+		  	height: 10%;
+		  	width: 100%;
+		  	image{
+		  		height: 100%;
+		  		width: 20%;
+		  	}
+		  }
 	}
 	
 	
 	#tixing{
 		width: 100vw;
-		height: 50vh;
+		height: 40vh;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
 	}
 	.dot{
 		position: absolute;
@@ -434,7 +474,6 @@
 	// 调整titile"题型"的位置
 	#tixing_title{
 		position: relative;
-		top: 5%;
 	}
 	.square {
 	  // display: flex;
@@ -445,9 +484,9 @@
 	  gap: 2px;
 	  width: 70vw;
 	  height: 70vw;
-	  position: absolute;
-	  top:15vw;
-	  left: 15vw;
+	  position: relative;
+	  left: 50%;
+	  transform: translate(-50%);
 	}
 	.square-part {
 	  // display: flex; /* 使用 flex 布局 */

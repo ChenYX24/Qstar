@@ -17,7 +17,7 @@
 		    >
 		      <swiper-item>
 				<view class="page1">
-				  <QBlock v-for="(block, index) in blocks1" :key="block.id" :onumber="block.filled" :title="block.title" :isPush="block.isPush"></QBlock>
+				  <QBlock v-for="(block, index) in blocks1" :key="block.id" :onumber="block.filled" :title="block.title" :isPush="block.isPush" @changeSave="emitSave(index)"></QBlock>
 				</view>
 		      </swiper-item>
 		      <swiper-item>
@@ -28,7 +28,7 @@
 		    </swiper>
 		  </view>
 		  
-		<tab-bar :tab="tab"></tab-bar>
+		<tab-bar :tab="tab" :outIsSave="isSave" @changeSave="emitSave"></tab-bar>
 	</view>
 </template>
 
@@ -63,10 +63,19 @@ export default {
 		//要传的值
 		blocks:[],
 		//要传的值
-		blocks1: []
+		blocks1: [],
+		isSave:false
   	}
   },
     methods: {
+		emitSave(index){
+			//TODO
+			if(index==0||index)
+			{
+			  console.log(this.blocks1[index].id)
+			}
+			this.isSave=!this.isSave
+		},
 		async fetchData() {
 			axios.defaults.headers.common['token'] = localStorage.getItem('token');
 			axios.get(/*'https://metaq.scutbot.icu/login'*/

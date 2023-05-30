@@ -4,39 +4,38 @@
 			<view class="inbox" @click="showOperation">
 				<view class="title">
 					{{num}}.{{content.title}}
-
 				</view>
 				<view class="slider-box">
-					<slider @change=""
-					class="sliderShow"
-					show-value="true" 
-					block-color="#76a9f0" 
-					activeColor='#4f2dd0'
-					value=25
+					<sliderBar
+					:value='answer'
 					:min="content.choice[0]"
 					:max="content.choice[2]"
-					/>
+					@changeVal="changeValue"
+					:disabled="true"
+					></sliderBar>
 				</view>
 			</view>
-
-			<operationEditQuestion 
+			<operationEditQuestion
 			:style="{display: operation_show ? 'flex' : 'none'}"
 			:num="num"
 			@clickSon="getOffsetTop"
 			 >
 			</operationEditQuestion>
-			
 		</view>
-		
-		
 	</view>
 </template>
 
 <script>
+import sliderBar from '/components/sliderBar/sliderBar.vue'
 import operationEditQuestion from "/components/questionShow/operationEditQuestion/operationEditQuestion.vue"
-	export default {
+export default {
+		components: {
+			sliderBar,
+			operationEditQuestion
+		},
 		data() {
 			return {
+				answer:200,
 				operation_show:false
 			};
 		},
@@ -55,9 +54,6 @@ import operationEditQuestion from "/components/questionShow/operationEditQuestio
 			},
 
 		},
-		components:{
-			operationEditQuestion
-		},
 		methods:{
 			getOffsetTop: function() {
 				let viewElements = document.querySelectorAll("#test");  
@@ -68,11 +64,14 @@ import operationEditQuestion from "/components/questionShow/operationEditQuestio
 					target_view={'targetView_height':target_view.offsetHeight,'targetView_offset_top':target_view.offsetTop}
 					this.$store.commit('setTargetView',target_view);
 				}
-
+			
 			},
 			showOperation(){
-					this.operation_show=!this.operation_show
+				this.operation_show=!this.operation_show
 			},
+			changeValue(val){
+				this.answer=val
+			}
 		}
 	}
 </script>
@@ -88,33 +87,21 @@ import operationEditQuestion from "/components/questionShow/operationEditQuestio
 }
 .box{
 	width: 90vw;
+	border-radius: 20px;
+	background: rgba(255, 255, 255, 0.8);
+	box-shadow: 2px 2px 20px 0px rgba(136, 63, 143, 0.15);
 }
 .inbox{
-	border: 1px dashed green;
+	// border: 1px dashed green;
 }
 .title{
+	margin:10px 0px 5px 20px;
 	font-size: 20px;
-	// color: aqua;
-	// border: 2px solid red;
 }
 
-.options{
-	height: 5vh;
-	// border: 2px solid green;
-	display: flex;
-	align-items: center
+.slider-box{
+	margin: 20px 20px 20px 20px;
 }
-.circle{
-  width: 15px;
-  height: 15px; 
-  // background-color: red;
-  border: 2px solid gray;
-  border-radius: 50%;
-  margin-left: 5px;
-  margin-right: 5px;
-}
-
-
 
 /deep/.uni-slider-value{
 	color: #7902ac;

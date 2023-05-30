@@ -4,14 +4,20 @@
 			<view class="inbox" @click="showOperation">
 				<view class="title">
 					{{num}}.{{content.title}}
-					<view class="" v-if="content.type==1">
-						<text>(多选题)</text>
+					<view class="type" v-if="content.type==1">
+						<text>[多选题]</text>
+					</view>
+					<view class="type" v-else>
+						<text>[单选题]</text>
 					</view>
 				</view>
-				<view class="options" v-for="(item,index) in content.choice" :key=index>
-					<view class="circle"></view>
-					{{item}}
+				<view class="radioGroup">
+					<view class="options" v-for="(item,index) in content.choice" :key=index>
+						<view class="circle"></view>
+						{{item}}
+					</view>
 				</view>
+
 			</view>
 
 			<operationEditQuestion 
@@ -90,40 +96,59 @@
 	margin-top: 10px;
 	display: flex;
 	width: 100vw;
-	// height: 100vh;
 	justify-content: center;
+	
 }
 .box{
 	width: 90vw;
+	border-radius: 20px;
+	background: rgba(255, 255, 255, 0.8);
+	box-shadow: 2px 2px 20px 0px rgba(136, 63, 143, 0.15);
+	padding-bottom: 5%;
 }
-.inbox{
-	border: 1px dashed green;
-}
-.title{
-	display: flex;
-	font-size: 20px;
 
+.title{
+    display: flex;
+    margin: 10px 0px 5px 20px;
+    font-size: 20px;
+    flex-direction: row;
+    align-items: center;
+	.type{
+		margin-left: 5px;
+		color: rgb(143 68 238);
+		font-size: 14px;
+	}
+}
+.radioGroup{
+	margin: 10px 20px 5% 20px;
 }
 
 .options{
-	height: 5vh;
-	// border: 2px solid green;
-	display: flex;
-	align-items: center
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    height: 8vh;
+	border-radius: 3px;
+	align-items: center;
+	background: rgba(255, 255, 255, 0.8);
+	border: 2px solid rgba(225, 225, 235, 1);
 }
+  .options + .options {  
+    margin-top: -2px; /* 使边框重叠 */  
+  } 
 .circle{
   width: 15px;
   height: 15px; 
-  // background-color: red;
-  border: 2px solid gray;
   border-radius: 50%;
   margin-left: 5px;
   margin-right: 5px;
+  border: 1px solid #d1d1d1;
+  background-color: #ffffff;
 }
 
 .title text{
 	margin-left: 5px;
-	color: red;
+	color: rgb(143 68 238);
 	font-size: 14px;
 }
 
