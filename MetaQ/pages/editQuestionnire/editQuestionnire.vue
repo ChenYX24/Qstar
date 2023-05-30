@@ -63,7 +63,7 @@
 		<!-- 下面是点击加号弹出选择题目 -->
 		<view class="question" id='question_page'   :style="{top: question_page_show ? '0' : '100%'}">
 		   <view class="navBar">
-		   	<image src="../../static/save/back.png" mode="aspectFit" class="back" @tap="goBack"></image>
+		   	<image src="/static/editQuestion/back.png" mode="aspectFit" class="back" @tap="goBack"></image>
 		   </view>
 		   <!-- 题型选择 -->
 		  <view id="tixing">
@@ -436,11 +436,16 @@
 		  height: 85vh;
 		  width: 100vw;
 		  .navBar{
-		  	height: 10%;
+			margin-top: 5%;
+
+		  	height: 5%;
 		  	width: 100%;
+			display: flex;
+			align-items: center;
+			flex-direction: row;
 		  	image{
 		  		height: 100%;
-		  		width: 20%;
+		  		width: 10%;
 		  	}
 		  }
 	}
