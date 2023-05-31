@@ -2,7 +2,6 @@
 {"_id":1,"_name":"aaa","_email":"aaa@qq.com","_passwd":"aaabbb"}
 {"_id":2,"_name":"abcd","_email":"abcd@qq.com","_passwd":"abcdabcd"}
 {"_id":3,"_name":"abcde","_email":"abcde@qq.com","_passwd":"123"}
-{"id":4,"_name":"qwer","_email":"qwer@qq.com","_passwd":"qwerqwer"}
 {"_id":5,"_name":"qwer","_email":"qqq@qq.com","_passwd":"qqqwww"}
 {"_id":6,"_name":"jkljkl","_email":"jkl@qq.com","_passwd":"jkljkl"}
 {"_id":7,"_name":"qwer","_email":"qwer@qq.com","_passwd":"qwer"}
@@ -12,10 +11,3 @@
 {"_id":11,"_name":"abc","_email":"abc@abc.com","_passwd":"753951"}
 {"_id":12,"_name":"abc","_email":"abc@bca.com","_passwd":"123456"}
 {"_id":13,"_name":"asjdlkj","_email":"asjdlk@ajsdlk.com","_passwd":"123456789"}
-{"_id":16,"_name":"abca","_email":"abkjc@askj.com","_passwd":"123456789"}
-{"_id":17,"_name":"abca","_email":"abkjc@askj.com","_passwd":"123456789"}
-{"_id":18,"_name":"user","_email":"2502160023@qq.com","_passwd":"123456"}
-{"_id":19,"_name":"user","_email":"123456@qjacl.com","_passwd":"123456"}
-{"_id":20,"_name":"user","_email":"2502160023@qq.com","_passwd":"753951"}
-{"_id":21,"_name":"³¾","_email":"2502160023@qq.com","_passwd":"753951"}
-{"_id":22,"_name":"³¾","_email":"2502160023@qq.com","_passwd":"753951"}

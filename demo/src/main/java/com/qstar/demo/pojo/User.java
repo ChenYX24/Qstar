@@ -13,25 +13,32 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Component
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonPropertyOrder({"_id", "_name", "_email", "_passwd"})//规定转为json的格式
+@JsonPropertyOrder({"_id", "_name", "_email", "_passwd","_phonenumber","_location"})//规定转为json的格式
 public class User {//用户
     //用户信息
     @JsonPropertyOrder("_id")
-    private int _id;
+    private int _id;//用户id
     @JsonPropertyOrder("_name")
-    private String _name;
+    private String _name;//用户名
     @JsonPropertyOrder("_email")
-    private String _email;
+    private String _email;//用户邮箱
     @JsonPropertyOrder("_passwd")
-    private String _passwd;
+    private String _passwd;//用户密码
+    @JsonPropertyOrder("_phonenumber")
+    private String _phonenumber;//用户手机号
+    @JsonPropertyOrder("_location")
+    private String _location;//用户位置
     //private Account account;   //用户的标识  //账户类应该是独立的，User对象内部仅仅储存一个名字用于定位，因为需要账户对象登录，获取token
     @JsonIgnore
     private transient List<Integer> questionaires = null;    //问卷id的集合
     @JsonIgnore
     private transient List<FilledQuestionaire> filledQuestionaires = null;
-    private Set<Integer> allowCheckQuestionaires;         //允许查看的问卷
-    private Set<Integer> allowEditQuestionaires;        //允许编辑的问卷
-    private boolean modified;   //赃位，验证是否修改
+    @JsonIgnore
+    private transient Set<Integer> allowCheckQuestionaires;         //允许查看的问卷
+    @JsonIgnore
+    private transient Set<Integer> allowEditQuestionaires;        //允许编辑的问卷
+    @JsonIgnore
+    private transient boolean modified;   //赃位，验证是否修改
     public User(){
         questionaires=new ArrayList<>();
         filledQuestionaires=new ArrayList<>();
@@ -43,11 +50,13 @@ public class User {//用户
         this._passwd = Passwd;
         modified=true;
     }
-    public User(int Id,String Name,String Email,String Passwd){
+    public User(int Id,String Name,String Email,String Passwd,String Phonenumber,String Location){
         this._id = Id;
         this._name = Name;
         this._email = Email;
         this._passwd = Passwd;
+        this._phonenumber = Phonenumber;
+        this._location = Location;
         modified=true;
     }
     // @JsonIgnore
@@ -145,6 +154,8 @@ public class User {//用户
         }
         return false;
     }
+
+
     public void addCheckQuestionaire(Integer id){
         allowCheckQuestionaires.add(id);
     }
@@ -160,6 +171,8 @@ public class User {//用户
     public boolean containEditQuestionaire(Integer id){
         return allowEditQuestionaires.contains(id);
     }
+
+    //各种get、set函数
     public String get_name()
     {
         return _name;
@@ -176,6 +189,12 @@ public class User {//用户
     {
         return _id;
     }
+    public String get_phonenumber(){
+        return _phonenumber;
+    }
+    public String get_location(){
+        return _location;
+    }
     public void set_name(String Name)
     {
         this._name = Name;
@@ -191,5 +210,11 @@ public class User {//用户
     public void set_id(int Id)
     {
         this._id = Id;
+    }
+    public void set_phonenumber(String phonenumber){
+        this._phonenumber = phonenumber;
+    }
+    public void set_location(String location){
+        this._location = location;
     }
 }

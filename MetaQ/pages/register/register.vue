@@ -94,11 +94,18 @@ import axios from 'axios';
 						password: this.formData.password
 						})
 						.then(response => {
-							this.token = response.data;
-							console.log(this.token);
-							uni.navigateTo({
-								url:"/pages/login/login"
-							})
+							const responses = response.data;
+							if(responses == "该邮箱已经被注册过"){
+								uni.showToast({
+								  title: '该邮箱已经被注册过',  
+								  icon: 'none'
+								}); 
+							}else{
+								uni.navigateTo({
+									url:"/pages/login/login"
+								})
+							}
+							
 						})
 						.catch(error => {
 						    console.log(error);

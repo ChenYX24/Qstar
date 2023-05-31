@@ -6,15 +6,20 @@ import java.io.FileWriter;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import com.fasterxml.jackson.databind.JsonNode;
+import java.io.File;
+import com.qstar.demo.pojo.User;
+import com.qstar.demo.IE;
 // import java.nio.channels.FileChannel;
 // import java.nio.channels.FileLock;
 // import java.nio.file.Paths;
 // import java.nio.file.StandardOpenOption;
 import java.io.RandomAccessFile;
+import java.util.Scanner;
 import java.util.Vector;
 public class DataIO {
     private ObjectMapper objectMapper = new ObjectMapper();
-    private String path = "user.json";
+    private String path = "id.json";
+    private String base = "./userinfo";
     DataIO()
     {
 
@@ -24,31 +29,31 @@ public class DataIO {
         this.path = Path;
     }
     //将对象转为json格式的字符串，然后写入文件中
-    public void writeObject(Object object){
+    public void writeObject(Object object,String Path){
         try {
             String result = " ";
             result = objectMapper.writeValueAsString(object) + "\n";
-            FileWriter fileWriter = new FileWriter(this.path,true);
+            FileWriter fileWriter = new FileWriter(base + "/" + Path + ".json");
             fileWriter.write(result);
             fileWriter.close();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
-    //获取某个key的值为value的对象的id
-    public int getIDofObject(String key,String value){
+    //获取邮箱对应的id
+    public int getIDofObject(String email){
         try (BufferedReader reader = new BufferedReader(new FileReader(this.path))){
             String line = " ";
             line = reader.readLine();
             while(line != null){
                 JsonNode node = objectMapper.readTree(line);
-                JsonNode nodekey = node.get(key);
+                JsonNode nodekey = node.get("email");
                 String temp = " ";
                 if(nodekey != null){
                     temp = nodekey.asText();
-                    if(temp.hashCode() == value.hashCode()){
+                    if(temp.hashCode() == email.hashCode()){
                         reader.close();
-                        return node.get("_id").asInt();
+                        return node.get("id").asInt();
                     }
                 }
                 line = reader.readLine();
@@ -57,6 +62,29 @@ public class DataIO {
             System.out.println(e.getMessage());
         }
         return -1;
+    }
+    //获取id对应的邮箱
+    public String getEmailByID(int id){
+        try (BufferedReader reader = new BufferedReader(new FileReader(this.path))){
+            String line = " ";
+            line = reader.readLine();
+            while(line != null){
+                JsonNode node = objectMapper.readTree(line);
+                JsonNode nodekey = node.get("id");
+                int temp = -1;
+                if(nodekey != null){
+                    temp = nodekey.asInt();
+                    if(temp == id){
+                        reader.close();
+                        return node.get("email").asText();
+                    }
+                }
+                line = reader.readLine();
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return " ";
     }
     //将Json转换为对象
     public <T> T switchJsonToObject(String json,Class<T> valuetype){
@@ -72,25 +100,35 @@ public class DataIO {
         try (BufferedReader reader = new BufferedReader(new FileReader(this.path))){
             String line = " ";
             line = reader.readLine();
+            int temp = -1;
+            String email = "";
             while(line != null){
                 JsonNode node = objectMapper.readTree(line);
-                JsonNode nodeid = node.get("_id");
-                int temp = 0;
+                JsonNode nodeid = node.get("id");
                 if(nodeid !=  null){
                     temp = nodeid.asInt();
                 }
                 if(temp == id){
                     reader.close();
-                    return line;
+                    email = node.get("email").asText();
+                    break;
                 }
                 line = reader.readLine();
             }
+            File file = new File(base + "/" + email + ".json");
+            if(!file.isFile()){
+                return "找不到文件";
+            }
+            BufferedReader rd = new BufferedReader(new FileReader(file));
+            String result = rd.readLine();
+            rd.close();
+            return result;
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
         return " ";
     }
-    //获取文件中的最大id
+    //获取最大id
     public int getMaxId(){
         try (BufferedReader reader = new BufferedReader(new FileReader(this.path))){
             String line = " ";
@@ -98,7 +136,7 @@ public class DataIO {
             line = reader.readLine();
             while(line != null){
                 JsonNode node = objectMapper.readTree(line);
-                JsonNode nodeid = node.get("_id");
+                JsonNode nodeid = node.get("id");
                 int temp = 0;
                 if(nodeid != null){
                     temp = nodeid.asInt();
@@ -114,70 +152,66 @@ public class DataIO {
             System.out.println(e.getMessage());
         }
         System.out.println("error");
-        return 0;
+        return -1;
     }
     //更改密码
     public void changePasswdById(int id,String newPasswd){
-        try (RandomAccessFile file = new RandomAccessFile("user.json", "rw")){
-            String line = file.readLine();
-            while(line != null){
-                JsonNode node = objectMapper.readTree(line);
-                JsonNode nodeid = node.get("_id");
-                int temp = 0;
-                if(nodeid != null){
-                    temp = nodeid.asInt();
-                }
-                Vector<String> buffer = new Vector<String>();
-                if(temp == id){
-                    long pos = file.getFilePointer();
-                    int length = 0;
-                    while(line != null){
-                        line = file.readLine();
-                        buffer.addElement(line);
-                    }
-                    
-                    if(pos > 0){
-                        pos--;
-                    }
-                    while (pos >= 0) {
-                        file.seek(pos); // 移动文件指针到上一个字符位置
-                        char ch = (char) file.readByte(); // 读取上一个字符
-                        if (ch == ':') {
-                            break; // 如果找到":"字符，跳出循环
-                        }
-                        pos--; // 如果不是":"字符，将指针向前移动
-                        length++;
-                    }
-                    pos++;
-                    length--;
-                    file.seek(pos);
-                    for(int i = 0;i < length;i++){
-                        file.writeByte(' ');
-                    }
-                    file.seek(pos);
-                    char chars[] = newPasswd.toCharArray();
-                    file.writeByte('"');
-                    for(int i = 0;i < chars.length;i++)
-                    {
-                        file.writeByte(chars[i]);
-                    }
-                    file.writeByte('"'); file.writeByte('}'); file.writeByte('\n');
-                    for(int i = 0;i < buffer.size() - 1;i++){
-                        String data = buffer.elementAt(i);
-                        char Chars[] = data.toCharArray();
-                        for(int j = 0;j < Chars.length;j++)
-                        {
-                            file.writeByte(Chars[j]);
-                        }
-                        file.writeByte('\n');
-                    }
-                    file.setLength(file.getFilePointer());
-                    break;
-                }
-                line = file.readLine();
-            }
+       try {
+        String email = this.getEmailByID(id);
+        if(email != " "){
+            File file = new File(base + "/" + email + ".json");
+            Scanner sc = new Scanner(file);
+            String userinfo = sc.nextLine();
+            User user = new User(id,getKeyValueofJson(userinfo,"_name"),
+                            email,
+                            newPasswd,
+                            getKeyValueofJson(userinfo,"_phonenumber"),
+                            getKeyValueofJson(userinfo,"_location"));
+            writeObject(user, email);
+            sc.close();
+        }
+       } catch (Exception e) {
+        System.out.println(e.getMessage());
+       }
+    }
+    //更改电话号
+    public void changePhoneById(int id,String PhoneNumber){
+        try {
+         String email = this.getEmailByID(id);
+         if(email != " "){
+             File file = new File(base + "/" + email + ".json");
+             Scanner sc = new Scanner(file);
+             String userinfo = sc.nextLine();
+             User user = new User(id,getKeyValueofJson(userinfo,"_name"),
+                             email,
+                             getKeyValueofJson(userinfo,"_passwd"),
+                             PhoneNumber,
+                             getKeyValueofJson(userinfo,"_location"));
+             writeObject(user, email);
+             sc.close();
+         }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+         System.out.println(e.getMessage());
+        }
+    }
+    //更改位置
+    public void changeLocationById(int id,String Location){
+        try {
+         String email = this.getEmailByID(id);
+         if(email != " "){
+             File file = new File(base + "/" + email + ".json");
+             Scanner sc = new Scanner(file);
+             String userinfo = sc.nextLine();
+             User user = new User(id,getKeyValueofJson(userinfo,"_name"),
+                             email,
+                             getKeyValueofJson(userinfo,"_passwd"),
+                             getKeyValueofJson(userinfo,"_phonenumber"),
+                             Location);
+             writeObject(user, email);
+             sc.close();
+         }
+        } catch (Exception e) {
+         System.out.println(e.getMessage());
         }
     }
     //获取json中某个key的值
@@ -189,6 +223,50 @@ public class DataIO {
             if(nodekey != null){
                 result = nodekey.asText();
             }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return result;
+    }
+    public void writeID_Email(int id,String email){
+        try {
+            FileWriter fileWriter = new FileWriter("id.json",true);
+            IE ie = new IE(id,email);
+            String result = " ";
+            result = objectMapper.writeValueAsString(ie) + "\n";
+            fileWriter.write(result);
+            fileWriter.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    //判断是否存在文件
+    public boolean hasFile(String path){
+        File file = new File(path);
+        if(file.isFile()){
+            return true;
+        }
+        return false;
+    }
+    //将IE对象转为Json字符串
+    public String getIEByEmail(String Email){
+        String result = "";
+        try (BufferedReader reader = new BufferedReader(new FileReader(this.path))){
+            String line = "";
+            line = reader.readLine();
+            while(line != null){
+                JsonNode node = objectMapper.readTree(line);
+                JsonNode nodeitem = node.get("email");
+                if(nodeitem != null){
+                    line = nodeitem.asText();
+                    if(line.hashCode() == Email.hashCode()){
+                            
+                    }
+                }
+                
+                line = reader.readLine();
+            }
+            reader.close();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

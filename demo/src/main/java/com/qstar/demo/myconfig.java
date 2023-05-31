@@ -28,11 +28,11 @@ public class myconfig {
     // }
     @Bean
     public UserService userService(){
-        return new UserService("user.json");
+        return new UserService();
     }
     @Bean
     public DataIO userio(){
-        return new DataIO("user.json");
+        return new DataIO("id.json");
     }
     @Bean
     public EmailSender emailSender(){
