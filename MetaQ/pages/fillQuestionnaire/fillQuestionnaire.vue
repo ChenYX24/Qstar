@@ -88,11 +88,6 @@
 					    },
 						{
 							title:"标题2",
-							type:'0',
-							choice:['m','n','b'],
-						},
-						{
-							title:"标题2",
 							type:'2',
 							choice:['m','n','b'],
 						},

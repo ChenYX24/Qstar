@@ -10,6 +10,8 @@
 			color="rgba(0,0,0,0)" 
 			selected-color="rgba(0,0,0,0)" 
 			@changing="updateValue"
+			@change="changeValue"
+			:disabled="disabled"
 			/>
 			
 		
@@ -27,16 +29,20 @@
 		props:{
 			min:{
 				type:Number,
-				defau:0
+				default:0
 			},
 			max:{
 				type:Number,
-				defau:100
+				default:100
 			},
 			value:{
 				type:Number,
-				defau:0
+				default:0
 			},
+			disabled:{
+				type:Boolean,
+				default:false
+			}
 		},
 		computed:{
 			percentage(){
@@ -57,6 +63,10 @@
 		},
 		methods:{
 			updateValue(e){
+				this.val=e.detail.value
+				this.$emit("changeVal",e.detail.value)
+			},
+			changeValue(e){
 				this.val=e.detail.value
 				this.$emit("changeVal",e.detail.value)
 			}

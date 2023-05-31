@@ -72,9 +72,7 @@
 	background: rgba(255, 255, 255, 0.8);
 	box-shadow: 2px 2px 20px 0px rgba(136, 63, 143, 0.15);
 }
-.inbox{
-	// border: 1px dashed green;
-}
+
 .title{
 	margin:10px 0px 5px 20px;
 	font-size: 20px;

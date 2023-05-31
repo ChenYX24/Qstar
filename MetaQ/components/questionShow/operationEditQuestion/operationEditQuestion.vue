@@ -68,13 +68,12 @@
 	width: 100vw;
 	display: flex;
 	// justify-content: center;
-	
+
 }
 .outbox{
     box-sizing: border-box;
 	width: 90vw;
 	height: 10vh;
-	border: 1px dashed green;
 	display: flex;
 	align-items: center;
 	justify-content: center;

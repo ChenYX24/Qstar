@@ -1,5 +1,19 @@
 <template>
-	<view class="saveContainer">
+	<view v-if="Type==1" class="saveContainer">
+		<view class="save">
+			<view class="navBar">
+				<image src="../../static/save/back.png" mode="aspectFit" class="back" @tap="goBack"></image>
+			</view>
+			<image :src="isQrcode?qrcode:checkImg" mode="aspectFit" class="checkImg"></image>
+			<view class="button" @tap="save">
+				保存
+			</view>
+			<view class="button2" @tap="push">
+				发布
+			</view>
+		</view>	
+	</view>
+	<view v-else class="saveContainer">
 		<view class="save">
 			<view class="navBar">
 				<image src="../../static/save/back.png" mode="aspectFit" class="back" @tap="goBack"></image>
@@ -27,6 +41,7 @@
 				qrcode:'/static/save/qrcode.png'//TODO
 			};
 		},
+		
 		computed:{
 			button1Text(){
 				if(this.b1==0)
@@ -66,8 +81,22 @@
 				type: Boolean,
 				default: false,
 			},
+			Type:{
+				type:Number,
+				default:0
+			}
 		},
 		methods:{
+			save(){
+				uni.navigateTo({
+					url:"/pages/myQ/myQ"
+				})
+			},
+			push(){
+				uni.navigateTo({
+					url:"/pages/myQ/myQ"
+				})
+			},
 			goBack(){
 				if(this.isQrcode)
 				{

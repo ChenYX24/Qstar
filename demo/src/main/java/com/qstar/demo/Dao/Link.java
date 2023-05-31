@@ -8,12 +8,13 @@ import com.qstar.demo.pojo.writeAndRead.ObjWriter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 import com.qstar.demo.DataIO;
@@ -33,17 +34,28 @@ public class Link {
     private String attachRoad;   //附件储存的文件夹
     @Value("${store.questionaireRoad}")
     private String questionaireRoad;
+    @Value("${storeMax.mapMax}")        //三个map的上限，用于内存调度，但其实如果用户需求不大其实不太需要，锦上添花的，有想法，看情况，暂时不写
+    private int mapMax;
+    @Value("${storeMax.questionairesMax}")
+    private int questionairesMax;
+    @Value("${storeMax.userMapMax}")
+    private int userMapMax;
+    private Environment env;
     @Autowired
     private ObjReader reader;
     @Autowired
     private ObjWriter writer;
     @Autowired
     DataIO userio;
-    private int idDistribute;
-
-    public Link(){
+    private int idDistribute;       //这个IDistribute应该和硬盘高度同步
+    private Properties IDProperties;    //保存ID数值的文件
+    private final static String IDKey="idDistribute";
+    private Writer propertiesWriter=new BufferedWriter(new FileWriter("IDProperty.properties"));
+    public Link() throws IOException {
         User user=new User();//用于测试
         map.put("Test",user);
+        IDProperties=PropertiesLoaderUtils.loadAllProperties("IDProperty.properties");
+        idDistribute= Integer.parseInt(IDProperties.getProperty(IDKey));
     }
     public boolean verifyToken(String token){
         return map.containsKey(token);
@@ -51,13 +63,18 @@ public class Link {
     public List<QuestionaireInfo> getCreated(String token){
             return map.get(token).getCreateInfo();
     }
-    public int create(String title, String description,String filename,List<Question> questions,String token){
+    public int create(String title, String description,String filename,List<Question> questions,String token) throws IOException {
             User user=map.get(token);
             user.addQuestionaire(idDistribute);
             questionaires.put(idDistribute,new Questionaire(title,description,filename,questions,idDistribute,user.get_email()));
             /*public Questionaire(String title,String description,String attachFile,List<Question> questions,int id,String creatorEmail){*/
             idDistribute++;
+            updateProperties(); //创建问卷时同步问题
             return idDistribute-1;
+    }
+    public void updateProperties() throws IOException {//更新idDistribute到文件中
+        IDProperties.setProperty(IDKey,idDistribute+"");
+        IDProperties.store(propertiesWriter,null);
     }
     public ResultForCheck check(int id, String token) throws IOException {
         User user=map.get(token);
@@ -65,7 +82,7 @@ public class Link {
             if(checkQuestionaire(id)) {
                 Questionaire questionaire = questionaires.get(id);
                 if (questionaire != null&&questionaire.allowCheck(user.get_email())) {//是否允许查看
-                    return new ResultForCheck(questionaire.getDescription(), questionaire.getQuestions(), questionaire.getAttachFile());
+                    return new ResultForCheck(questionaire.getInfo().getTitle(),questionaire.getDescription(), questionaire.getQuestions(), questionaire.getAttachFile());
                 }
             }
         }
@@ -90,37 +107,42 @@ public class Link {
     public String comboPicFileRoad(String filename){    //图片路径
         return base+"/"+picSonRoad+"/"+filename;
     }
-    public boolean commit(int id,String token) throws IOException {
+    public Result commit(int id,String token) throws IOException {
         User user=map.get(token);
         if(user.hasQuestionaireID(id)) {//如果id正确中
             if(checkQuestionaire(id) ){
             Questionaire questionaire = questionaires.get(id);   //在用户map读入时，问卷map同步读入
             if (questionaire != null&&questionaire.allowEdit(user.get_email())) {//允许编辑的才允许查看
-                return questionaire.commit();
+                if(questionaire.commit()){
+                    return Result.success();
+                }
+                return Result.fail("已提交");
             }
             }
         }
-        return false;
+        return Result.fail("问卷ID错误");
     }
-    public ResultForCheck fill(int id,String token) throws IOException {//填写问卷时返回问题，并在加到自己的填写记录上
+    public Result fill(int id,String token) throws IOException {//填写问卷时返回问题，并在加到自己的填写记录上    这里的ID改了，这不是问卷的ID，这是已填写的问卷的ID
             User user=map.get(token);
             if(checkQuestionaire(id)){
                 Questionaire questionaire=questionaires.get(id);
-                if (questionaire.commit()) {
-                    if((user.containID(id)&&questionaire.isMultiCommit())||!(user.containID(id))) {//检验是否填写过，可以填写吗
-                        user.addFilled(questionaire.getCreatorEmail(), id, questionaire);//添加填写问卷对象
+                if (questionaire.isCommit()) {
+                    if((user.containFilledID(id)&&questionaire.isMultiCommit())||!(user.containFilledID(id))) {//检验是否填写过，可以填写吗
+                        int index=user.addFilled(questionaire.getCreatorEmail(), id, questionaire);//添加填写问卷对象
                         user.setModified(true);
-                        return getfill(id, token);
+                        return Result.success(new ResultForCheckWithID(getfill(id, token),index));
                     }
+                    return Result.fail("用户没有权限");
                 }
+                return Result.fail("未提交");
             }
-        return null;
+        return Result.fail("问卷ID错误");
     }
     public ResultForCheck getfill(int id,String token) throws IOException{//获取指定问卷
             if(checkQuestionaire(id)) { //检验这个问卷是否在文件中或questionaires中
                 Questionaire questionaire = questionaires.get(id);
                 if (questionaire != null && questionaire.commit()) {//检验是否提交
-                    return new ResultForCheck(questionaire.getDescription(), questionaire.getQuestions(), questionaire.getAttachFile());
+                    return new ResultForCheck(questionaire.getInfo().getTitle(),questionaire.getDescription(), questionaire.getQuestions(), questionaire.getAttachFile());
                 }
             }
         return null;
@@ -159,34 +181,35 @@ public class Link {
             }
         return null;
     }
-    public boolean commitFill(int id, String token) throws IOException {//返回错误，可能是问卷id错误或者是已经提交
+    public Result commitFill(int filledID, String token) throws IOException {//返回错误，可能是问卷id错误或者是已经提交  这个ID是填写记录对应的ID
         User user =map.get(token);
-        FilledQuestionaire filled=user.findFilled(id);
-        if(checkQuestionaire(id)) {
-            Questionaire questionaire=questionaires.get(id);
+        FilledQuestionaire filled=user.findFilled(filledID);      //如果允许多次填写，那得分清楚是第几次
+        int questionaireID=filled.getId();      //这个是填写的问卷对应的ID
+        if(checkQuestionaire(questionaireID)) {
+            Questionaire questionaire=questionaires.get(questionaireID);
             if (filled != null) {
-                boolean result = questionaire.upload(filled.getData());
+                Result result = questionaire.upload(filled.getData());
                 if(questionaire.isRecordFillerName()){//是否要记录名字
                     questionaire.uploadUsername(user.get_name());
                 }
-                filled.setCommitted(result);
-                user.setModified(result);
+                filled.setCommitted(result.getCode()==1);   //根据返回的状态码检验是否成功
                 return result;
             }
         }
-        return false;
+        return Result.fail("问卷ID错误");
     }
-    public StatisticsResult statistics(int index, int id, String token) throws IOException {
+    public Result statistics(int index, int id, String token) throws IOException {
         User user=map.get(token);
         if(user.hasQuestionaireID(id)) {
             if(checkQuestionaire(id)) {
                 Questionaire questionaire=questionaires.get(id);
                 if(questionaire.allowCheck(user.get_email())) {//只有允许查看才能看数据
-                    return questionaire.getStatisticsResult(index);
+                    return Result.success(questionaire.getStatisticsResult(index));
                 }
+                return Result.fail("没有查看权限");
             }
         }
-        return null;
+        return Result.fail("问卷ID错误");
     }
 
 
@@ -314,7 +337,7 @@ public class Link {
         return Result.fail("ID错误");
     }
     public Result authorizeCheck(Integer id,String email,String token) throws IOException {
-        if(checkQuestionaire(id)&&map.get(token).containID(id)){    //只有问卷的创建者才能授权给别人
+        if(checkQuestionaire(id)&&map.get(token).hasQuestionaireID(id)){    //只有问卷的创建者才能授权给别人
             if(checkUsermap(email)) {
                 Questionaire questionaire = questionaires.get(id);
                 questionaire.addAuthorizeCheckEmail(email);
@@ -328,7 +351,7 @@ public class Link {
         return Result.fail("问卷ID错误");
     }
     public Result authorizeEdit(Integer id,String email,String token) throws IOException {
-        if(checkQuestionaire(id)&&map.get(token).containID(id)){
+        if(checkQuestionaire(id)&&map.get(token).hasQuestionaireID(id)){
             if(checkUsermap(email)) {
                 Questionaire questionaire = questionaires.get(id);
                 questionaire.addAuthorizeEditEmail(email);
@@ -384,7 +407,7 @@ public class Link {
     }
     public Questionaire getQuestionaireForEdit(String token,int id) throws IOException {
         User user=map.get(token);
-        if(user.containID(id)||user.containCheckQuestionaire(id)){  //是否允许编辑
+        if(user.hasQuestionaireID(id)||user.containCheckQuestionaire(id)){  //是否允许编辑
             if(checkQuestionaire(id)){
                 return questionaires.get(id);
             }
@@ -393,7 +416,7 @@ public class Link {
     }
     public Result delete(Integer id,String token){  //删除问卷
         User user=map.get(token);
-        if(user.containID(id)){
+        if(user.hasQuestionaireID(id)){
             if(user.containEditQuestionaire(id)) {
                 user.deleteQuestionaire(id);
                 deleteQuestionaire(id);
@@ -404,7 +427,7 @@ public class Link {
         return Result.fail("问卷ID错误");
     }
     public void deleteQuestionaire(Integer id){//删除问卷在文件中的备份
-        File file=new File(userRoad(id+""));
+        File file=new File(getQuestionaireRoad(id+""));
         if(file.exists()){
             file.delete();
         }
@@ -412,7 +435,7 @@ public class Link {
             questionaires.remove(id);
         }
     }
-    public String userRoad(String filename){
+    public String getQuestionaireRoad(String filename){
         return base+"/"+questionaireRoad+"/"+filename+".txt";
     }
 
@@ -425,4 +448,8 @@ public class Link {
         }
         return Result.fail("没有编辑的权限");
     }
+    public Map<String,User> getMap(){   //获取link中的map，为了验证token
+        return map;
+    }
+
 }

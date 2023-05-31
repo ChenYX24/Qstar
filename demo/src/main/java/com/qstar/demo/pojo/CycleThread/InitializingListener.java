@@ -1,5 +1,6 @@
 package com.qstar.demo.pojo.CycleThread;
 
+import com.qstar.demo.Dao.Link;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
@@ -23,10 +24,12 @@ public class InitializingListener implements ServletContextListener, Application
     public void contextInitialized(ServletContextEvent sce) {//在context初始化时调用
         cycle=(CycleStoreThread)context.getBean("thread");
         cycle.run();
+        Link link=(Link)context.getBean("link");
+        sce.getServletContext().setAttribute("tokens",link.getMap());   //不清楚能不能获取啊，测试时看看吧
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-       cycle.stop();
+       cycle.stopThread();
     }
 }

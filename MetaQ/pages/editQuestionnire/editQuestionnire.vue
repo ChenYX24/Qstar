@@ -62,6 +62,9 @@
 		
 		<!-- 下面是点击加号弹出选择题目 -->
 		<view class="question" id='question_page'   :style="{top: question_page_show ? '0' : '100%'}">
+		   <view class="navBar">
+		   	<image src="/static/editQuestion/back.png" mode="aspectFit" class="back" @tap="goBack"></image>
+		   </view>
 		   <!-- 题型选择 -->
 		  <view id="tixing">
 			  <view class="titleBox" id="tixing_title">
@@ -72,21 +75,21 @@
 		    
 		    <view class="square">
 		      <view class="square-part" @click="generateQuestion" id="0">
-				  <img src="/static/editQuestion/danxuan.png" alt="">
+				  <image src="/static/editQuestion/danxuan.png" mode="aspectFit"></image>
 				  <!-- <view class="square-part-word">单选题</view> -->
 				  <p>单选题</p>
 			  </view>
 		      <view class="square-part" @click="generateQuestion" id="1">
-				  <img src="/static/editQuestion/duoxuan.png" alt="">
+				  <image src="/static/editQuestion/duoxuan.png" mode="aspectFit"></image>
 				  <!-- <view class="square-part-word">单选题</view> -->
 				  <p>多选题</p>
 			  </view>
 		      <view class="square-part" @click="generateQuestion" id="2">
-				  <img src="/static/editQuestion/tiankong.png" alt="">
+				  <image src="/static/editQuestion/tiankong.png" mode="aspectFit"></image>
 				  <p>填空题</p>
 			  </view>
 		      <view class="square-part" @click="generateQuestion" id="3">
-				  <img src="/static/editQuestion/huadongtiao.png" alt="">
+				  <image src="/static/editQuestion/huadongtiao.png" mode="aspectFit"></image>
 				  <p>滑动条</p>
 			  </view>
 		    </view>
@@ -101,15 +104,15 @@
 			  
 			  <view class="rectangle">
 				  <view class="rectangle_square">
-					  <img src="/static/editQuestion/shouji.png" alt="">
+					  <image src="/static/editQuestion/shouji.png" mode="aspectFit"></image>
 					  <p>手机</p>
 				  </view>
 				  <view class="rectangle_square">
-					  <img src="/static/editQuestion/riqi.png" alt="">
+					  <image src="/static/editQuestion/riqi.png" mode="aspectFit"></image>
 					  <p>日期</p>
 				  </view>
 				  <view class="rectangle_square">
-					  <img src="/static/editQuestion/didian.png" alt="">
+					  <image src="/static/editQuestion/didian.png" mode="aspectFit"></image>
 					  <p>地点</p>
 				  </view>
 			  </view>
@@ -215,6 +218,10 @@
 					this.questionnire_page_show=1;
 					// this.show=0;
 			},
+			goBack(){
+				this.question_page_show=0;
+				this.questionnire_page_show=0;
+			},
 			generateQuestion(e){
 				this.question_page_show=0;
 				this.questionnire_page_show=0;
@@ -281,6 +288,10 @@
 </script>
 
 <style scoped lang="less">
+	*{
+		margin: 0%;
+		box-sizing: border-box;
+	}
 .background{
 	.title{
 		font-size: 16pt;
@@ -308,7 +319,8 @@
 			height: 85%;
 			flex-direction: column;
 			align-items: center;
-			
+			display: flex;
+			flex-direction: column;
 	}
 	
 	.input_class{
@@ -327,6 +339,8 @@
 		height: 12vh;
 		width: 80vw;
 		display: flex;
+		align-items: center;
+		padding: 2% 5% 2% 5%;
 	}
 	.input_class .textarea_border:nth-child(2){
 			margin-top: 2vh;
@@ -334,34 +348,48 @@
 			width: 80vw;
 			size: size;
 			display: flex;
+		    padding: 2% 5% 2% 5%;
 	}
 	
 	.textarea_border{
 		display: flex;
 		flex-direction: column;
-		justify-content: center;
-		textarea{
-			border: 2px solid red;
-			display: flex;
-			overflow-wrap: break-word;
-			white-space: normal;
-			text-align: center;
-			overflow-y: auto;
-		}
-		
+		justify-content: center;		
 	}
 	
 
 	.textarea_border:first-child textarea {
 		height: 3vh;
-		width: 80vw;
+		display: flex;
+		overflow-wrap: break-word;
+		white-space: normal;
+		text-align: center;
+		width: 100%;
+		font-size: 24px;
+		color: rgba(0, 0, 0, 1);
+		line-height: 32.93px;
 		// line-height: 12vh;
+		::placeholder{
+			font-size: 24px;
+			line-height: 32.93px;
+		}
 	}
 
 	.textarea_border:last-child textarea {
 		// margin-top: 2vh;
 		height: 3vh;
-		width: 80vw;
+		line-height: 27.44px;
+		color: rgba(0, 0, 0, 0.36);
+		font-size: 20px;
+		width: 100%;
+		
+		::placeholder{
+			font-size: 20px;
+			line-height: 27.44px;
+			display: flex;
+			text-align: center;
+			width: 100%;
+		}
 		// line-height: 8vh;
 	}
 
@@ -385,7 +413,7 @@
 		font-size: 15vw;
 		color: #E4C2FF;
 	}
-	
+
 	
 	// //为生成的新的div设置样式
 	// .danxuan{
@@ -405,13 +433,30 @@
 		  top: 100%;
 		  left: 0;
 		  transition: top 0.5s ease-in-out;
-		  
+		  height: 85vh;
+		  width: 100vw;
+		  .navBar{
+			margin-top: 5%;
+
+		  	height: 5%;
+		  	width: 100%;
+			display: flex;
+			align-items: center;
+			flex-direction: row;
+		  	image{
+		  		height: 100%;
+		  		width: 10%;
+		  	}
+		  }
 	}
 	
 	
 	#tixing{
 		width: 100vw;
-		height: 50vh;
+		height: 40vh;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
 	}
 	.dot{
 		position: absolute;
@@ -434,7 +479,6 @@
 	// 调整titile"题型"的位置
 	#tixing_title{
 		position: relative;
-		top: 5%;
 	}
 	.square {
 	  // display: flex;
@@ -445,9 +489,12 @@
 	  gap: 2px;
 	  width: 70vw;
 	  height: 70vw;
-	  position: absolute;
-	  top:15vw;
-	  left: 15vw;
+	  position: relative;
+	  left: 50%;
+	  transform: translate(-50%);
+	  border-radius: 20px;
+	  box-shadow: 2px 2px 20px 0px rgba(136, 63, 143, 0.15);
+	  overflow: hidden;
 	}
 	.square-part {
 	  // display: flex; /* 使用 flex 布局 */
@@ -455,14 +502,12 @@
 	  width: 100%;
 	  height: 100%;
 	  box-sizing: border-box;
-	  border: 1px solid rgb(237,217,252);
-	  background-color: rgba(255, 255, 255, 0.5); /* 红色，透明度为 50% */
-	  //定义圆角变量
-	  --border_radius:25%;
+	  background: rgba(255, 255, 255, 0.8);
 	  display: flex;
 	  flex-direction: column;
 	  align-items: center;
 	  justify-content: center;
+
 	}
 	
 	
@@ -479,9 +524,9 @@
 	  border-bottom-right-radius: var(--border_radius); 
 	}
 	
-	.square-part img{
-		width: 40%;
-		height: 40%;
+	.square-part image{
+		width: 30%;
+		height: 30%;
 		position: relative;
 		// top: 30%;
 		// left: 30%;
@@ -489,6 +534,9 @@
 	}
 	.square-part p{
 		position: relative;
+		line-height: 27.44px;
+		color: rgba(0, 0, 0, 0.36);
+		font-size: 12pt;
 		// top:25%;
 		// left: 30%;
 	}
@@ -507,17 +555,19 @@
 		height: 120%;
 		width: 32%;
 		border: 1px solid rgb(237,217,252);
-		background-color: rgba(255, 255, 255, 0.5); 
+		background: rgba(255, 255, 255, 0.8);
 		--border_radius:20%;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
+		background: rgba(255, 255, 255, 0.8);
+		box-shadow: 2px 2px 20px 0px rgba(136, 63, 143, 0.15);
 	}
 	
-	.rectangle_square img{
-		width: 50%;
-		height: 50%;
+	.rectangle_square image{
+		width: 40%;
+		height: 40%;
 		position: relative;
 		// top: 21%;
 		// left: 30%;
@@ -525,6 +575,9 @@
 	
 	.rectangle_square p{
 		position: relative;
+		line-height: 27.44px;
+		color: rgba(0, 0, 0, 0.36);
+		font-size: 12pt;
 		// top:15%;
 		// left: 39%;
 	}

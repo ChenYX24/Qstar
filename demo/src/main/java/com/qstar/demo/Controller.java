@@ -64,18 +64,8 @@ public class Controller {
     }
     //提交问卷
     @PostMapping("/commit")
-    public Result commit(@RequestBody QuestionaireReceive receive,@RequestHeader("token") String token) throws IOException {
-        if(handle.checkID(receive.getId(),token)) {
-            String attach = handleFile(receive);
-            boolean b = handle.save(receive.getId(), receive.getTitle(),receive.getDescription(), attach, receive.getList(), token);
-            if (b) {
-                handle.commit(receive.getId(), token);
-                return Result.success();
-            }
-            return Result.fail("已提交!无需再提交");
-        }else{
-            return Result.fail("问卷id有误！");
-        }
+    public Result commit(Integer id,@RequestHeader("token") String token) throws IOException {//直接提交
+            return handle.commit(id,token);
     }
 
     public String handleFile(FileReceive receive) throws IOException {
@@ -101,11 +91,7 @@ public class Controller {
     //返回要填写的问卷的信息
     @GetMapping("/fill")
     public Result fill(Integer id,@RequestHeader("token") String token) throws IOException {
-        ResultForCheck list=handle.fill(id,token);
-        if(list==null){
-            return Result.fail("问卷id或者作者邮箱错误或访问的问卷未提交！");
-        }
-        return Result.success(list);
+        return handle.fill(id,token);
     }
     //返回已经填写的问卷的信息
     @GetMapping("/fillRecord")
@@ -122,8 +108,8 @@ public class Controller {
         }else{
             set=null;
         }
-        boolean b=handle.saveFill(receive.getId(),receive.getData(),set,attach,token);
-        return b?Result.success():Result.fail("问卷id或者作者邮箱错误!");
+        boolean b=handle.saveFill(receive.getFilledID(),receive.getData(),set,attach,token);
+        return b?Result.success():Result.fail("填写记录的ID错误!");
     }
     //查看已经填写过的问卷
     @GetMapping("/checkFill")
@@ -132,33 +118,17 @@ public class Controller {
         if(result!=null) {
             return Result.success(result);
         }
-        return Result.fail("问卷id或者作者邮箱错误!");
+        return Result.fail("填写记录的ID错误!");
     }
     //提交填写
     @PostMapping("/commitFill")
-    public Result commitFill(@RequestBody SaveFillReceive receive,@RequestHeader("token") String token) throws IOException {
-        String attach=handleFile(receive);
-        Set<Integer> set;
-        if(receive.getFiles()!=null){
-            set=receive.getFiles().keySet();
-        }else{
-            set=null;
-        }
-        boolean b=handle.saveFill(receive.getId(),receive.getData(),set,attach,token);
-        if(!b){
-            return Result.fail("问卷id或者作者邮箱错误!");
-        }
-        return handle.commitFill(receive.getId(),token)?Result.success():Result.fail("已提交!");
+    public Result commitFill(Integer id,@RequestHeader("token") String token) throws IOException {
+        return handle.commitFill(id,token);
     }
     //获取数据
     @GetMapping("/statistics/{index}")
     public Result statistics(@PathVariable Integer index,Integer id,@RequestHeader("token") String token) throws IOException {
-        StatisticsResult result=handle.statistics(index,id,token);
-        if(result!=null){
-            return Result.success(result);
-        }else{
-            return Result.fail("问卷id错误或者问题序号超出范围");
-        }
+        return handle.statistics(index,id,token);
     }
 
     @PostMapping("/setting")

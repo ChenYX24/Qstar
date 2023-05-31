@@ -39,16 +39,20 @@ public class User {//用户
     private transient Set<Integer> allowEditQuestionaires;        //允许编辑的问卷
     @JsonIgnore
     private transient boolean modified;   //赃位，验证是否修改
+    @JsonIgnore
+    int indexDistribute;
     public User(){
         questionaires=new ArrayList<>();
         filledQuestionaires=new ArrayList<>();
         modified=true;      //刚开始初始化时需要主动被写入
+        indexDistribute=0;
     }
     public User(String Name,String Email,String Passwd){
         this._name = Name;
         this._email = Email;
         this._passwd = Passwd;
         modified=true;
+        indexDistribute=0;
     }
     public User(int Id,String Name,String Email,String Passwd,String Phonenumber,String Location){
         this._id = Id;
@@ -58,6 +62,7 @@ public class User {//用户
         this._phonenumber = Phonenumber;
         this._location = Location;
         modified=true;
+        indexDistribute=0;
     }
     // @JsonIgnore
     // public List<Questionaire> get_questionaires(){
@@ -88,7 +93,7 @@ public class User {//用户
          return infolist;
     }
     @JsonIgnore
-    public boolean hasQuestionaireID(int id){//可能返回空
+    public boolean hasQuestionaireID(int id){//可能返回空，检验是否拥有这个问卷
         if(questionaires.contains(id)) {
             return true;
         }
@@ -125,16 +130,16 @@ public class User {//用户
         return list;
     }
     @JsonIgnore
-    public void addFilled(String creator,int id,Questionaire questionaire){//添加到填写记录
-        filledQuestionaires.add(new FilledQuestionaire(creator,id,questionaire));
+    public int addFilled(String creator,int id,Questionaire questionaire){//添加到填写记录
+        filledQuestionaires.add(new FilledQuestionaire(creator,id,questionaire,indexDistribute));
+        indexDistribute++;
         modified=true;
+        return indexDistribute-1;
     }
     @JsonIgnore
     public FilledQuestionaire findFilled(int id){//查找指定的填写
-        for(FilledQuestionaire filledQuestionaire:filledQuestionaires){
-            if(filledQuestionaire.verify(id)){
-                return filledQuestionaire;
-            }
+        if(id<filledQuestionaires.size()) {
+            return filledQuestionaires.get(id);
         }
         return null;
     }
@@ -146,7 +151,7 @@ public class User {//用户
         }
         return null;
     }
-    public boolean containID(int id){       //是否这个用户包含这个问卷ID
+    public boolean containFilledID(int id){       //这个用户是否填写过这个ID的问卷
         for(FilledQuestionaire filledQuestionaire:filledQuestionaires){
             if(filledQuestionaire.getId()==id){
                 return true;
