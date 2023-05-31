@@ -12,7 +12,7 @@ public class Statistics {//单个问题的数据，可以是String或者integer�
 
     public Statistics(Type type,int count){//传入问题的类型和选项的个数（可选）
         this.count=count;
-        if(type==Type.SLIDE||type==Type.SINGLE||type==Type.MULTIPLE){
+        if(type==Type.SINGLE||type==Type.MULTIPLE){ //现在是选择题的数据提交，滑条题另外搞个
             this.type=Type.NUM;
             data=new ArrayList(count);      //滑条题的数量该怎么处理，不可能一个数值一个数值地处理，应该用范围
             for(int i=0;i<count;i++) {
@@ -44,9 +44,8 @@ public class Statistics {//单个问题的数据，可以是String或者integer�
     }
     public boolean addCount(String choice){//可能会有多选题的添加，多选题的选项包含在一个字符串中
         int index=0;
-        String[] choices=choice.split(","); //多选用逗号分隔
-        for(int i=0;i<choices.length;i++){
-            index=(int)(choices[i].charAt(0)-'a');
+        for(int i=0;i<choice.length();i++){
+            index=(int)(choice.charAt(i)-'0');
             if(!addSingleCount(index)){
                 return false;
             }
