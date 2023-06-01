@@ -33,25 +33,22 @@ public class User {//用户
     private transient List<Integer> questionaires = null;    //问卷id的集合
     @JsonIgnore
     private transient List<FilledQuestionaire> filledQuestionaires = null;
+    private Set<Integer> allowManageQuestionaires;        //允许管理的问卷
     @JsonIgnore
     private transient Set<Integer> allowCheckQuestionaires;         //允许查看的问卷
     @JsonIgnore
     private transient Set<Integer> allowEditQuestionaires;        //允许编辑的问卷
     @JsonIgnore
-    private transient boolean modified;   //赃位，验证是否修改
-    @JsonIgnore
     int indexDistribute;
     public User(){
         questionaires=new ArrayList<>();
         filledQuestionaires=new ArrayList<>();
-        modified=true;      //刚开始初始化时需要主动被写入
         indexDistribute=0;
     }
     public User(String Name,String Email,String Passwd){
         this._name = Name;
         this._email = Email;
         this._passwd = Passwd;
-        modified=true;
         indexDistribute=0;
     }
     public User(int Id,String Name,String Email,String Passwd,String Phonenumber,String Location){
@@ -61,7 +58,6 @@ public class User {//用户
         this._passwd = Passwd;
         this._phonenumber = Phonenumber;
         this._location = Location;
-        modified=true;
         indexDistribute=0;
     }
     // @JsonIgnore
@@ -102,7 +98,6 @@ public class User {//用户
     @JsonIgnore
     public void addQuestionaire(int id){//添加问卷
         questionaires.add(id);
-        modified=true;
     }
     /*@JsonIgnore
     *//*public StatisticsResult getStatistics(int id, int index){
@@ -133,7 +128,6 @@ public class User {//用户
     public int addFilled(String creator,int id,Questionaire questionaire){//添加到填写记录
         filledQuestionaires.add(new FilledQuestionaire(creator,id,questionaire,indexDistribute));
         indexDistribute++;
-        modified=true;
         return indexDistribute-1;
     }
     @JsonIgnore
@@ -160,7 +154,8 @@ public class User {//用户
         return false;
     }
 
-
+    public void addManageQuestionaire(Integer id) {allowManageQuestionaires.add(id);
+    }
     public void addCheckQuestionaire(Integer id){
         allowCheckQuestionaires.add(id);
     }
@@ -176,7 +171,9 @@ public class User {//用户
     public boolean containEditQuestionaire(Integer id){
         return allowEditQuestionaires.contains(id);
     }
-
+    public boolean allowManage(Integer id){
+        return hasQuestionaireID(id)||allowManageQuestionaires.contains(id);
+    }
     //各种get、set函数
     public String get_name()
     {
@@ -222,4 +219,6 @@ public class User {//用户
     public void set_location(String location){
         this._location = location;
     }
+
+
 }

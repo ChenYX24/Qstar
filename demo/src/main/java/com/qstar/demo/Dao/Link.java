@@ -309,7 +309,7 @@ public class Link {
     }
 
     public User getUser(String email) throws IOException {//可能为空  用于登录系统的验证
-        return (User)reader.read(email);
+        return reader.readUser(email);
     }
 
     /*public void storeMap() throws IOException {//把map存储到文件中，也许可以在关闭之前调用这个方法，免得有些数据遗漏
@@ -349,7 +349,6 @@ public class Link {
                 questionaire.setMultiCommit(multiCommit);
                 questionaire.setBegin(begin);
                 questionaire.setEnd(end);
-                questionaire.setModified(true);
                 return Result.success();
             }else{
                 return Result.fail("不允许编辑");
@@ -368,31 +367,54 @@ public class Link {
         }
         return Result.fail("ID错误");
     }
-    public Result authorizeCheck(Integer id,String email,String token) throws IOException {
-        if(checkQuestionaire(id)&&map.get(token).hasQuestionaireID(id)){    //只有问卷的创建者才能授权给别人
-            if(checkUsermap(email)) {
-                Questionaire questionaire = questionaires.get(id);
-                questionaire.addAuthorizeCheckEmail(email);
-                User user=userMap.get(email);
-                user.addCheckQuestionaire(id);
-                user.setModified(true);
-                return Result.success();
+    public Result authorizeManage(Integer id, String name, String email, String photo, String token) throws IOException {
+        if(checkQuestionaire(id)){
+            if(map.get(token).allowManage(id)) {//只有问卷的管理者才能授权给别人
+                if (checkUsermap(email)) {
+                    Questionaire questionaire = questionaires.get(id);
+                    questionaire.addAuthorizeManageEmail(name, email, photo);
+                    User user = userMap.get(email);
+                    user.addManageQuestionaire(id);
+                    writer.writeQuestionaire(questionaire);
+                    return Result.success();
+                }
+                return Result.fail("邮箱错误");
             }
-            return Result.fail("邮箱错误");
+            return Result.fail("没有管理权限");
         }
         return Result.fail("问卷ID错误");
     }
-    public Result authorizeEdit(Integer id,String email,String token) throws IOException {
-        if(checkQuestionaire(id)&&map.get(token).hasQuestionaireID(id)){
-            if(checkUsermap(email)) {
-                Questionaire questionaire = questionaires.get(id);
-                questionaire.addAuthorizeEditEmail(email);
-                User user=userMap.get(email);
-                user.addEditQuestionaire(id);
-                user.setModified(true);
-                return Result.success();
+    public Result authorizeCheck(Integer id,String name,String email,String photo,String token) throws IOException {
+        if(checkQuestionaire(id)){
+            if(map.get(token).allowManage(id)) {//只有问卷的创建者才能授权给别人
+                if (checkUsermap(email)) {
+                    Questionaire questionaire = questionaires.get(id);
+                    questionaire.addAuthorizeCheckEmail(name, email, photo);
+                    User user = userMap.get(email);
+                    user.addCheckQuestionaire(id);
+                    writer.writeQuestionaire(questionaire);
+                    return Result.success();
+                }
+                return Result.fail("邮箱错误");
             }
-            return Result.fail("邮箱错误");
+            return Result.fail("没有管理权限");
+        }
+        return Result.fail("问卷ID错误");
+    }
+    public Result authorizeEdit(Integer id,String name,String email,String photo,String token) throws IOException {
+        if(checkQuestionaire(id)){
+            if(map.get(token).allowManage(id)) {//只有问卷的创建者才能授权给别人
+                if (checkUsermap(email)) {
+                    Questionaire questionaire = questionaires.get(id);
+                    questionaire.addAuthorizeEditEmail(name, email, photo);
+                    User user = userMap.get(email);
+                    user.addEditQuestionaire(id);
+                    writer.writeQuestionaire(questionaire);
+                    return Result.success();
+                }
+                return Result.fail("邮箱错误");
+            }
+            return Result.fail("没有管理权限");
         }
         return Result.fail("问卷ID错误");
     }
@@ -432,7 +454,7 @@ public class Link {
         Questionaire questionaire=getQuestionaireForEdit(token,id);
         if(questionaire!=null) {
             questionaire.partlySave(title, description, unit);
-            questionaire.setModified(true);
+            writer.writeQuestionaire(questionaire);
             return Result.success();
         }
         return Result.fail("没有编辑的权限");
@@ -475,7 +497,7 @@ public class Link {
         Questionaire questionaire=getQuestionaireForEdit(token,id);
         if(questionaire!=null){
             questionaire.uncommit();
-            questionaire.setModified(true);
+            writer.writeQuestionaire(questionaire);
             return Result.success();
         }
         return Result.fail("没有编辑的权限");
@@ -483,5 +505,6 @@ public class Link {
     public Map<String,User> getMap(){   //获取link中的map，为了验证token
         return map;
     }
+
 
 }

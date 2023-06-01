@@ -84,11 +84,11 @@ public class Handle {
     public Result getSetting(Integer id,String token) throws IOException {
         return link.getSetting(id,token);
     }
-    public Result authorizeCheck(Integer id,String email,String token) throws IOException {
-        return link.authorizeCheck(id,email,token);
+    public Result authorizeCheck(Integer id,String name,String email,String photo,String token) throws IOException {
+        return link.authorizeCheck(id,name,email,photo,token);
     }
-    public Result authorizeEdit(Integer id,String email,String token) throws IOException {
-        return link.authorizeEdit(id,email,token);
+    public Result authorizeEdit(Integer id,String name,String email,String photo,String token) throws IOException {
+        return link.authorizeEdit(id,name,email,photo,token);
     }
     public Result getAllowCheck(String token) throws IOException {
         return link.getAllowCheck(token);
@@ -104,5 +104,9 @@ public class Handle {
     }
     public Result withdraw(Integer id,String token) throws IOException {
         return link.withdraw(id,token);
+    }
+
+    public Result authorizeManage(Integer id, String name, String email, String photo, String token) throws IOException {
+        return link.authorizeManage(id,name,email,photo,token);
     }
 }
