@@ -34,13 +34,14 @@ public class Link {
     private String attachRoad;   //附件储存的文件夹
     @Value("${store.questionaireRoad}")
     private String questionaireRoad;
-    @Value("${storeMax.mapMax}")        //三个map的上限，用于内存调度，但其实如果用户需求不大其实不太需要，锦上添花的，有想法，看情况，暂时不写
+    /*@Value("${storeMax.mapMax}")        //三个map的上限，用于内存调度，但其实如果用户需求不大其实不太需要，锦上添花的，有想法，看情况，暂时不写
     private int mapMax;
     @Value("${storeMax.questionairesMax}")
     private int questionairesMax;
     @Value("${storeMax.userMapMax}")
-    private int userMapMax;
+    private int userMapMax;*/
     private Environment env;
+
     @Autowired
     private ObjReader reader;
     @Autowired
@@ -48,14 +49,18 @@ public class Link {
     @Autowired
     DataIO userio;
     private int idDistribute;       //这个IDistribute应该和硬盘高度同步
+
+    //暂时不用
     private Properties IDProperties;    //保存ID数值的文件
     private final static String IDKey="idDistribute";
     private Writer propertiesWriter=new BufferedWriter(new FileWriter("IDProperty.properties"));
+
+
     public Link() throws IOException {
         User user=new User();//用于测试
         map.put("Test",user);
-        IDProperties=PropertiesLoaderUtils.loadAllProperties("IDProperty.properties");
-        idDistribute= Integer.parseInt(IDProperties.getProperty(IDKey));
+        /*IDProperties=PropertiesLoaderUtils.loadAllProperties("IDProperty.properties");*/
+        idDistribute=0; /*Integer.parseInt(IDProperties.getProperty(IDKey));*/
     }
     public boolean verifyToken(String token){
         return map.containsKey(token);
@@ -69,7 +74,7 @@ public class Link {
             questionaires.put(idDistribute,new Questionaire(title,description,filename,questions,idDistribute,user.get_email()));
             /*public Questionaire(String title,String description,String attachFile,List<Question> questions,int id,String creatorEmail){*/
             idDistribute++;
-            updateProperties(); //创建问卷时同步问题
+            /*updateProperties(); *///创建问卷时同步问题，暂时不用，会报错
             return idDistribute-1;
     }
     public void updateProperties() throws IOException {//更新idDistribute到文件中

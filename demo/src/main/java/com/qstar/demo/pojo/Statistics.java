@@ -24,7 +24,7 @@ public class Statistics {//单个问题的数据，可以是String或者integer�
         }
     }
     public static Type judgeType(Type type){
-        if(type==Type.SLIDE||type==Type.SINGLE||type==Type.MULTIPLE) {
+        if(type==Type.SINGLE||type==Type.MULTIPLE) {
             return Type.NUM;
         }else{
             return Type.TEXT;
