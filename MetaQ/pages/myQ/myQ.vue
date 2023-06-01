@@ -5,7 +5,7 @@
 		</view>
 		<view class="inputBox">
 			<image src="/static/inputSearch/search.png" mode="aspectFill"></image>
-			<input type="text" placeholder="输入关键词" class="input" placeholder-style="color: rgba(187, 187, 199, 1);;" v-model="inputValue" @click="test"> <!--v-model是双向绑定，将文本框的值与inputvalue绑定-->
+			<input type="text" placeholder="输入关键词" class="input" placeholder-style="color: rgba(187, 187, 199, 1);;" v-model="inputValue"> <!--v-model是双向绑定，将文本框的值与inputvalue绑定-->
 		</view>
 		<view class="container">
 			<tab-swiper class="tabSwiper" @tab-change="handleTabChange" :current-tab="currentTab" :text1="text1" :text2="text2"/>
@@ -17,12 +17,12 @@
 		    >
 		      <swiper-item>
 				<view class="page1">
-				  <QBlock v-for="(block, index) in blocks1" :key="block.id" :onumber="block.filled" :title="block.title" :isPush="block.isPush" @changeSave="emitSave(index)"></QBlock>
+				  <QBlock v-for="(block, index) in myCreateds" :key="block.id" :onumber="block.filled" :title="block.title" :isPush="block.commit" @changeSave="emitSave(index)"></QBlock>
 				</view>
 		      </swiper-item>
 		      <swiper-item>
 				<view class="page2">
-				  <QBlock2 v-for="item in blocks" :key="item.id" :title="item.title" :isEnd="item.isEnd" :name="item.name"></QBlock2>
+				  <QBlock2 v-for="item in myFilleds" :key="item.id" :title="item.title" :isEnd="item.commited" :name="item.name"></QBlock2>
 				</view>
 		      </swiper-item>
 		    </swiper>
@@ -110,14 +110,38 @@ export default {
 		  },
       swiperChange(e) {
         this.currentTab = e.detail.current;
+		this.inputValue=''
       },
 	  handleTabChange(index) {
 		this.currentTab = index;
 	  },
-	  test(e){
-		  console.log(e.target)
-	  },
-    }
+
+
+    },
+	computed: {
+		myCreateds() {
+		  if(this.inputValue&&this.currentTab===0)
+		  {
+			return this.blocks1.filter(post =>
+						post.title.includes(this.inputValue)
+						);  
+		  }
+		  else{
+			  return this.blocks1
+		  }
+		},
+		myFilleds(){
+			if(this.inputValue&&this.currentTab==1)
+			{
+				return this.blocks.filter(post =>
+							post.title.includes(this.inputValue)||post.name.includes(this.inputValue)
+							);  
+			}
+			else{
+				return this.blocks
+			}
+		}
+	},
 
 };
 </script>
