@@ -38,8 +38,8 @@ public class Controller {
     //创建问卷
     @PostMapping("/create")
     public Result create(@RequestBody CreatedReceive receive, @RequestHeader("token") String token) throws IOException {
-        String attach=handleFile(receive);
-        int id=handle.create(receive.getTitle(),receive.getDescription(),attach,receive.getList(),token);
+        /*String attach=handleFile(receive);*/
+        int id=handle.create(receive.getTitle(),receive.getDescription(),receive.getList(),token,receive.isCommit());
         return Result.success(id);
     }
     //查看已经创建问卷的详细信息
@@ -54,21 +54,15 @@ public class Controller {
     //保存问卷
     @PostMapping("/save")
     public Result save(@RequestBody QuestionaireReceive receive, @RequestHeader("token") String token) throws IOException {
-        if(handle.checkID(receive.getId(),token)) {
-            String attach = handleFile(receive);
-            boolean b = handle.save(receive.getId(), receive.getTitle(),receive.getDescription(), attach, receive.getList(), token);
-            return b ? Result.success() : Result.fail("已提交，无法再修改!");
-        }else{
-            return Result.fail("问卷id有误！");
-        }
+        return handle.save(receive.getId(),receive.getTitle(),receive.getDescription(),receive.getList(),token,receive.isCommit());
     }
     //提交问卷
-    @PostMapping("/commit")
+    /*@PostMapping("/commit")
     public Result commit(Integer id,@RequestHeader("token") String token) throws IOException {//直接提交
             return handle.commit(id,token);
-    }
+    }*/
 
-    public String handleFile(FileReceive receive) throws IOException {
+    /*public String handleFile(FileReceive receive) throws IOException {
         if(receive.getFiles()!=null) {
             handle.handleFiles(receive.getList(), receive.getFiles());
         }
@@ -76,8 +70,8 @@ public class Controller {
             return handle.handleFile(receive.getAttach());
         }
         return null;
-    }
-    public String handleFile(SaveFillReceive receive) throws IOException{
+    }*/
+    /*public String handleFile(SaveFillReceive receive) throws IOException{
         if(receive.getFiles()!=null) {
             handle.handleFiles(receive.getData(), receive.getFiles());
         }
@@ -85,13 +79,13 @@ public class Controller {
             return handle.handleFile(receive.getAttach());
         }
         return null;
-    }
+    }*/
 
 
     //返回要填写的问卷的信息
     @GetMapping("/fill")
-    public Result fill(Integer id,@RequestHeader("token") String token) throws IOException {
-        return handle.fill(id,token);
+    public Result fill(Integer id,boolean commit,@RequestHeader("token") String token) throws IOException {
+        return handle.fill(id,token,commit);
     }
     //返回已经填写的问卷的信息
     @GetMapping("/fillRecord")
@@ -99,17 +93,16 @@ public class Controller {
         return Result.success(handle.getFillRecord(token));
     }
     //保存已经填写的数据
-    @PostMapping("/saveFill")   //可能有文件传入
+    @PostMapping("/saveFill")
     public Result saveFill(@RequestBody SaveFillReceive receive,@RequestHeader("token") String token) throws IOException {
-        String attach=handleFile(receive);
-        Set<Integer> set;
+        /*String attach=handleFile(receive);*/
+        /*Set<Integer> set;
         if(receive.getFiles()!=null){
             set=receive.getFiles().keySet();
         }else{
             set=null;
-        }
-        boolean b=handle.saveFill(receive.getFilledID(),receive.getData(),set,attach,token);
-        return b?Result.success():Result.fail("填写记录的ID错误!");
+        }*/
+        return handle.saveFill(receive.getFilledID(), receive.getData(), token, receive.isCommit());
     }
     //查看已经填写过的问卷
     @GetMapping("/checkFill")
@@ -121,10 +114,10 @@ public class Controller {
         return Result.fail("填写记录的ID错误!");
     }
     //提交填写
-    @PostMapping("/commitFill")
+    /*@PostMapping("/commitFill")
     public Result commitFill(Integer id,@RequestHeader("token") String token) throws IOException {
         return handle.commitFill(id,token);
-    }
+    }*/
     //获取数据
     @GetMapping("/statistics/{index}")
     public Result statistics(@PathVariable Integer index,Integer id,@RequestHeader("token") String token) throws IOException {

@@ -50,17 +50,22 @@ public class Link {
     DataIO userio;
     private int idDistribute;       //这个IDistribute应该和硬盘高度同步
 
+    @Value("${store.IDFile}")
+    private String IDFile;  //存放ID的文件，放在base目录下
     //暂时不用
-    private Properties IDProperties;    //保存ID数值的文件
-    private final static String IDKey="idDistribute";
-    private Writer propertiesWriter=new BufferedWriter(new FileWriter("IDProperty.properties"));
-
+    private Writer IDWriter=new BufferedWriter(new FileWriter(base+"/"+IDFile));
+    private BufferedReader IDReader=new BufferedReader((new FileReader(base+"/"+IDFile)));
 
     public Link() throws IOException {
         User user=new User();//用于测试
         map.put("Test",user);
         /*IDProperties=PropertiesLoaderUtils.loadAllProperties("IDProperty.properties");*/
-        idDistribute=0; /*Integer.parseInt(IDProperties.getProperty(IDKey));*/
+         /*Integer.parseInt(IDProperties.getProperty(IDKey));*/
+        if(new File(base+"/"+IDFile).exists()) {    //测试用
+            idDistribute = Integer.parseInt(IDReader.readLine());     //读取
+        }else{
+            idDistribute=0;
+        }
     }
     public boolean verifyToken(String token){
         return map.containsKey(token);
@@ -68,19 +73,26 @@ public class Link {
     public List<QuestionaireInfo> getCreated(String token){
             return map.get(token).getCreateInfo();
     }
-    public int create(String title, String description,String filename,List<Question> questions,String token) throws IOException {
+    public int create(String title, String description/*,String filename*/,List<Question> questions,String token,boolean commit) throws IOException {
             User user=map.get(token);
             user.addQuestionaire(idDistribute);
-            questionaires.put(idDistribute,new Questionaire(title,description,filename,questions,idDistribute,user.get_email()));
+            Questionaire questionaire=new Questionaire(title,description,questions,idDistribute,user.get_email());
+            questionaires.put(idDistribute,questionaire);
+            writer.writeQuestionaire(questionaire);    //创建时顺便写入
+            writer.writeUser(user);
             /*public Questionaire(String title,String description,String attachFile,List<Question> questions,int id,String creatorEmail){*/
             idDistribute++;
+            IDWriter.write(idDistribute);       //同步写入
+            if(commit){ //当需要提交时
+                    questionaire.commit();
+            }
             /*updateProperties(); *///创建问卷时同步问题，暂时不用，会报错
             return idDistribute-1;
     }
-    public void updateProperties() throws IOException {//更新idDistribute到文件中
+    /*public void updateProperties() throws IOException {//更新idDistribute到文件中
         IDProperties.setProperty(IDKey,idDistribute+"");
         IDProperties.store(propertiesWriter,null);
-    }
+    }*/
     public ResultForCheck check(int id, String token) throws IOException {
         User user=map.get(token);
         if(user.hasQuestionaireID(id)) {//如果id正确中
@@ -93,53 +105,66 @@ public class Link {
         }
         return null;
     }
-    public boolean save(int id, String title,String description,String filename,List<Question> list,String token) throws IOException {//标题的修改不应该在问卷的保存这里
-        User user=map.get(token);
+    public Result save(int id, String title,String description/*,String filename*/,List<Question> list,String token,boolean commit) throws IOException {//标题的修改不应该在问卷的保存这里
+        User user=map.get(token);       //综合了保存和提交两个功能
         if(map.get(token).hasQuestionaireID(id)) {//如果id正确中
             if(checkQuestionaire(id)) {
                 Questionaire questionaire = questionaires.get(id);   //在用户map读入时，问卷map同步读入
                 if (questionaire != null) {
-                    deleteFile(questionaire.getAttachFile()); //删除原有的文件，因为已经被覆盖了
-                    return questionaire.save(title,description, filename, list,user.get_email());
+                    /*deleteFile(questionaire.getAttachFile()); //删除原有的文件，因为已经被覆盖了*/
+                    boolean suc= questionaire.save(title,description, list,user.get_email());
+                    if(commit){ //当需要提交时
+                        if (questionaire.allowEdit(user.get_email())) {//允许编辑的才允许查看
+                            if(questionaire.commit()){  //
+                                writer.writeQuestionaire(questionaire);     //提交也会修改这个问卷对象，需要写入
+                                return Result.success();
+                            }
+                            return Result.fail("已提交");
+                        }
+                    }
+                    writer.writeQuestionaire(questionaire);     //不需要写入user对象，这个方法只修改了问卷对象
+                    if(suc) {
+                        return Result.success();
+                    }
+                    return Result.fail("已提交");
                 }
-            }
-        }
-        return false;
-    }
-    public String comboAttachFileRoad(String filename){ //附件路径
-        return base+"/"+attachRoad+"/"+filename;
-    }
-    public String comboPicFileRoad(String filename){    //图片路径
-        return base+"/"+picSonRoad+"/"+filename;
-    }
-    public Result commit(int id,String token) throws IOException {
-        User user=map.get(token);
-        if(user.hasQuestionaireID(id)) {//如果id正确中
-            if(checkQuestionaire(id) ){
-            Questionaire questionaire = questionaires.get(id);   //在用户map读入时，问卷map同步读入
-            if (questionaire != null&&questionaire.allowEdit(user.get_email())) {//允许编辑的才允许查看
-                if(questionaire.commit()){
-                    return Result.success();
-                }
-                return Result.fail("已提交");
-            }
             }
         }
         return Result.fail("问卷ID错误");
     }
-    public Result fill(int id,String token) throws IOException {//填写问卷时返回问题，并在加到自己的填写记录上    这里的ID改了，这不是问卷的ID，这是已填写的问卷的ID
+    /*public String comboAttachFileRoad(String filename){ //附件路径
+        return base+"/"+attachRoad+"/"+filename;
+    }
+    public String comboPicFileRoad(String filename){    //图片路径
+        return base+"/"+picSonRoad+"/"+filename;
+    }*/
+   /* public Result commit(int id,String token) throws IOException {  //暂时性放弃
+        User user=map.get(token);
+        if(user.hasQuestionaireID(id)) {//如果id正确中
+            if(checkQuestionaire(id) ){
+            Questionaire questionaire = questionaires.get(id);   //在用户map读入时，问卷map同步读入
+
+            }
+        }
+        return null;
+    }*/
+    public Result fill(int id,String token,boolean commit) throws IOException {//填写问卷时返回问题，并在加到自己的填写记录上    这里的ID改了，这不是问卷的ID，这是已填写的问卷的ID
             User user=map.get(token);
             if(checkQuestionaire(id)){
                 Questionaire questionaire=questionaires.get(id);
                 if (questionaire.isCommit()) {
                     if((user.containFilledID(id)&&questionaire.isMultiCommit())||!(user.containFilledID(id))) {//检验是否填写过，可以填写吗
                         int index=user.addFilled(questionaire.getCreatorEmail(), id, questionaire);//添加填写问卷对象
-                        user.setModified(true);
+                        FilledQuestionaire filledQuestionaire=user.findFilled(index);
+                        if(commit){
+                            return commitFill(filledQuestionaire,user);
+                        }
+                        writer.writeUser(user);
                         return Result.success(new ResultForCheckWithID(getfill(id, token),index));
                     }
-                    return Result.fail("用户没有权限");
+                    return Result.fail("已填写过");
                 }
-                return Result.fail("未提交");
+                return Result.fail("问卷未提交，无法填写");
             }
         return Result.fail("问卷ID错误");
     }
@@ -155,27 +180,30 @@ public class Link {
     public List<FilledQuestionaireInfo> getFillRecord(String token){
         return map.get(token).getFilledInfo();
     }
-    public boolean saveFill(int id,String[] data, Set<Integer> set,String attach,String token){
+    public Result saveFill(int filledId,String[] data/*, Set<Integer> set,String attach*/,String token,boolean commit) throws IOException {
         User user=map.get(token);
-        FilledQuestionaire filledQuestionaire=user.findFilled(id);
+        FilledQuestionaire filledQuestionaire=user.findFilled(filledId);
         if(filledQuestionaire!=null) {
-            deleteFilledFiles(filledQuestionaire,set);
-        filledQuestionaire.setData(data);
-        deleteFile(filledQuestionaire.getAttach());
-        filledQuestionaire.setAttach(attach);
-        user.setModified(true);
-        return true;
+            /*deleteFilledFiles(filledQuestionaire,set);*/
+            filledQuestionaire.setData(data);
+            /*deleteFile(filledQuestionaire.getAttach());*/
+            /*filledQuestionaire.setAttach(attach);*/
+            if(commit){
+                return commitFill(filledQuestionaire,user);
+            }
+            writer.writeUser(user);
+        return Result.success();
         }
-        return false;
+        return Result.fail("填写记录的ID错误");
     }
-    public void deleteFilledFiles(FilledQuestionaire questionaire,Set<Integer> set){//删除填写问卷的文件，后面那个集合指定的是哪几个题是要删除的
+    /*public void deleteFilledFiles(FilledQuestionaire questionaire,Set<Integer> set){//删除填写问卷的文件，后面那个集合指定的是哪几个题是要删除的
         String[] data=questionaire.getData();
         if(set!=null) {
             for (int i : set) {
                 deleteFile(data[i]);
             }
         }
-    }
+    }*/
     public ResultForFill checkFill(int id, String token) throws IOException {
             List<Question> questions;
             String[] filled;    //已填写的数据
@@ -186,9 +214,7 @@ public class Link {
             }
         return null;
     }
-    public Result commitFill(int filledID, String token) throws IOException {//返回错误，可能是问卷id错误或者是已经提交  这个ID是填写记录对应的ID
-        User user =map.get(token);
-        FilledQuestionaire filled=user.findFilled(filledID);      //如果允许多次填写，那得分清楚是第几次
+    public Result commitFill(FilledQuestionaire filled, User user) throws IOException {//返回错误，可能是问卷id错误或者是已经提交  这个ID是填写记录对应的ID
         int questionaireID=filled.getId();      //这个是填写的问卷对应的ID
         if(checkQuestionaire(questionaireID)) {
             Questionaire questionaire=questionaires.get(questionaireID);
@@ -196,8 +222,9 @@ public class Link {
                 Result result = questionaire.upload(filled.getData());
                 if(questionaire.isRecordFillerName()){//是否要记录名字
                     questionaire.uploadUsername(user.get_name());
+                    writer.writeQuestionaire(questionaire);
                 }
-                filled.setCommitted(result.getCode()==1);   //根据返回的状态码检验是否成功
+                filled.setCommitted(result.getCode()==1);   //根据返回的状态码检验是否成功,也许filledQuestionaire也需要单独拉出来
                 return result;
             }
         }
@@ -219,7 +246,7 @@ public class Link {
 
 
 
-    public String[] storeFiles(List<MultipartFile> files) throws IOException {//储存多个文件
+    /*public String[] storeFiles(List<MultipartFile> files) throws IOException {//储存多个文件
         String[] filenames=new String[files.size()];
         int index=0;
         for(MultipartFile file:files){
@@ -227,8 +254,8 @@ public class Link {
             index++;
         }
         return filenames;
-    }
-    public String storeFile(MultipartFile file,boolean choose)throws IOException{//储存附件文件
+    }*/
+    /*public String storeFile(MultipartFile file,boolean choose)throws IOException{//储存附件文件
         String originalFilename=file.getOriginalFilename();
         String suffix=originalFilename.substring(originalFilename.lastIndexOf("."));
         String filename=UUID.randomUUID().toString()+suffix;
@@ -240,22 +267,22 @@ public class Link {
         }
         file.transferTo(new File(road));
         return road;
-    }
-    public void deleteFiles(String[] filenames){
+    }*/
+    /*public void deleteFiles(String[] filenames){
         if(filenames!=null) {
             for (String filename : filenames) {
                 deleteFile(filename);
             }
         }
-    }
-    public void deleteFile(String filename){//已经是完整路径了，不需要判断是否是附件的还是图片
+    }*/
+    /*public void deleteFile(String filename){//已经是完整路径了，不需要判断是否是附件的还是图片
         if(filename!=null) {
             File file = new File(filename);
             if (file.exists()) {
                 file.delete();
             }
         }
-    }
+    }*/
     public boolean checkID(int id,String token){
         return map.get(token).hasQuestionaireID(id);
     }
@@ -285,7 +312,7 @@ public class Link {
         return (User)reader.read(email);
     }
 
-    public void storeMap() throws IOException {//把map存储到文件中，也许可以在关闭之前调用这个方法，免得有些数据遗漏
+    /*public void storeMap() throws IOException {//把map存储到文件中，也许可以在关闭之前调用这个方法，免得有些数据遗漏
         Collection<User> users=map.values();
         Collection<Questionaire> ques =questionaires.values();
         for(User user:users){
@@ -300,7 +327,7 @@ public class Link {
                 questionaire.setModified(false);
             }
         }
-    }
+    }*/
 
     public boolean checkQuestionaire(int id) throws IOException {//检查是否访问的问卷存在，不存在就读入
         if(!questionaires.containsKey(id)){

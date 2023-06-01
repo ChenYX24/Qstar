@@ -34,7 +34,7 @@ public class Questionaire {//创建的问卷
         return title.equals(info.getTitle());
     }
 
-    public Questionaire(String title,String description,String attachFile,List<Question> questions,int id,String creatorEmail){//初始化问卷对象，其中数据统计对象是和问题对象高度绑定的
+    public Questionaire(String title,String description/*,String attachFile*/,List<Question> questions,int id,String creatorEmail){//初始化问卷对象，其中数据统计对象是和问题对象高度绑定的
         info=new QuestionaireInfo(title,id);
         this.questions=questions;
         this.description=description;
@@ -46,7 +46,7 @@ public class Questionaire {//创建的问卷
     public Questionaire(int id,String title,int filled,boolean commit){
         info = new QuestionaireInfo(id,title,filled,commit);
     }
-    public boolean save(String title,String description,String attachFile,List<Question> questions,String editorEmail){//问卷的保存，只有被授权的用户才能编辑
+    public boolean save(String title,String description/*,String attachFile*/,List<Question> questions,String editorEmail){//问卷的保存，只有被授权的用户才能编辑
         if(info.isCommit()){
             return false;
         }
@@ -56,7 +56,7 @@ public class Questionaire {//创建的问卷
         this.info.setTitle(title);
         this.questions=questions;
         this.description=description;
-        this.attachFile=attachFile;
+        /*this.attachFile=attachFile;*/
         this.modified=true;
         if(attachFile!=null){   //可能在保存中把上个存档的附件删除了，所以从true变false是有可能的
             haveAttach=false;
@@ -79,8 +79,8 @@ public class Questionaire {//创建的问卷
         if(!info.isCommit()) {
             int index = 0;
             for (Question question : questions) {
-                if (question.getExtra() != null) {
-                    statistics.add(new Statistics(question.getType(), question.getExtra().length));
+                if (question.getChoice() != null) {
+                    statistics.add(new Statistics(question.getType(), question.getChoice().length));
                 } else {
                     statistics.add(new Statistics(question.getType(), 1));
                 }
@@ -96,7 +96,7 @@ public class Questionaire {//创建的问卷
         return info.isCommit();
     }
     public Result upload(String[] data){//上传填写数据到统计对象
-        if(Arrays.asList(data).contains(null)) {//检测是否还有数据没有填完的
+        if(checkUnfill(data)) {//检测是否还有数据没有填完的，但是可能有些问题不是必须要填的
             Date date=new Date();
             if((begin!=null&&date.after(begin)||begin==null)) {       //验证是否在规定时间内提交，如果没设置时间，可以直接过
                 if ((end != null && date.before(end)) || end == null) {
@@ -110,6 +110,22 @@ public class Questionaire {//创建的问卷
             return Result.fail("已超时");
         }
         return Result.fail("有些问题没有回答");
+    }
+    public boolean checkUnfill(String[] data){//检验没填的问题，如果为空，除非为不必填或者有前提条件没有满足，否则返回没有false
+        for(int i=0;i<questions.size();i++){
+            if(data[i]==null&&questions.get(i).isNeed()&&checkSatisfiedPromise(data,questions.get(i).getLogic())){
+                return false;
+            }
+        }
+        return true;
+    }
+    public boolean checkSatisfiedPromise(String[] data,Map<Integer,String> map){//
+        for(int i:map.keySet()){//可能会有多个前提条件
+            if(!data[i].contains(map.get(i))) {      //可能是只要选择a,但是这是个多选题，需要选择abc，只要包含即可
+                return false;
+            }
+        }
+        return true;
     }
     public void uploadUsername(String filledName){
         fillerNames.add(filledName);
@@ -148,7 +164,7 @@ public class Questionaire {//创建的问卷
             Question question=questions.get(i);
             question.setQuestion(unit[i].getQuestion());
             if(question.getType()==Type.SINGLE||question.getType()==Type.MULTIPLE||question.getType()==Type.SLIDE) {//判断是否是选择题
-                question.setExtra(unit[i].getChoices());
+                question.setChoice(unit[i].getChoices());
             }
         }
     }
