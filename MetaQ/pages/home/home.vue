@@ -44,6 +44,14 @@ export default {
   },
   onLoad: function (options) {
 	this.tab=options.tab
+	
+	//自动获取邮箱
+	this.token = localStorage.getItem('token');
+	console.log(this.token);
+	const obj = JSON.parse(this.token);
+	console.log(obj);
+	this.email = obj["_email"];
+	console.log(obj["_email"]);
   },
   data() {
   	return {
@@ -54,10 +62,12 @@ export default {
 		isInfoExpanded:false,
 		flag:false,
 		phone: "13306715109",
-        email: "2502160023@qq.com",
+        email: "",
 		provinces: ['未知','北京市', '天津市', '上海市', '重庆市', '河北省', '山西省', '辽宁省', '吉林省', '黑龙江省', '江苏省', '浙江省', '安徽省', '福建省', '江西省', '山东省', '河南省', '湖北省', '湖南省', '广东省', '海南省', '四川省', '贵州省', '云南省', '陕西省', '甘肃省', '青海省', '台湾省', '内蒙古自治区', '广西壮族自治区', '西藏自治区', '宁夏回族自治区', '新疆维吾尔自治区', '香港特别行政区', '澳门特别行政区'],
 		currentProvince: '未知',
-		
+		origin_phone:"13306715109",
+		origin_provinces:"未知",
+		token:""
 	}
   },
   methods: {
@@ -66,6 +76,23 @@ export default {
 			this.isExpanded = true;
       },
       confirmInput(event) {
+		//告诉后端数据修改
+		if(this.origin_phone != this.phone || this.origin_provinces != this.currentProvince){
+			this.origin_phone = this.phone;
+			this.origin_provinces = this.currentProvince;
+			axios.defaults.headers.common['token'] = this.token;
+			axios.post(/*'https://metaq.scutbot.icu/login'*/
+						'http://localhost:8080/test', {
+					phoneNumber:this.phone,
+					location:this.currentProvince
+				})
+			    .then(response => {
+					console.log(response.data);
+			    })
+			    .catch(error => {
+			      console.log(error);
+			    });
+		}
         // 恢复样式
 		if(this.isExpanded)
 		{

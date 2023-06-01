@@ -17,7 +17,7 @@
 		    >
 		      <swiper-item>
 				<view class="page1">
-				  <QBlock v-for="(block, index) in blocks1" :key="block.id" :onumber="block.filled" :title="block.title" :isPush="block.isPush"></QBlock>
+				  <QBlock v-for="(block, index) in blocks1" :key="block.id" :onumber="block.filled" :title="block.title" :isPush="block.isPush" @changeSave="emitSave(index)"></QBlock>
 				</view>
 		      </swiper-item>
 		      <swiper-item>
@@ -28,7 +28,7 @@
 		    </swiper>
 		  </view>
 		  
-		<tab-bar :tab="tab"></tab-bar>
+		<tab-bar :tab="tab" :outIsSave="isSave" @changeSave="emitSave"></tab-bar>
 	</view>
 </template>
 
@@ -63,11 +63,21 @@ export default {
 		//要传的值
 		blocks:[],
 		//要传的值
-		blocks1: []
+		blocks1: [],
+		isSave:false
   	}
   },
     methods: {
+		emitSave(index){
+			//TODO
+			if(index==0||index)
+			{
+			  console.log(this.blocks1[index].id)
+			}
+			this.isSave=!this.isSave
+		},
 		async fetchData() {
+			//获取已经创建的问卷
 			axios.defaults.headers.common['token'] = localStorage.getItem('token');
 			axios.get(/*'https://metaq.scutbot.icu/login'*/
 						'http://localhost:8080/getCreated')
@@ -80,12 +90,13 @@ export default {
 			      console.log(error);
 			    });
 			try {  
-			  const response = await axios.get('/static/test2.json'); // TODO
-			  this.blocks = response.data.data.blocks;
-			  this.blocks1=response.data.data.blocks1
+			  // const response = await axios.get('/static/test2.json'); // TODO
+			  // this.blocks = response.data.data.blocks;
+			  // this.blocks1=response.data.data.blocks1
 			} catch (error) {  
 			  console.error('Error fetching data:', error);  
 			}
+			//获取已经填写的问卷
 			axios.get(/*'https://metaq.scutbot.icu/login'*/
 						'http://localhost:8080/fillRecord')
 			    .then(response => {

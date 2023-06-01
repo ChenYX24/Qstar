@@ -15,25 +15,21 @@
     </swiper-item>
     
     <!-- 第二个视图 -->
-    <swiper-item class="share">
+    <swiper-item class="share" @tap="share">
       <view class="alternateView">
         <!-- Content for the alternate view -->
         分享问卷填写
       </view>
     </swiper-item>
   </swiper>
+
 </template>
 
-
 <script>
-
 export default {
   name: 'QBlock',
-  components: {
-  },
   data() {
     return {
-
     };
   },
   props: {
@@ -49,6 +45,11 @@ export default {
       type: Boolean,
       default: false,
     },
+  },
+  methods:{
+	  share(){
+		  this.$emit('changeSave')
+	  },
   },
   computed: {
 	  pushText(){

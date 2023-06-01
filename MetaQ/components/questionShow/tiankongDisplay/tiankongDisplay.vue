@@ -93,40 +93,32 @@
 	// height: 100vh;
 	justify-content: center;
 }
-.box{
+.box{	
 	width: 90vw;
-}
-.inbox{
-	border: 1px dashed green;
-}
-.title{
-	font-size: 20px;
-	// color: aqua;
-	// border: 2px solid red;
+	border-radius: 20px;
+	background: rgba(255, 255, 255, 0.8);
+	box-shadow: 2px 2px 20px 0px rgba(136, 63, 143, 0.15);
 }
 
+.title{
+	margin:10px 0px 5px 20px;
+	font-size: 20px;
+}
+.input-div{
+	display: flex;
+	margin: 10px 20px 20px 20px;
+	border: 1px solid rgba(225, 225, 235, 1);
+	border-radius: 3px;
+	background-color: #ffffff;
+	height: 5vh
+}
 .options{
 	height: 5vh;
 	// border: 2px solid green;
 	display: flex;
 	align-items: center
 }
-.circle{
-  width: 15px;
-  height: 15px; 
-  // background-color: red;
-  border: 2px solid gray;
-  border-radius: 50%;
-  margin-left: 5px;
-  margin-right: 5px;
-}
 
-.input-div{
-	height: 5vh;
-	margin: 5px 5px 5px 5px;
-	border: 2px solid pink;
-	background-color: #f7faf6;
-}
 
 
 </style>

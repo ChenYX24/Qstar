@@ -27,7 +27,8 @@
 <!-- 	<add v-if="isAdd"></add> -->
   </view>
   <add :class="{show:isAdd}" :isShow="isAdd" @updateAdd="changeAdd"></add>
-  <save :class="{show:isSave}" :isShow="isSave" @updateSave="changeSave"></save>
+  <save v-if="Type==1" :class="{show:isSave}" :isShow="isSave" @updateSave="changeSave" :Type="Type"></save>
+  <save v-else :class="{show:isSave}" :isShow="isSave" @updateSave="changeSave"></save>
   </view>
 </template>
 
@@ -43,10 +44,27 @@ export default {
     return {
 		activeTab: this.tab,
 		isAdd:false,
-		isSave:false,
+		isSaveFlag:false,
 	};
   },
+  computed:{
+	isSave(){
+		if(this.isSaveFlag||this.outIsSave)
+		{
+			this.isSaveFlag=true
+			console.log(this.isSaveFlag,this.outIsSave)
+			return true
+		}
+		else{
+			return false
+		}  
+	}  
+  },
    props: {
+	  outIsSave:{
+		  type:Boolean,
+		  default:false
+	  },
       tab: {
         type: String,
         default: 'question'
@@ -65,8 +83,9 @@ export default {
 		  this.isAdd=!this.isAdd;
 	  },
 	 changeSave(){
-		 this.isSave=!this.isSave;
-		 if(!this.isSave)
+		 this.$emit('changeSave')
+		 this.isSaveFlag=!this.isSaveFlag;
+		 if(!this.isSaveFlag)
 		 {
 		 	this.activeTab=''
 		 }
@@ -108,8 +127,8 @@ export default {
 				})
 				break;
 			case 'save':
-				this.isSave=!this.isSave
-				if(!this.isSave)
+				this.isSaveFlag=!this.isSaveFlag
+				if(!this.isSaveFlag)
 				{
 					this.activeTab=''
 				}
@@ -157,8 +176,8 @@ export default {
 			});
 			break;
 		  case 'save':
-		  	this.isSave=!this.isSave
-			if(!this.isSave)
+		  	this.isSaveFlag=!this.isSaveFlag
+			if(!this.isSaveFlag)
 			{
 				this.activeTab=''
 			}

@@ -17,7 +17,7 @@ public class InitializingListener implements ServletContextListener, Application
     private CycleStoreThread cycle;
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.context=applicationContext;
+        //this.context=applicationContext;
     }
 
     @Override

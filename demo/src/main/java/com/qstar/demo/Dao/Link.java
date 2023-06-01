@@ -254,19 +254,20 @@ public class Link {
     public boolean checkID(int id,String token){
         return map.get(token).hasQuestionaireID(id);
     }
-    public void SaveUser(String token,User user){
-        System.out.println("map:"+token);
-        map.put(token,user);
-    }
 
-    public boolean put(String token,User user) throws IOException { //用于给已登录的map添加的，给登录系统用
+    public boolean put(String token,User user){ //用于给已登录的map添加的，给登录系统用
         if(!map.containsKey(token)){
             map.put(token,user);
             List<Integer> ques=user.getQuestionaires();
             for(int id:ques){
-                Object o=reader.readQuestionaire(id);
-                if(o instanceof Questionaire){
-                    questionaires.put(id,(Questionaire) o);     //把登录用户相关的问卷放在内存中，前提是登录成功，这个方法就是登录成功时调用的
+                Object o;
+                try {
+                    o=reader.readQuestionaire(id);
+                    if(o instanceof Questionaire){
+                        questionaires.put(id,(Questionaire) o);     //把登录用户相关的问卷放在内存中，前提是登录成功，这个方法就是登录成功时调用的
+                    }
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
                 }
             }
             return true;
