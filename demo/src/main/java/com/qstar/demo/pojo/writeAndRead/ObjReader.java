@@ -2,6 +2,7 @@ package com.qstar.demo.pojo.writeAndRead;
 
 import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.annotation.JacksonStdImpl;
+import com.qstar.demo.pojo.Question;
 import com.qstar.demo.pojo.Questionaire;
 import com.qstar.demo.pojo.User;
 import org.springframework.asm.TypeReference;
@@ -19,7 +20,7 @@ public class ObjReader {//读取user对象，根据用户的名字读取，用�
     private String questionaireRoad;
     @Value("${store.userRoad}")
     private String userRoad;
-    public Object read(String name) throws IOException {
+    public String read(String name) throws IOException {
         File file=new File(base+"/"+name+".txt");   //储存user对象的文件是txt格式的
         System.out.println("读取路径："+base+"/"+name+".txt");
         if(file.exists()) {//先检验文件是否存在，防止报错
@@ -40,9 +41,9 @@ public class ObjReader {//读取user对象，根据用户的名字读取，用�
         return this.read(father+"/"+name);
     }
     public Questionaire readQuestionaire(int id) throws IOException {
-        return (Questionaire)read(questionaireRoad,Integer.toString(id));
+        return  (Questionaire) JSON.parseObject((String) read(questionaireRoad,id+""), Questionaire.class);
     }
     public User readUser(String email) throws IOException {
-        return (User)read(userRoad,email);
+        return (User) JSON.parseObject((String) read(userRoad,email), User.class);
     }
 }

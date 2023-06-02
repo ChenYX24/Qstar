@@ -129,7 +129,21 @@ public class Controller {
 
     @PostMapping("/setting")
     public Result setting(@RequestBody SettingReceive receive,@RequestHeader("token") String token) throws IOException {//设置问卷的配置信息
-        return handle.setting(receive.isRecordName(),receive.isMultiCommit(),receive.getBegin(),receive.getEnd(),receive.getId(),token);
+        Result result= handle.setting(receive.isRecordName(),receive.isMultiCommit(),receive.getBegin(),receive.getEnd(),receive.getId(),token);
+        if(result.getCode()==1){//如果前面的没问题，不需要直接返回
+            switch (receive.getPeople().getAuthority()){
+                case 0:
+                    result=authorizeManage(receive.getId(),receive.getPeople().getName(),receive.getPeople().getEmail(),receive.getPeople().getPhoto(),token);
+                    break;
+                case 1:
+                    result=authorizeEdit(receive.getId(),receive.getPeople().getName(),receive.getPeople().getEmail(),receive.getPeople().getPhoto(),token);
+                    break;
+                case 2:
+                    result=authorizeCheck(receive.getId(),receive.getPeople().getName(),receive.getPeople().getEmail(),receive.getPeople().getPhoto(),token);
+                    break;
+            }
+        }
+        return result;
     }
     @GetMapping("/getSetting")
     public Result getSetting(Integer id,@RequestHeader("token") String token) throws IOException {//获取问卷配置信息
@@ -143,13 +157,15 @@ public class Controller {
         return Result.success(userinfo);
         //return null;
     }
-    @PostMapping("/authorizeCheck")
-    public Result authorizeCheck(Integer id,String email,@RequestHeader("token") String token) throws IOException {//授权用户查看问卷的权限
-        return handle.authorizeCheck(id,email,token);                         //token交给拦截器，这里不需要
+    public Result authorizeManage(Integer id,String name,String email,String photo,String token) throws IOException {//授权用户查看问卷的权限
+        return handle.authorizeManage(id,name,email,photo,token);                         //token交给拦截器，这里不需要
     }
-    @PostMapping("/authorizeEdit")
-    public Result authorizeEdit(Integer id,String email,@RequestHeader("token") String token) throws IOException {//授权用户编辑的权限
-        return handle.authorizeEdit(id,email,token);
+    public Result authorizeCheck(Integer id,String name,String email,String photo,String token) throws IOException {//授权用户查看问卷的权限
+        return handle.authorizeCheck(id,name,email,photo,token);                         //token交给拦截器，这里不需要
+    }
+
+    public Result authorizeEdit(Integer id,String name,String email,String photo,String token) throws IOException {//授权用户编辑的权限
+        return handle.authorizeEdit(id,name,email,photo,token);
     }
     @GetMapping("/getAllowCheck")
     public Result getAllowCheck(@RequestHeader("token") String token) throws IOException {//获取允许查看的列表

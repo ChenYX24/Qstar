@@ -47,7 +47,6 @@ public class User {//用户
     public User(){
         questionaires=new ArrayList<>();
         filledQuestionaires=new ArrayList<>();
-        modified=true;      //刚开始初始化时需要主动被写入
         indexDistribute=0;
         
     }
@@ -111,7 +110,6 @@ public class User {//用户
      
     public void addQuestionaire(int id){//添加问卷
         questionaires.add(id);
-        modified=true;
     }
     /* 
     *//*public StatisticsResult getStatistics(int id, int index){
@@ -142,7 +140,6 @@ public class User {//用户
     public int addFilled(String creator,int id,Questionaire questionaire){//添加到填写记录
         filledQuestionaires.add(new FilledQuestionaire(creator,id,questionaire,indexDistribute));
         indexDistribute++;
-        modified=true;
         return indexDistribute-1;
     }
      
@@ -169,7 +166,8 @@ public class User {//用户
         return false;
     }
 
-
+    public void addManageQuestionaire(Integer id) {allowManageQuestionaires.add(id);
+    }
     public void addCheckQuestionaire(Integer id){
         allowCheckQuestionaires.add(id);
     }
@@ -185,7 +183,9 @@ public class User {//用户
     public boolean containEditQuestionaire(Integer id){
         return allowEditQuestionaires.contains(id);
     }
-
+    public boolean allowManage(Integer id){
+        return hasQuestionaireID(id)||allowManageQuestionaires.contains(id);
+    }
     //各种get、set函数
     // public String get_name()
     // {

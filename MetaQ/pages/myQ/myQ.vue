@@ -5,7 +5,7 @@
 		</view>
 		<view class="inputBox">
 			<image src="/static/inputSearch/search.png" mode="aspectFill"></image>
-			<input type="text" placeholder="输入关键词" class="input" placeholder-style="color: rgba(187, 187, 199, 1);;" v-model="inputValue" @click="test"> <!--v-model是双向绑定，将文本框的值与inputvalue绑定-->
+			<input type="text" placeholder="输入关键词" class="input" placeholder-style="color: rgba(187, 187, 199, 1);;" v-model="inputValue"> <!--v-model是双向绑定，将文本框的值与inputvalue绑定-->
 		</view>
 		<view class="container">
 			<tab-swiper class="tabSwiper" @tab-change="handleTabChange" :current-tab="currentTab" :text1="text1" :text2="text2"/>
@@ -17,12 +17,15 @@
 		    >
 		      <swiper-item>
 				<view class="page1">
-				  <QBlock v-for="(block, index) in blocks1" :key="block.id" :onumber="block.filled" :title="block.title" :isPush="block.isPush" @changeSave="emitSave(index)"></QBlock>
+				  <QBlock v-for="(block, index) in blocks1" :key="block.id" 
+				  :onumber="block.filled" :title="block.title" 
+				  :isPush="block.isPush" @changeSave="emitSave(index)" 
+				   @click='getData(index)'></QBlock>
 				</view>
 		      </swiper-item>
 		      <swiper-item>
 				<view class="page2">
-				  <QBlock2 v-for="item in blocks" :key="item.id" :title="item.title" :isEnd="item.isEnd" :name="item.name"></QBlock2>
+				  <QBlock2 v-for="item in myFilleds" :key="item.id" :title="item.title" :isEnd="item.commited" :name="item.name"></QBlock2>
 				</view>
 		      </swiper-item>
 		    </swiper>
@@ -38,6 +41,7 @@ import TabSwiper from "/components/tabSwiper/tabSwiper.vue";
 import QBlock from '/components/myQ/QBlock/QBlock.vue';
 import QBlock2 from '/components/myQ/QBlock2/QBlock2.vue';
 import axios from 'axios';
+import store from '/store/index.js'
 export default {
   components: {
     TabBar,
@@ -60,10 +64,9 @@ export default {
 		text2:"我填写的",
 		isEnd:true,
 		name:'尘',
-		//要传的值
-		blocks:[],
-		//要传的值
-		blocks1: [],
+		//下面两个要传
+		blocks:[],//我填写的
+		blocks1: [],//我创建的
 		isSave:false
   	}
   },
@@ -111,6 +114,7 @@ export default {
 		  },
       swiperChange(e) {
         this.currentTab = e.detail.current;
+		this.inputValue=''
       },
 	  handleTabChange(index) {
 		this.currentTab = index;
@@ -118,7 +122,58 @@ export default {
 	  test(e){
 		  console.log(e.target)
 	  },
+	  getData(index){
+		  // console.log(index);
+		  // console.log(this.blocks1)
+		  axios.defaults.headers.common['token'] = localStorage.getItem('token');
+		  axios.get(/*'https://metaq.scutbot.icu/login'*/
+		  			// 'http://localhost:8080/check',
+					'/static/test2.json',
+					{
+						id:this.blocks1[index].id
+					})
+		      .then(response => {
+					var temp=response.data.data.blocks1[index]
+					// console.log(temp)
+					temp.title=this.blocks1[index].title
+					this.$store.commit('setQuestionNire',temp);
+					// console.log(this.$store.state.questionNire)
+					uni.navigateTo({
+						url: '/pages/editQuestionnire/editQuestionnire?flag='+1
+					})
+		      })
+		      .catch(error => {
+		        console.log(error);
+		      });
+	  }
     }
+
+
+    },
+	computed: {
+		myCreateds() {
+		  if(this.inputValue&&this.currentTab===0)
+		  {
+			return this.blocks1.filter(post =>
+						post.title.includes(this.inputValue)
+						);  
+		  }
+		  else{
+			  return this.blocks1
+		  }
+		},
+		myFilleds(){
+			if(this.inputValue&&this.currentTab==1)
+			{
+				return this.blocks.filter(post =>
+							post.title.includes(this.inputValue)||post.name.includes(this.inputValue)
+							);  
+			}
+			else{
+				return this.blocks
+			}
+		}
+	},
 
 };
 </script>

@@ -3,7 +3,7 @@
 		<view class="box">
 			<view class="inbox">
 				<view class="title">
-					{{num}}.{{content.title}}
+					{{num}}.{{content.question}}
 				</view>
 				<view class="input-div" id='inputDiv'>
 					<textarea name="" id="textArea" cols="30" rows="10" 
@@ -36,7 +36,7 @@
 			content:{
 				type:Object,
 				default:{
-					title:"3333",
+					question:"3333",
 					type:'blank',
 					choice:['1','2','3','4'],
 				}
@@ -72,7 +72,9 @@
 	background: rgba(255, 255, 255, 0.8);
 	box-shadow: 2px 2px 20px 0px rgba(136, 63, 143, 0.15);
 }
-
+.inbox{
+	// border: 1px dashed green;
+}
 .title{
 	margin:10px 0px 5px 20px;
 	font-size: 20px;

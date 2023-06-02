@@ -2,14 +2,16 @@ import { createStore } from 'vuex';
   
 const store = createStore({  
   state: {  
-    now_operate: -1,
+    now_operate: 100,
 	IsJump:false,
 	questionNire:{
-		nireTitle:'',
-		nireIntroduction:'',
-		all_content:[]
+		title:'',
+		description:'',
+		content:[],
 	},
 	targetView:null,
+	
+	
   }, 
   mutations: {  
 		setNowOperate(state, id){
@@ -18,8 +20,8 @@ const store = createStore({
 		setIsJump(state){
 			state.IsJump=!state.IsJump;
 		},
-		set_all_content(state,all_content){
-			state.questionNire.all_content=all_content;
+		setContent(state,content){
+			state.questionNire.content=content;
 		},
 		setTargetView(state,targetView){
 			state.targetView=targetView;
@@ -27,6 +29,9 @@ const store = createStore({
 		setEditHeight(state,editHeight){
 			state.editHeight=editHeight;
 		},
+		setQuestionNire(state,questionNire){
+			state.questionNire=questionNire;
+		}
   },
 //   actions: {  
 //     incrementAsync({ commit }) {  
