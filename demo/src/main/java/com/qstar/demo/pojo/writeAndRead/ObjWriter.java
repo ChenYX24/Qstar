@@ -21,13 +21,13 @@ public class ObjWriter {//把对象储存，需要储存的应该就User对象
     @Value("${store.userRoad}")
     private String userRoad;
 
-    public void write(User user,String subroad) throws IOException {//用邮箱作为文件名
-        Writer w=new BufferedWriter(new FileWriter(base+"/"+subroad+"/"+user.get_email()+".txt"));
+    public void writeUser(User user) throws IOException {//用邮箱作为文件名
+        Writer w=new BufferedWriter(new FileWriter(base+"/"+userRoad+"/"+user.get_email()+".txt"));
         w.write(JSON.toJSONString(user));
         w.close();
     }
-    public void write(Questionaire questionaire,int id) throws IOException {
-        Writer w=new BufferedWriter(new FileWriter(base+"/"+questionaireRoad+"/"+id+".txt"));
+    public void writeQuestionaire(Questionaire questionaire) throws IOException {
+        Writer w=new BufferedWriter(new FileWriter(base+"/"+questionaireRoad+"/"+questionaire.getInfo().getId()+".txt"));
         w.write(JSON.toJSONString(questionaire));
         w.close();
     }

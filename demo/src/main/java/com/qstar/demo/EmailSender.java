@@ -52,7 +52,7 @@ public class EmailSender {
         // 设置发件人，收件人和主题
         message.setFrom(new InternetAddress(SenderName));
         message.setRecipient(Message.RecipientType.TO, new InternetAddress(Email));
-        message.setSubject("MetaQ注册验证码");
+        message.setSubject("MetaQ验证码");
         // 设置邮件正文
         message.setText("以下是您的验证码:" + codeString + "。请勿告诉他人。若非本人操作，请忽略本邮件。");
         // 发送邮件

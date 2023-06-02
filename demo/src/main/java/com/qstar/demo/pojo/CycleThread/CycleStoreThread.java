@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-@Component("thread")
+/*@Component("thread")
 public class CycleStoreThread extends Thread{//放在监听器的初始方法会好点
     @Autowired
     private Link link;
@@ -32,4 +32,4 @@ public class CycleStoreThread extends Thread{//放在监听器的初始方法会
     public void stopThread(){
         start=false;
     }
-}
+}*/

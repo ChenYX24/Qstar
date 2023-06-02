@@ -11,13 +11,13 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
-@WebListener
+/*@WebListener
 public class InitializingListener implements ServletContextListener, ApplicationContextAware {//监听器，用于初始化时调用线程的循环
     private ApplicationContext context;
     private CycleStoreThread cycle;
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.context=applicationContext;
+        //this.context=applicationContext;
     }
 
     @Override
@@ -32,4 +32,4 @@ public class InitializingListener implements ServletContextListener, Application
     public void contextDestroyed(ServletContextEvent sce) {
        cycle.stopThread();
     }
-}
+}*/

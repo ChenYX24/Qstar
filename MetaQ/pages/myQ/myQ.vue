@@ -5,7 +5,7 @@
 		</view>
 		<view class="inputBox">
 			<image src="/static/inputSearch/search.png" mode="aspectFill"></image>
-			<input type="text" placeholder="输入关键词" class="input" placeholder-style="color: rgba(187, 187, 199, 1);;" v-model="inputValue" @click="test"> <!--v-model是双向绑定，将文本框的值与inputvalue绑定-->
+			<input type="text" placeholder="输入关键词" class="input" placeholder-style="color: rgba(187, 187, 199, 1);;" v-model="inputValue"> <!--v-model是双向绑定，将文本框的值与inputvalue绑定-->
 		</view>
 		<view class="container">
 			<tab-swiper class="tabSwiper" @tab-change="handleTabChange" :current-tab="currentTab" :text1="text1" :text2="text2"/>
@@ -25,7 +25,7 @@
 		      </swiper-item>
 		      <swiper-item>
 				<view class="page2">
-				  <QBlock2 v-for="item in blocks" :key="item.id" :title="item.title" :isEnd="item.isEnd" :name="item.name"></QBlock2>
+				  <QBlock2 v-for="item in myFilleds" :key="item.id" :title="item.title" :isEnd="item.commited" :name="item.name"></QBlock2>
 				</view>
 		      </swiper-item>
 		    </swiper>
@@ -80,6 +80,7 @@ export default {
 			this.isSave=!this.isSave
 		},
 		async fetchData() {
+			//获取已经创建的问卷
 			axios.defaults.headers.common['token'] = localStorage.getItem('token');
 			axios.get(/*'https://metaq.scutbot.icu/login'*/
 						'http://localhost:8080/getCreated')
@@ -92,12 +93,13 @@ export default {
 			      console.log(error);
 			    });
 			try {  
-			  const response = await axios.get('/static/test2.json'); // TODO
-			  this.blocks = response.data.data.blocks;
-			  this.blocks1=response.data.data.blocks1
+			  // const response = await axios.get('/static/test2.json'); // TODO
+			  // this.blocks = response.data.data.blocks;
+			  // this.blocks1=response.data.data.blocks1
 			} catch (error) {  
 			  console.error('Error fetching data:', error);  
 			}
+			//获取已经填写的问卷
 			axios.get(/*'https://metaq.scutbot.icu/login'*/
 						'http://localhost:8080/fillRecord')
 			    .then(response => {
@@ -111,6 +113,7 @@ export default {
 		  },
       swiperChange(e) {
         this.currentTab = e.detail.current;
+		this.inputValue=''
       },
 	  handleTabChange(index) {
 		this.currentTab = index;
@@ -143,6 +146,33 @@ export default {
 		      });
 	  }
     }
+
+
+    },
+	computed: {
+		myCreateds() {
+		  if(this.inputValue&&this.currentTab===0)
+		  {
+			return this.blocks1.filter(post =>
+						post.title.includes(this.inputValue)
+						);  
+		  }
+		  else{
+			  return this.blocks1
+		  }
+		},
+		myFilleds(){
+			if(this.inputValue&&this.currentTab==1)
+			{
+				return this.blocks.filter(post =>
+							post.title.includes(this.inputValue)||post.name.includes(this.inputValue)
+							);  
+			}
+			else{
+				return this.blocks
+			}
+		}
+	},
 
 };
 </script>
