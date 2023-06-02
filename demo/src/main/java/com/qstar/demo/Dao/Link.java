@@ -40,7 +40,7 @@ public class Link {
     private int questionairesMax;
     @Value("${storeMax.userMapMax}")
     private int userMapMax;*/
-    private Environment env;
+    //private Environment env;
 
     @Autowired
     private ObjReader reader;
@@ -53,19 +53,20 @@ public class Link {
     @Value("${store.IDFile}")
     private String IDFile;  //存放ID的文件，放在base目录下
     //暂时不用
-    private Writer IDWriter=new BufferedWriter(new FileWriter(base+"/"+IDFile));
-    private BufferedReader IDReader=new BufferedReader((new FileReader(base+"/"+IDFile)));
+    // private Writer IDWriter=new BufferedWriter(new FileWriter(base+"/"+IDFile));
+    // private BufferedReader IDReader=new BufferedReader((new FileReader(base+"/"+IDFile)));
 
     public Link() throws IOException {
+        map=new HashMap<String, User>();
         User user=new User();//用于测试
         map.put("Test",user);
         /*IDProperties=PropertiesLoaderUtils.loadAllProperties("IDProperty.properties");*/
          /*Integer.parseInt(IDProperties.getProperty(IDKey));*/
-        if(new File(base+"/"+IDFile).exists()) {    //测试用
-            idDistribute = Integer.parseInt(IDReader.readLine());     //读取
-        }else{
-            idDistribute=0;
-        }
+        // if(new File(base+"/"+IDFile).exists()) {    //测试用
+        //     idDistribute = Integer.parseInt(IDReader.readLine());     //读取
+        // }else{
+        //     idDistribute=0;
+        // }
     }
     public boolean verifyToken(String token){
         return map.containsKey(token);
@@ -76,13 +77,13 @@ public class Link {
     public int create(String title, String description/*,String filename*/,List<Question> questions,String token,boolean commit) throws IOException {
             User user=map.get(token);
             user.addQuestionaire(idDistribute);
-            Questionaire questionaire=new Questionaire(title,description,questions,idDistribute,user.get_email());
+            Questionaire questionaire=new Questionaire(title,description,questions,idDistribute,user.getEmail());
             questionaires.put(idDistribute,questionaire);
             writer.writeQuestionaire(questionaire);    //创建时顺便写入
             writer.writeUser(user);
             /*public Questionaire(String title,String description,String attachFile,List<Question> questions,int id,String creatorEmail){*/
             idDistribute++;
-            IDWriter.write(idDistribute);       //同步写入
+            //IDWriter.write(idDistribute);       //同步写入
             if(commit){ //当需要提交时
                     questionaire.commit();
             }
@@ -98,7 +99,7 @@ public class Link {
         if(user.hasQuestionaireID(id)) {//如果id正确中
             if(checkQuestionaire(id)) {
                 Questionaire questionaire = questionaires.get(id);
-                if (questionaire != null&&questionaire.allowCheck(user.get_email())) {//是否允许查看
+                if (questionaire != null&&questionaire.allowCheck(user.getEmail())) {//是否允许查看
                     return new ResultForCheck(questionaire.getInfo().getTitle(),questionaire.getDescription(), questionaire.getQuestions(), questionaire.getAttachFile());
                 }
             }
@@ -112,9 +113,9 @@ public class Link {
                 Questionaire questionaire = questionaires.get(id);   //在用户map读入时，问卷map同步读入
                 if (questionaire != null) {
                     /*deleteFile(questionaire.getAttachFile()); //删除原有的文件，因为已经被覆盖了*/
-                    boolean suc= questionaire.save(title,description, list,user.get_email());
+                    boolean suc= questionaire.save(title,description, list,user.getEmail());
                     if(commit){ //当需要提交时
-                        if (questionaire.allowEdit(user.get_email())) {//允许编辑的才允许查看
+                        if (questionaire.allowEdit(user.getEmail())) {//允许编辑的才允许查看
                             if(questionaire.commit()){  //
                                 writer.writeQuestionaire(questionaire);     //提交也会修改这个问卷对象，需要写入
                                 return Result.success();
@@ -221,7 +222,7 @@ public class Link {
             if (filled != null) {
                 Result result = questionaire.upload(filled.getData());
                 if(questionaire.isRecordFillerName()){//是否要记录名字
-                    questionaire.uploadUsername(user.get_name());
+                    questionaire.uploadUsername(user.getName());
                     writer.writeQuestionaire(questionaire);
                 }
                 filled.setCommitted(result.getCode()==1);   //根据返回的状态码检验是否成功,也许filledQuestionaire也需要单独拉出来
@@ -235,7 +236,7 @@ public class Link {
         if(user.hasQuestionaireID(id)) {
             if(checkQuestionaire(id)) {
                 Questionaire questionaire=questionaires.get(id);
-                if(questionaire.allowCheck(user.get_email())) {//只有允许查看才能看数据
+                if(questionaire.allowCheck(user.getEmail())) {//只有允许查看才能看数据
                     return Result.success(questionaire.getStatisticsResult(index));
                 }
                 return Result.fail("没有查看权限");
@@ -344,7 +345,7 @@ public class Link {
         if(checkQuestionaire(id)){
             User user=map.get(token);
             Questionaire questionaire=questionaires.get(id);
-            if(questionaire.allowEdit(user.get_email())) {
+            if(questionaire.allowEdit(user.getEmail())) {
                 questionaire.setRecordFillerName(recordName);
                 questionaire.setMultiCommit(multiCommit);
                 questionaire.setBegin(begin);
@@ -361,7 +362,7 @@ public class Link {
         if(checkQuestionaire(id)){
             User user=map.get(token);
             Questionaire questionaire=questionaires.get(id);
-            if(questionaire.allowCheck(user.get_email())){      //只有允许查看才能看配置信息，好像又有点不合理
+            if(questionaire.allowCheck(user.getEmail())){      //只有允许查看才能看配置信息，好像又有点不合理
                 return Result.success(questionaire.settingInstance());
             }
             return Result.fail("不允许查看");

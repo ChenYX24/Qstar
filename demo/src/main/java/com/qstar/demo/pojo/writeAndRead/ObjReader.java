@@ -21,6 +21,7 @@ public class ObjReader {//读取user对象，根据用户的名字读取，用�
     private String userRoad;
     public Object read(String name) throws IOException {
         File file=new File(base+"/"+name+".txt");   //储存user对象的文件是txt格式的
+        System.out.println("读取路径："+base+"/"+name+".txt");
         if(file.exists()) {//先检验文件是否存在，防止报错
             Reader r = new BufferedReader(new FileReader(file));
             String objstr = "";
@@ -30,7 +31,7 @@ public class ObjReader {//读取user对象，根据用户的名字读取，用�
                 objstr += new String(c, 0, len);
             }
             r.close();
-            return (User) JSON.parseObject(objstr, User.class);
+            return  JSON.parseObject(objstr,User.class);
         }else{
             return null;
         }
@@ -38,10 +39,10 @@ public class ObjReader {//读取user对象，根据用户的名字读取，用�
     public Object read(String father,String name) throws IOException {
         return this.read(father+"/"+name);
     }
-    public Object readQuestionaire(int id) throws IOException {
-        return read(questionaireRoad,Integer.toString(id));
+    public Questionaire readQuestionaire(int id) throws IOException {
+        return (Questionaire)read(questionaireRoad,Integer.toString(id));
     }
-    public Object readUser(String email) throws IOException {
-        return read(userRoad,email);
+    public User readUser(String email) throws IOException {
+        return (User)read(userRoad,email);
     }
 }

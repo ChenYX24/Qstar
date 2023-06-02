@@ -79,6 +79,7 @@ export default {
 		async fetchData() {
 			//获取已经创建的问卷
 			axios.defaults.headers.common['token'] = localStorage.getItem('token');
+			console.log("token",localStorage.getItem('token'));
 			axios.get(/*'https://metaq.scutbot.icu/login'*/
 						'http://localhost:8080/getCreated')
 			    .then(response => {
