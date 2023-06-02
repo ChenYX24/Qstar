@@ -24,6 +24,8 @@ public class Controller {
     private Handle handle;
     @Autowired
     Link link;
+    @Autowired
+    UserService userService;
     @RequestMapping("/hello")
     public String handle01(){
         return "helloworld!";
@@ -33,6 +35,7 @@ public class Controller {
     public Result getCreated(@RequestHeader("token") String token){
         System.out.println("要获取问卷的token:"+token);
         List<QuestionaireInfo> infos=handle.getCreated(token);
+        System.out.println("success");
         return Result.success(infos);
     }
     //创建问卷
@@ -126,25 +129,43 @@ public class Controller {
 
     @PostMapping("/setting")
     public Result setting(@RequestBody SettingReceive receive,@RequestHeader("token") String token) throws IOException {//设置问卷的配置信息
-        return handle.setting(receive.isRecordName(),receive.isMultiCommit(),receive.getBegin(),receive.getEnd(),receive.getId(),token);
+        Result result= handle.setting(receive.isRecordName(),receive.isMultiCommit(),receive.getBegin(),receive.getEnd(),receive.getId(),token);
+        if(result.getCode()==1){//如果前面的没问题，不需要直接返回
+            switch (receive.getPeople().getAuthority()){
+                case 0:
+                    result=authorizeManage(receive.getId(),receive.getPeople().getName(),receive.getPeople().getEmail(),receive.getPeople().getPhoto(),token);
+                    break;
+                case 1:
+                    result=authorizeEdit(receive.getId(),receive.getPeople().getName(),receive.getPeople().getEmail(),receive.getPeople().getPhoto(),token);
+                    break;
+                case 2:
+                    result=authorizeCheck(receive.getId(),receive.getPeople().getName(),receive.getPeople().getEmail(),receive.getPeople().getPhoto(),token);
+                    break;
+            }
+        }
+        return result;
     }
     @GetMapping("/getSetting")
     public Result getSetting(Integer id,@RequestHeader("token") String token) throws IOException {//获取问卷配置信息
         return handle.getSetting(id,token);
     }
     @GetMapping("/getPage")
-    public Result getPage(String email,Integer id,@RequestHeader("token")String token){//这是给其他用户权限的前置操作，用于确认是否是自己想要邀请的用户
+    public Result getPage(@RequestBody String info){//这是给其他用户权限的前置操作，用于确认是否是自己想要邀请的用户
         //到时候直接调用cjd的接口
         //可能会邮箱获取失败，到时候返回fail即可
-        return null;
+        Userinfo userinfo = userService.getUserinfo(info);
+        return Result.success(userinfo);
+        //return null;
     }
-    @PostMapping("/authorizeCheck")
-    public Result authorizeCheck(Integer id,String email,@RequestHeader("token") String token) throws IOException {//授权用户查看问卷的权限
-        return handle.authorizeCheck(id,email,token);                         //token交给拦截器，这里不需要
+    public Result authorizeManage(Integer id,String name,String email,String photo,String token) throws IOException {//授权用户查看问卷的权限
+        return handle.authorizeManage(id,name,email,photo,token);                         //token交给拦截器，这里不需要
     }
-    @PostMapping("/authorizeEdit")
-    public Result authorizeEdit(Integer id,String email,@RequestHeader("token") String token) throws IOException {//授权用户编辑的权限
-        return handle.authorizeEdit(id,email,token);
+    public Result authorizeCheck(Integer id,String name,String email,String photo,String token) throws IOException {//授权用户查看问卷的权限
+        return handle.authorizeCheck(id,name,email,photo,token);                         //token交给拦截器，这里不需要
+    }
+
+    public Result authorizeEdit(Integer id,String name,String email,String photo,String token) throws IOException {//授权用户编辑的权限
+        return handle.authorizeEdit(id,name,email,photo,token);
     }
     @GetMapping("/getAllowCheck")
     public Result getAllowCheck(@RequestHeader("token") String token) throws IOException {//获取允许查看的列表

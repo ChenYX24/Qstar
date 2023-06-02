@@ -3,7 +3,7 @@
 		<view class="box">
 			<view class="inbox" @click="showOperation">
 				<view class="title">
-					{{num}}.{{content.title}}
+					{{num}}.{{content.question}}
 				</view>
 				<view class="input-div">
 					
@@ -43,7 +43,7 @@
 			content:{
 				type:Object,
 				default:{
-					title:"3333",
+					question:"3333",
 					type:'blank',
 					choice:['1','2','3','4'],
 				}

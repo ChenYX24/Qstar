@@ -9,7 +9,7 @@
 							  id="title"
 							  placeholder="请输入问卷标题"
 							  @linechange="test"
-							  v-model="nireTitle"
+							  v-model="questionNire.title"
 							  ></textarea>
 				</view>
 				<view class="textarea_border">
@@ -18,34 +18,34 @@
 							  id="descripition"
 							  placeholder="请输入问卷简介"
 							  @linechange="test"
-							  v-model="nireIntroduction"
+							  v-model="questionNire.description"
 							  ></textarea>
 				</view>
 				
 			</view>
 			
-			<view class="" id='question-all' v-for="(item,index) in all_content" :key=index>
+			<view class="" id='question-all' v-for="(item,index) in questionNire.content" :key=index>
 				<!-- 单选组件 -->
-				<view class="" v-if="item.type==0">
-					<danxuanDisplay :content="all_content[index]"
+				<view class="" v-if="item.type=='SINGLE'">
+					<danxuanDisplay :content="questionNire.content[index]"
 					:num="(index+1).toString()"
 					></danxuanDisplay>
 				</view>
 				<!-- 多选 -->
-				<view class="" v-if="item.type==1">
-					<danxuanDisplay :content="all_content[index]"
+				<view class="" v-if="item.type=='MULTIPLE'">
+					<danxuanDisplay :content="questionNire.content[index]"
 					:num="(index+1).toString()"
 					></danxuanDisplay>
 				</view>
 				<!-- 填空 -->
-				<view class="" v-else-if="item.type==2">
-					<tiankongDisplay :content="all_content[index]"
+				<view class="" v-else-if="item.type=='BLANK'">
+					<tiankongDisplay :content="questionNire.content[index]"
 					:num="(index+1).toString()"
 					></tiankongDisplay>
 				</view>
 				<!-- 滑动条 -->
-				<view class="" v-else-if="item.type==3">
-					<sliderDisplay :content="all_content[index]"
+				<view class="" v-else-if="item.type=='SLIDE'">
+					<sliderDisplay :content="questionNire.content[index]"
 					:num="(index+1).toString()"
 					></sliderDisplay>
 				</view>
@@ -58,7 +58,7 @@
 			</view>
 
 		</view>
-		<tab-bar :activeTab="tab" :Type="1"></tab-bar>
+		<tab-bar :activeTab="tab" :Type="1" :questionNireProps='questionNire'></tab-bar>
 		
 		<!-- 下面是点击加号弹出选择题目 -->
 		<view class="question" id='question_page'   :style="{top: question_page_show ? '0' : '100%'}">
@@ -74,21 +74,21 @@
 			  </view>
 		    
 		    <view class="square">
-		      <view class="square-part" @click="generateQuestion" id="0">
+		      <view class="square-part" @click="generateQuestion" id="SINGLE">
 				  <image src="/static/editQuestion/danxuan.png" mode="aspectFit"></image>
 				  <!-- <view class="square-part-word">单选题</view> -->
 				  <p>单选题</p>
 			  </view>
-		      <view class="square-part" @click="generateQuestion" id="1">
+		      <view class="square-part" @click="generateQuestion" id="MULTIPLE">
 				  <image src="/static/editQuestion/duoxuan.png" mode="aspectFit"></image>
 				  <!-- <view class="square-part-word">单选题</view> -->
 				  <p>多选题</p>
 			  </view>
-		      <view class="square-part" @click="generateQuestion" id="2">
+		      <view class="square-part" @click="generateQuestion" id="BLANK">
 				  <image src="/static/editQuestion/tiankong.png" mode="aspectFit"></image>
 				  <p>填空题</p>
 			  </view>
-		      <view class="square-part" @click="generateQuestion" id="3">
+		      <view class="square-part" @click="generateQuestion" id="SLIDE">
 				  <image src="/static/editQuestion/huadongtiao.png" mode="aspectFit"></image>
 				  <p>滑动条</p>
 			  </view>
@@ -138,26 +138,27 @@
 			danxuanDisplay,
 			tiankongDisplay,
 			sliderDisplay
-			// Blank
 		},
 		onLoad: function(options) {
 			this.tab = options.tab
 			if(options.content){
-				//重新获取all_content
-				this.all_content=this.$store.state.questionNire.all_content
+				//重新获取content
+				this.questionNire.content=this.$store.state.questionNire.content
 				const temp=JSON.parse(options.content);
-				//如果all_content的长度比当前正在操作的选择的序号大
-				// console.log(this.all_content.length,this.$store.state.now_operate)
-				if(this.all_content.length>this.$store.state.now_operate){
-					this.all_content[this.$store.state.now_operate]=temp;
-					this.isAdd=this.$store.state.now_operate;
+				//如果content的长度比当前正在操作的选择的序号大
+				// console.log(this.questionNire.content.length,this.$store.state.now_operate)
+				if(this.questionNire.content.length>this.$store.state.now_operate){
+					this.questionNire.content[this.$store.state.now_operate]=temp;
 				}
 				else{
-					this.all_content.push(temp);
-					this.isAdd=-1;
+					this.questionNire.content.push(temp);
 				}
 				//重置这个值
 				this.$store.commit('setNowOperate',-1);
+			}
+			else if(options.flag){
+				//重新获取content
+				this.questionNire.content=this.$store.state.questionNire.content
 			}
 		},
 		mounted(){
@@ -166,35 +167,44 @@
 		data() {
 			return {
 				tab: '',
-				nireTitle:'',
-				nireIntroduction:'',
-				all_content:[
-						{
-							title:"标题1",
-							type:'0',
-							choice:['a','b','c'],
-						},
-						{
-							title:"填空题",
-							type:2,
-							choice:[]
-						},
-						{
-							title:"滑动条",
-							type:3,
-							choice:[10,'非常差',1000,'非常好',0],
-						},
-						{
-							title:"标题2",
-							type:'1',
-							choice:['m','n','b'],
-					    },
-						{
-							title:"标题2",
-							type:'0',
-							choice:['m','n','b'],
-						}
-],
+				questionNire:{
+					title:'早八大学生会不会饿死',
+					description:'大学士会饿死',
+					content:[
+							{
+								question:"标题1",
+								type:'SINGLE',
+								choice:['a','b','c'],
+								setting:[]
+							},
+							{
+								question:"填空题",
+								type:'BLANK',
+								choice:[],
+								setting:[]
+							},
+							{
+								question:"滑动条",
+								type:'SLIDE',
+								choice:[10,'非常差',1000,'非常好',0],
+								setting:[]
+							},
+							{
+								question:"标题2",
+								type:'MULTIPLE',
+								choice:['m','n','b'],
+								setting:[]
+						    },
+							{
+								question:"标题2",
+								type:'SINGLE',
+								choice:['m','n','b'],
+								setting:[]
+							}
+							]
+				},
+				
+				
 				//下面是决定两个页面互相切换的变量
 				questionnire_page_show:0,
 				question_page_show:0,
@@ -228,24 +238,26 @@
 				this.creat(e.currentTarget.id);
 			},
 			creat(type_num){
-				var length=this.all_content.length
+				var length=this.questionNire.content.length
 				var content_temp={
 					title:'',
 					type:type_num,
-					choice:[]
+					choice:[],
+					setting:[]
 				}
 				//每次跳转前都要把信息转存
-				this.$store.commit('set_all_content',this.all_content);
+				this.$store.commit('setQuestionNire',this.questionNire);
+				this.$store.commit('setNowOperate',length);
 				uni.navigateTo({
 					url: '/pages/try/try?content='+JSON.stringify(content_temp)+'&length='+length  
 				})
 			},
 			toEdit(){
-				// console.log(this.all_content[this.$store.state.now_operate])
+				// console.log(this.questionNire.content[this.$store.state.now_operate])
 				//每次跳转前都要把信息转存
-				this.$store.commit('set_all_content',this.all_content);
+				this.$store.commit('setQuestionNire',this.questionNire);
 				uni.navigateTo({
-					url: '/pages/try/try?content='+JSON.stringify(this.all_content[this.$store.state.now_operate])
+					url: '/pages/try/try?content='+JSON.stringify(this.questionNire.content[this.$store.state.now_operate])
 							
 				})
 			},

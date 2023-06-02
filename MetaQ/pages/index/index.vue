@@ -44,7 +44,7 @@
 				      .then(response => {
 				        var response = response.data;
 						console.log(response);
-				  	  if(response == " ")
+				  	  if(response == "fail")
 				  	  {
 				  		  uni.showToast({
 				  		    title: '登录失败',  

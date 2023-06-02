@@ -3,7 +3,7 @@
 		<view class="box">
 			<view class="inbox">
 				<view class="title">
-					{{num}}.{{content.title}}<text>[多选题]</text>
+					{{num}}.{{content.question}}<text>[多选题]</text>
 				</view>
 					<checkbox-group name="" @change="getValue" class="checkboxGroup">
 						<view class="duoxuan-checkbox" v-for="(item,index) in content.choice" :key="index" :class="{'active':answer.includes(index.toString())&&answer!=''}">
@@ -22,6 +22,7 @@
 
 <script>
 	export default {
+		name:'duoxuanAnswer',
 		data() {
 			return {
 				answer:''
@@ -39,7 +40,7 @@
 			content:{
 				type:Object,
 				default:{
-					title:"5555",
+					question:"5555",
 					type:'blank',
 					choice:['1','2','3','4'],
 				}
@@ -49,7 +50,7 @@
 		methods:{
 			getValue(e){
 				this.answer=e.detail.value
-				console.log(e.detail.value)
+				// console.log(e.detail.value)
 			}
 		}
 	}

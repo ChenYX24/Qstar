@@ -1,5 +1,6 @@
 package com.qstar.demo.pojo;
 
+import com.qstar.demo.pojo.Receiver.AuthorityReceive;
 import com.qstar.demo.pojo.Receiver.QuestionMiniUnit;
 import com.qstar.demo.pojo.Result.Result;
 import com.qstar.demo.pojo.Result.ResultForSetting;
@@ -20,12 +21,12 @@ public class Questionaire {//创建的问卷
     private List<Question> questions;   //问题的集合
     private List<Statistics> statistics;    //统计数据
     private String creatorEmail;                 //创建者的邮箱
-    private Set<String>  authorizeEditID=new HashSet<>();    //被授权允许编辑的用户的邮箱
-    private Set<String> authorizeCheckID=new HashSet<>();     //被授权允许查看的用户的邮箱
+    private Set<UserProfile> authorizeManageID=new HashSet<>();     //被授权允许管理的用户
+    private Set<UserProfile>  authorizeEditID=new HashSet<>();    //被授权允许编辑的用户的邮箱
+    private Set<UserProfile> authorizeCheckID=new HashSet<>();     //被授权允许查看的用户的邮箱
     private boolean multiCommit;            //是否允许多次提交
     private boolean recordFillerName;          //是否记录名字
     private Set<String> fillerNames=new HashSet<>();            //填写的用户名
-    private boolean modified;               //是否被修改
     private Date begin;                 //开始时间
     private Date end;                   //结束时间
 
@@ -41,7 +42,6 @@ public class Questionaire {//创建的问卷
         //this.attachFile=attachFile;
         statistics=new ArrayList<>(questions.size());
         this.creatorEmail=creatorEmail;
-        this.modified=true;     //刚开始初始化时需要主动被写入
     }
     public Questionaire(int id,String title,int filled,boolean commit){
         info = new QuestionaireInfo(id,title,filled,commit);
@@ -57,7 +57,6 @@ public class Questionaire {//创建的问卷
         this.questions=questions;
         this.description=description;
         /*this.attachFile=attachFile;*/
-        this.modified=true;
         if(attachFile!=null){   //可能在保存中把上个存档的附件删除了，所以从true变false是有可能的
             haveAttach=false;
         }else{
@@ -85,7 +84,6 @@ public class Questionaire {//创建的问卷
                     statistics.add(new Statistics(question.getType(), 1));
                 }
             }
-            this.modified=true;
             info.commit();
             return true;
         }else{
@@ -103,7 +101,6 @@ public class Questionaire {//创建的问卷
                     for (int i = 0; i < questions.size(); i++) {
                         statistics.get(i).add(data[i]);
                     }
-                    this.modified = true;
                     return Result.success();
                 }
             }
@@ -138,14 +135,17 @@ public class Questionaire {//创建的问卷
         return null;
     }
 
-    public void addAuthorizeEditEmail(String email){
-        authorizeEditID.add(email);
+    public void addAuthorizeEditEmail(String name,String email,String photo){
+        authorizeEditID.add(new UserProfile(name,email,photo));
     }
-    public void addAuthorizeCheckEmail(String email){
-        authorizeCheckID.add(email);
+    public void addAuthorizeCheckEmail(String name,String email,String photo){
+        authorizeCheckID.add(new UserProfile(name,email,photo));
+    }
+    public void addAuthorizeManageEmail(String name,String email,String photo){
+        authorizeCheckID.add(new UserProfile(name,email,photo));
     }
     public boolean allowEdit(String email){
-        return authorizeEditID.contains(email)||email.equals(creatorEmail);
+        return authorizeEditID.contains(email)||email.equals(creatorEmail)||authorizeManageID.contains(email);
     }
     public boolean allowCheck(String email){
         if(allowEdit(email)){
@@ -154,8 +154,21 @@ public class Questionaire {//创建的问卷
         return authorizeCheckID.contains(email);        //前面的判断可以编辑已经判断过了
     }
     public ResultForSetting settingInstance(){
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");       //这个如果直接返回date会有时区的问题，所以最好返回字符串
-        return new ResultForSetting(recordFillerName,multiCommit,sdf.format(begin),sdf.format(end));
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm");       //这个如果直接返回date会有时区的问题，所以最好返回字符串
+        return new ResultForSetting(sdf.format(begin),sdf.format(end),multiCommit,recordFillerName,returnAuthorityReceive());
+    }
+    public List<AuthorityReceive> returnAuthorityReceive(){
+        List<AuthorityReceive> authorityReceives=new ArrayList<>();
+        for(UserProfile profile:authorizeManageID){
+            authorityReceives.add(new AuthorityReceive(profile.getName(),profile.getEmail(),profile.getPhoto(),0));
+        }
+        for(UserProfile profile:authorizeEditID){
+            authorityReceives.add(new AuthorityReceive(profile.getName(),profile.getEmail(),profile.getPhoto(),1));
+        }
+        for(UserProfile profile:authorizeCheckID){
+            authorityReceives.add(new AuthorityReceive(profile.getName(),profile.getEmail(),profile.getPhoto(),2));
+        }
+        return authorityReceives;
     }
     public void partlySave(String title, String description, QuestionMiniUnit[] unit){//保留修改
         this.info.setTitle(title);

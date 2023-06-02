@@ -80,7 +80,7 @@ import axios from 'axios';
 				})
 				.then(response => {
 					if(response.data == true){
-						axios.post('http://localhost:8080/changepasswd', {
+						axios.post('http://localhost:8080/findpasswd', {
 							email:    this.formData.email,
 							password: this.formData.password
 						})

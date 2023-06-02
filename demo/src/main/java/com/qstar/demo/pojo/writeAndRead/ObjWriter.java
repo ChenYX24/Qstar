@@ -22,7 +22,7 @@ public class ObjWriter {//把对象储存，需要储存的应该就User对象
     private String userRoad;
 
     public void writeUser(User user) throws IOException {//用邮箱作为文件名
-        Writer w=new BufferedWriter(new FileWriter(base+"/"+userRoad+"/"+user.get_email()+".txt"));
+        Writer w=new BufferedWriter(new FileWriter(base+"/"+userRoad+"/"+user.getEmail()+".txt"));
         w.write(JSON.toJSONString(user));
         w.close();
     }

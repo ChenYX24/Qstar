@@ -21,7 +21,7 @@
 							  ></textarea>
 				</view>		
 			</view>
-			<view class="question-all" v-for="(item,index) in all_content" :key="index">
+			<view class="question-all" v-for="(item,index) in content" :key="index">
 				<component
 				ref="questionAnswerRef"
 				:num="(index+1).toString()"
@@ -75,27 +75,38 @@
 				'tiankongAnswer','huadongtiaoAnswer'],
 				title:'关于c10居住学生学校住宿感受的的调研',
 				description:'请c10的同学填写，谢谢配合！',
-				all_content:[
+				content:[
 						{
-							title:"标题1",
-							type:'0',
+							question:"标题1",
+							type:'SINGLE',
 							choice:['a','b','c'],
+							setting:[]
 						},
 						{
-							title:"标题2",
-							type:'1',
+							question:"填空题",
+							type:'BLANK',
+							choice:[],
+							setting:[]
+						},
+						{
+							question:"滑动条",
+							type:'SLIDE',
+							choice:[10,'非常差',1000,'非常好',0],
+							setting:[]
+						},
+						{
+							question:"标题2",
+							type:'MULTIPLE',
 							choice:['m','n','b'],
+							setting:[]
 					    },
 						{
-							title:"标题2",
-							type:'2',
+							question:"标题2",
+							type:'SINGLE',
 							choice:['m','n','b'],
-						},
-						{
-							title:"滑动条",
-							type:'3',
-							choice:[10,'非常差',1000,'非常好',0],
-						}],
+							setting:[]
+						}
+						],
 			}
 		},
 		methods:{
@@ -104,12 +115,29 @@
 					node.style.height=`${e.detail.height}px`
 			},
 			chooseComponent(index){
-				var temp=parseInt(this.all_content[index].type);
-				return this.componentName[temp];
+				switch(this.content[index].type){
+					case 'SINGLE':
+						return this.componentName[0];
+					case 'MULTIPLE':
+						return this.componentName[1];
+					case 'BLANK':
+						return this.componentName[2];
+					case 'SLIDE':
+						return this.componentName[3];
+				};
+				
+				
+				// var temp=parseInt(this.all_content[index].type);
+				// return this.componentName[temp];
 			},
 			submitSuccess(){
 				this.$refs.questionAnswerRef.forEach(childComponent => {
-						this.answer.push(childComponent.answer);
+						if(childComponent.$options.name === 'duoxuanAnswer'){
+							// console.log('duoxuan',Array.from(childComponent.answer))
+							this.answer.push(Array.from(childComponent.answer).join(''));
+						}
+						else
+							this.answer.push(childComponent.answer);
 				});
 				console.log(this.answer)
 				

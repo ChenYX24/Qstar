@@ -1,24 +1,43 @@
 <template>
 	<view class="background">
 		<view>
-			<Title ref="title" :content="content"></Title>
+			<!-- <Title ref="title" :content="content"></Title> -->
 			
-			<view class="" v-if="content.type == 0">
-			<SingleChoice ref="danxuan" :text_copy="content.choice">
-			</SingleChoice>
+			<view class="num-show">
+				<view class="box">
+					第{{num}}题
+				</view>
 			</view>
 			
-			<view class="" v-else-if="content.type == 1">
-			<SingleChoice ref="duoxuan"></SingleChoice>
+			<view class="" v-if=" content.type=='SINGLE'||'MULTIPLE'" >
+				<SingleChoice ref="danxuan" 
+				:text_copy="content.choice"
+				:num="num"
+				:type="content.type"
+				:questionProp="content.question">
+				</SingleChoice>
 			</view>
 			
-			<view class="" v-else-if="content.type == 2">
-			<!-- <SingleChoice></SingleChoice> -->
+<!-- 			<view class="" v-else-if="content.type == 'MULTIPLE'">
+				<SingleChoice ref="duoxuan" 
+				:text_copy="content.choice"
+				:num="num"
+				:type="content.type"
+				:questionProp="content.question"></SingleChoice>
+			</view> -->
+			
+			<view class="" v-else-if="content.type == 'BLANK'">
+				<Title
+				:num="num"
+				ref="tiankong"
+				:questionProp="content.question"></Title>
 			</view>
 			
-			<view class="" v-else-if="content.type == 3">
-			<!-- <SingleChoice></SingleChoice> -->
-			<slider-setting ref="slider_set"></slider-setting>
+			<view class="" v-else-if="content.type == 'SLIDE'">
+				<slider-setting 
+				ref="sliderSet"
+				:num="num"
+				:questionProp="content.question"></slider-setting>
 			</view>
 			
 			<setting></setting>
@@ -42,13 +61,15 @@
 	import setting from "/components/questionEdit/setting/setting.vue"
 	import sliderSetting from "/components/questionEdit/sliderSetting/sliderSetting.vue"
 	import store from '/store/index.js'
+	
+	
 	export default {
 		components:{
 			// danxuansetting,
 			Title,
 			SingleChoice,
 			setting,
-			sliderSetting
+			sliderSetting,
 		},
 		onLoad(options) {
 			// console.log(options.length)
@@ -65,38 +86,38 @@
 		},
 		data() {
 			return {
+				num:this.$store.state.now_operate+1,
 				content:{
-					title:"444",
-					type:'0',
-					choice:['3','5']
+					question:"444",
+					type:'BLANK',
+					choice:['3','5'],
+					setting:[]
 					
 				}
 			};
 		},
 		methods:{
 			toEditQuestion(){
-				 // const titleComponent = this.$refs.title // 获取标题组件实例
-				 // console.log(this.content.type);
-				 this.content.title= this.$refs.title.content.title; // 获取标题数据
-				 // console.log(this.content.title)
-				 // console.log('-------------------')
-				 // console.log(this.content.type)
-				 switch(parseInt(this.content.type)){
-					 case 0:
+				console.log(this.content.type)
+				 switch(this.content.type){
+					 case 'SINGLE' ||'MULTIPLE':
 							this.content.choice=this.$refs.danxuan.copy;
 							//去除空值
+							this.content.question=this.$refs.danxuan.question;
 							this.content.choice=this.content.choice.filter(item => item !== null && item !== undefined && item !== "");  // 过滤空值
 							// console.log(this.content.choice);
 							break;
-					 case 1:
-							this.content.choice=this.$refs.duoxuan.copy;
-							this.content.choice=this.content.choice.filter(item => item !== null && item !== undefined && item !== "");  // 过滤空值
-							// console.log(this.content.choice);
+					 // case 'MULTIPLE':
+						// 	this.content.choice=this.$refs.duoxuan.copy;
+						// 	this.content.question=this.$refs.duoxuan.question;
+						// 	this.content.choice=this.content.choice.filter(item => item !== null && item !== undefined && item !== "");  // 过滤空值
+						// 	break;
+					 case 'BLANK':
+							this.content.question=this.$refs.tiankong.question;
 							break;
-					 case 2:
-							break;
-					 case 3:
-							this.content.choice=this.$refs.slider_set.setting;
+					 case 'SLIDE':
+							this.content.question=this.$refs.sliderSet.question;
+							this.content.choice=this.$refs.sliderSet.setting;
 							break;
 					 default:
 							break;
@@ -139,9 +160,29 @@
     overflow-y: scroll;
 	background: linear-gradient(225deg, rgba(245, 224, 230, 1) 0%, rgba(228, 218, 241, 1) 38.89%, rgba(237, 248, 255, 1) 67.78%, rgba(230, 224, 250, 1) 100%);
 }
+.num-show{
+	margin-top: 10px;
+	width: 100%;
+	height: 15vh;
+	// border: 2px solid red;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	
+}
+.box{
+	width: 80vw;
+	height: 10vh;
+	border: 2px dashed rgba(255, 255, 255, 1);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 30px;
+	color: #940ece;
+}
 
 .ok_or_no{
-	margin-top: 5vh;
+	margin-top: 4vh;
 	width: 100vw;
 	display: flex;
 	flex-direction: column;

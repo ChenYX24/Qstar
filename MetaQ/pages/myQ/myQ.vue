@@ -17,7 +17,10 @@
 		    >
 		      <swiper-item>
 				<view class="page1">
-				  <QBlock v-for="(block, index) in myCreateds" :key="block.id" :onumber="block.filled" :title="block.title" :isPush="block.commit" @changeSave="emitSave(index)"></QBlock>
+				  <QBlock v-for="(block, index) in blocks1" :key="block.id" 
+				  :onumber="block.filled" :title="block.title" 
+				  :isPush="block.isPush" @changeSave="emitSave(index)" 
+				   @click='getData(index)'></QBlock>
 				</view>
 		      </swiper-item>
 		      <swiper-item>
@@ -38,6 +41,7 @@ import TabSwiper from "/components/tabSwiper/tabSwiper.vue";
 import QBlock from '/components/myQ/QBlock/QBlock.vue';
 import QBlock2 from '/components/myQ/QBlock2/QBlock2.vue';
 import axios from 'axios';
+import store from '/store/index.js'
 export default {
   components: {
     TabBar,
@@ -60,10 +64,9 @@ export default {
 		text2:"我填写的",
 		isEnd:true,
 		name:'尘',
-		//要传的值
-		blocks:[],
-		//要传的值
-		blocks1: [],
+		//下面两个要传
+		blocks:[],//我填写的
+		blocks1: [],//我创建的
 		isSave:false
   	}
   },
@@ -79,6 +82,7 @@ export default {
 		async fetchData() {
 			//获取已经创建的问卷
 			axios.defaults.headers.common['token'] = localStorage.getItem('token');
+			console.log("token",localStorage.getItem('token'));
 			axios.get(/*'https://metaq.scutbot.icu/login'*/
 						'http://localhost:8080/getCreated')
 			    .then(response => {
@@ -115,6 +119,34 @@ export default {
 	  handleTabChange(index) {
 		this.currentTab = index;
 	  },
+	  test(e){
+		  console.log(e.target)
+	  },
+	  getData(index){
+		  // console.log(index);
+		  // console.log(this.blocks1)
+		  axios.defaults.headers.common['token'] = localStorage.getItem('token');
+		  axios.get(/*'https://metaq.scutbot.icu/login'*/
+		  			// 'http://localhost:8080/check',
+					'/static/test2.json',
+					{
+						id:this.blocks1[index].id
+					})
+		      .then(response => {
+					var temp=response.data.data.blocks1[index]
+					// console.log(temp)
+					temp.title=this.blocks1[index].title
+					this.$store.commit('setQuestionNire',temp);
+					// console.log(this.$store.state.questionNire)
+					uni.navigateTo({
+						url: '/pages/editQuestionnire/editQuestionnire?flag='+1
+					})
+		      })
+		      .catch(error => {
+		        console.log(error);
+		      });
+	  }
+    }
 
 
     },
