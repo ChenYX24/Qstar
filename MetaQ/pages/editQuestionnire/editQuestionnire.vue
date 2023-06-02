@@ -142,6 +142,7 @@
 		onLoad: function(options) {
 			this.tab = options.tab
 			if(options.content){
+				// console.log(this.$store.state.questionNire.content)
 				//重新获取content
 				this.questionNire.content=this.$store.state.questionNire.content
 				const temp=JSON.parse(options.content);
@@ -154,12 +155,14 @@
 					this.questionNire.content.push(temp);
 				}
 				//重置这个值
-				this.$store.commit('setNowOperate',-1);
+				// this.$store.commit('setNowOperate',-1);
+				// this.$store.commit('setQuestionNire',this.questionNire);
 			}
 			else if(options.flag){
 				//重新获取content
 				this.questionNire.content=this.$store.state.questionNire.content
 			}
+			
 		},
 		mounted(){
 			this.toButton()
@@ -208,7 +211,7 @@
 				//下面是决定两个页面互相切换的变量
 				questionnire_page_show:0,
 				question_page_show:0,
-				isAdd:-2
+				isAdd:0
 
 			}
 		},
@@ -265,9 +268,12 @@
 			toButton(){
 				this.$nextTick(()=>{
 					const questionnire_page = document.getElementById("questionnire_page");
-					if(this.isAdd==-1){
+					this.isAdd=this.questionNire.content.length>this.$store.state.now_operate?0:1
+					console.log(this.isAdd==1)
+					if(this.isAdd==1){
 					// const backgroundElement = this.$refs.background;
 					// console.log(backgroundElement.scrollHeight)
+					console.log(111)
 					var scrollHeight=questionnire_page.scrollHeight;
 					var offsetHeight=questionnire_page.offsetHeight;
 					questionnire_page.scrollTop=scrollHeight>0?scrollHeight-offsetHeight:0;

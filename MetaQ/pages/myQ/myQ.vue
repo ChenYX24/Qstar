@@ -19,7 +19,7 @@
 				<view class="page1">
 				  <QBlock v-for="(block, index) in blocks1" :key="block.id" 
 				  :onumber="block.filled" :title="block.title" 
-				  :isPush="block.isPush" @changeSave="emitSave(index)" 
+				  :isPush="block.commit" @changeSave="emitSave(index)" 
 				   @click='getData(index)'></QBlock>
 				</view>
 		      </swiper-item>
@@ -149,7 +149,7 @@ export default {
     }
 
 
-    },
+    ,
 	computed: {
 		myCreateds() {
 		  if(this.inputValue&&this.currentTab===0)
