@@ -3,7 +3,7 @@
 		<view class="box">
 			<view class="inbox">
 				<view class="title">
-					{{num}}.{{content.title}}
+					{{num}}.{{content.question}}
 				</view>
 				<view class="slider-box">
 					<sliderBar
@@ -48,7 +48,7 @@ export default {
 			content:{
 				type:Object,
 				default:{
-					title:"3333",
+					question:"3333",
 					type:'3',
 					choice:[10,'非常差',1000,'非常好',0],
 				}

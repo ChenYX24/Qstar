@@ -3,7 +3,7 @@
 		<view class="box">
 			<view class="inbox" @click="showOperation">
 				<view class="title">
-					{{num}}.{{content.title}}
+					{{num}}.{{content.question}}
 					<view class="type" v-if="content.type==1">
 						<text>[多选题]</text>
 					</view>
@@ -49,7 +49,7 @@
 			content:{
 				type:Object,
 				default:{
-					title:"3333",
+					question:"3333",
 					type:'blank',
 					choice:['1','2','3','4'],
 				}
@@ -150,6 +150,7 @@
 	margin-left: 5px;
 	color: rgb(143 68 238);
 	font-size: 14px;
+	
 }
 
 

@@ -3,7 +3,7 @@
 		<view class="box">
 			<view class="inbox">
 				<view class="title">
-					{{num}}.{{content.title}}<text>[单选题]</text>
+					{{num}}.{{content.question}}<text>[单选题]</text>
 				</view>
 				<radio-group name="" @change="getValue" class="radioGroup">
 					<view class="danxuan_radio" v-for="(item,index) in content.choice" :key="index" :class="{'active':index==answer&&answer!=''}">
@@ -21,6 +21,7 @@
 
 <script>
 	export default {
+		
 		data() {
 			return {
 				answer:''
@@ -35,7 +36,7 @@
 			content:{
 				type:Object,
 				default:{
-					title:"5555",
+					question:"5555",
 					type:'blank',
 					choice:['1','2','3','4'],
 				}

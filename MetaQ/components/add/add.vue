@@ -8,7 +8,7 @@
 							  id="title2"
 							  placeholder="请输入问卷标题"
 							  @linechange="autoChange"
-							  v-model="title"
+							  v-model="questionNire.title"
 							  disabled
 						></textarea>
 				</view>
@@ -17,13 +17,13 @@
 							  id="descripition2"
 							  placeholder="请输入问卷简介"
 							  @linechange="autoChange"
-							  v-model="description"
+							  v-model="questionNire.description"
 							  disabled
 							  ></textarea>
 				</view>
 				
 			</view>
-			<view class="question-all" v-for="(item,index) in all_content" :key="index">
+			<view class="question-all" v-for="(item,index) in questionNire.content" :key="index">
 				<component
 				:num="(index+1).toString()"
 				:content="item"
@@ -52,14 +52,19 @@
 			duoxuanAnswer
 		},
 		props:{
-			// all_content:{
-			// 	type:Array,
-			// 	default:[]
-			// },
+			questionNireProps:{
+				type:Object,
+				default:{
+					
+				}
+			},
 			isShow:{
 				type:Boolean,
 				default:false
 			}
+		},
+		mounted(){
+			// console.log(this.questionNire)
 		},
 		data() {
 			return {
@@ -69,32 +74,39 @@
 				'tiankongAnswer','huadongtiaoAnswer'],
 				title:'关于c10居住学生学校住宿感受的的调研',
 				description:'请c10的同学填写，谢谢配合！',
-				all_content:[
-						{
-							title:"标题1",
-							type:'0',
-							choice:['a','b','c'],
-						},
-						{
-							title:"标题2",
-							type:'1',
-							choice:['m','n','b'],
-					    },
-						{
-							title:"标题2",
-							type:'0',
-							choice:['m','n','b'],
-						},
-						{
-							title:"标题2",
-							type:'2',
-							choice:['m','n','b'],
-						},
-						{
-							title:"滑动条",
-							type:'3',
-							choice:[10,'非常差',1000,'非常好',0],
-						}],
+				questionNire:this.questionNireProps,
+				// content:[
+				// 		{
+				// 			question:"标题1",
+				// 			type:'SINGLE',
+				// 			choice:['a','b','c'],
+				// 			setting:[]
+				// 		},
+				// 		{
+				// 			question:"填空题",
+				// 			type:'BLANK',
+				// 			choice:[],
+				// 			setting:[]
+				// 		},
+				// 		{
+				// 			question:"滑动条",
+				// 			type:'SLIDE',
+				// 			choice:[10,'非常差',1000,'非常好',0],
+				// 			setting:[]
+				// 		},
+				// 		{
+				// 			question:"标题2",
+				// 			type:'MULTIPLE',
+				// 			choice:['m','n','b'],
+				// 			setting:[]
+				// 	    },
+				// 		{
+				// 			question:"标题2",
+				// 			type:'SINGLE',
+				// 			choice:['m','n','b'],
+				// 			setting:[]
+				// 		}
+				// 		],
 			}
 		},
 		methods:{
@@ -103,8 +115,18 @@
 					node.style.height=`${e.detail.height}px`
 			},
 			chooseComponent(index){
-				var temp=parseInt(this.all_content[index].type);
-				return this.componentName[temp];
+				switch(this.questionNire.content[index].type){
+					case 'SINGLE':
+						return this.componentName[0];
+					case 'MULTIPLE':
+						return this.componentName[1];
+					case 'BLANK':
+						return this.componentName[2];
+					case 'SLIDE':
+						return this.componentName[3];
+				};
+				// var temp=parseInt(this.all_content[index].type);
+				// this.componentName[temp]
 			},
 			submitSuccess(){
 				this.$refs.questionAnswerRef.forEach(childComponent => {
