@@ -125,7 +125,7 @@ public class Questionaire {//创建的问卷
         }
         return true;
     }
-    public StatisticsResult getStatisticsResult(){//获取统计结果
+    public List<StatisticsResult> getStatisticsResult(){//获取多个问题的统计结果
         List<StatisticsResult> statisticsResults=new ArrayList<>();
         for(int index=0;index<questions.size();index++) {
             Question question = questions.get(index);
@@ -145,7 +145,7 @@ public class Questionaire {//创建的问卷
             }
             statisticsResults.add(new StatisticsResult(question.getQuestion(), question.getType(), choices));
         }
-        return null;
+        return statisticsResults;
     }
 
     public void addAuthorizeEditEmail(String name,String email,String photo){
