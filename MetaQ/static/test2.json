@@ -10,27 +10,27 @@
 	  "description":"大学生会饿死",
 	  "all_content":[		{
 	  							"question":"测试二",
-	  							"type":"0",
+	  							"type":"SINGLE",
 	  							"choice":["a","b","c"]
 	  						},
 	  						{
 	  							"question":"填空题",
-	  							"type":2,
+	  							"type":"BLANK",
 	  							"choice":[]
 	  						},
 	  						{
 	  							"question":"滑动条",
-	  							"type":3,
+	  							"type":"SLIDE",
 	  							"choice":[10,"非常差",1000,"非常好",0]
 	  						},
 	  						{
 	  							"question":"标题2",
-	  							"type":"1",
+	  							"type":"MULTIPLE",
 	  							"choice":["m","n","b"]
 	  					    },
 	  						{
 	  							"question":"标题2",
-	  							"type":"0",
+	  							"type":"SINGLE",
 	  							"choice":["m","n","b"]
 	  						}
 	  ]},  

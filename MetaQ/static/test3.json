@@ -1,0 +1,8 @@
+{  
+  "data": {  
+    "people": [  
+      { "name": "尘", "email": "1501434920@qq.com", "photo": "/static/home/profilePhoto.png", "authority": 0 },  
+	  { "name": "testName", "email": "111@qq.com", "photo": "/static/home/profilePhoto.png:", "authority": 1 }
+    ]    
+  }  
+}  

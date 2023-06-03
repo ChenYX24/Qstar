@@ -36,6 +36,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import TabBar from '/components/tabbar/tabbar.vue';
 export default {
   inheritAttrs:false,
@@ -44,14 +45,19 @@ export default {
   },
   onLoad: function (options) {
 	this.tab=options.tab
+	const Token = JSON.parse(localStorage.getItem('token'));
+	this.email = Token.email;
+	axios.post(/*'https://metaq.scutbot.icu/login'*/
+				'http://localhost:8080/getPage', {
+			email:this.email
+		})
+	    .then(response => {
+			console.log(response.data);
+	    })
+	    .catch(error => {
+	      console.log(error);
+	    });
 	
-	//自动获取邮箱
-	this.token = localStorage.getItem('token');
-	console.log(this.token);
-	const obj = JSON.parse(this.token);
-	console.log(obj);
-	this.email = obj["_email"];
-	console.log(obj["_email"]);
   },
   data() {
   	return {

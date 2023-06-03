@@ -19,7 +19,7 @@
 				<view class="page1">
 				  <QBlock v-for="(block, index) in blocks1" :key="block.id" 
 				  :onumber="block.filled" :title="block.title" 
-				  :isPush="block.isPush" @changeSave="emitSave(index)" 
+				  :isPush="block.commit" @changeSave="emitSave(index)" 
 				   @click='getData(index)'></QBlock>
 				</view>
 		      </swiper-item>
@@ -82,6 +82,7 @@ export default {
 		async fetchData() {
 			//获取已经创建的问卷
 			axios.defaults.headers.common['token'] = localStorage.getItem('token');
+			console.log("token",localStorage.getItem('token'));
 			axios.get(/*'https://metaq.scutbot.icu/login'*/
 						'http://localhost:8080/getCreated')
 			    .then(response => {
@@ -93,9 +94,9 @@ export default {
 			      console.log(error);
 			    });
 			try {  
-			  // const response = await axios.get('/static/test2.json'); // TODO
-			  // this.blocks = response.data.data.blocks;
-			  // this.blocks1=response.data.data.blocks1
+			  const response = await axios.get('/static/test2.json'); // TODO
+			  this.blocks = response.data.data.blocks;
+			  this.blocks1=response.data.data.blocks1
 			} catch (error) {  
 			  console.error('Error fetching data:', error);  
 			}
@@ -145,7 +146,10 @@ export default {
 		        console.log(error);
 		      });
 	  }
-    },
+    }
+
+
+    ,
 	computed: {
 		myCreateds() {
 		  if(this.inputValue&&this.currentTab===0)

@@ -5,11 +5,12 @@ import java.util.Properties;
 import javax.mail.*;
 import javax.mail.internet.*;
 
+import org.springframework.stereotype.Component;
+
 import java.security.SecureRandom;
 // import com.sun.mail.util.MailSSLSocketFactory;
 // import java.net.InetAddress;
 // import java.net.Socket;
-
 
 public class EmailSender {
     Map<String, String> codes = new HashMap<>();

@@ -250,17 +250,18 @@ public class DataIO {
     }
     //将IE对象转为Json字符串
     public String getIEByEmail(String Email){
-        String result = "";
+        String result = " ";
         try (BufferedReader reader = new BufferedReader(new FileReader(this.path))){
             String line = "";
             line = reader.readLine();
             while(line != null){
                 JsonNode node = objectMapper.readTree(line);
                 JsonNode nodeitem = node.get("email");
+                String temp = "";
                 if(nodeitem != null){
-                    line = nodeitem.asText();
-                    if(line.hashCode() == Email.hashCode()){
-                            
+                    temp = nodeitem.asText();
+                    if(temp.hashCode() == Email.hashCode()){
+                        return line;
                     }
                 }
                 
@@ -288,4 +289,6 @@ public class DataIO {
         }
         return users;
     }
+    //根据id获取已创建问卷的信息
+    //写一个token是否有效的函数，boolean checkToken(String token)
 }

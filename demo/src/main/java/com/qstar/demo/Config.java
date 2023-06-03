@@ -15,7 +15,8 @@ public class Config implements WebMvcConfigurer {//配置类,把properties文件
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new TokenInterceptors()).addPathPatterns("/**").excludePathPatterns("/login",
-                "/register","/sendcode","/checkcode","changepassword","/autologin","/getgrcode","test");    //拦截除了登录之外的访问路径
+                "/register","/sendcode","/checkcode","/changepassword","/autologin","/getgrcode","/testss",
+                "/getCreated","/fillRecord","/changepasswd","/findpasswd","/getPage");    //拦截除了登录之外的访问路径
     }
 
     @Bean

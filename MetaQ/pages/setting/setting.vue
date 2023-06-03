@@ -19,6 +19,54 @@
 			<view class="title">
 				权限管理
 			</view>
+			<view class="scrollBox">
+				<view class="peopleBox">
+					<view class="infoBox">
+						<view class="img">
+							<image src="/static/home/profilePhoto.png" mode="aspectFill" ></image>
+						</view>
+						<view class="name">
+							尘
+						</view>
+					</view>
+					<view class="rightBox">
+						<picker mode="selector" :range="roles" @change="roleChanged">
+						  <view class="picker">{{roles[selectedRole]}}</view>  
+						</picker> 
+					</view>
+				</view>
+				<view class="peopleBox">
+					<view class="infoBox">
+						<view class="img">
+							<image src="/static/home/profilePhoto.png" mode="aspectFill" ></image>
+						</view>
+						<view class="name">
+							尘
+						</view>
+					</view>
+					<view class="rightBox">
+						<picker mode="selector" :range="roles" @change="roleChanged">
+						  <view class="picker">{{roles[selectedRole]}}</view>  
+						</picker> 
+					</view>
+				</view>
+				<view class="peopleBox">
+					<view class="infoBox">
+						<view class="img">
+							<image src="/static/home/profilePhoto.png" mode="aspectFill" ></image>
+						</view>
+						<view class="name">
+							尘
+						</view>
+					</view>
+					<view class="rightBox">
+						<picker mode="selector" :range="roles" @change="roleChanged">
+						  <view class="picker">{{roles[selectedRole]}}</view>  
+						</picker> 
+					</view>
+				</view>
+			</view>
+
 		</view>
 		<view class="button" @tap="goback">
 			确认
@@ -40,7 +88,9 @@
 				tab: 'setting',
 				startTime: "",  
 				endTime: "",
-				selected: [false, false, false],  
+				selected: [false, false, false], 
+			     roles: ['管理者', '编辑者', '查看者'],  
+			     selectedRole: 0
 			};  
 		},  
 	  methods: {
@@ -56,6 +106,9 @@
 		toggleSelect(index) {  
 		  this.selected.splice(index, 1, !this.selected[index]);  
 		}, 
+		roleChanged(e) {
+		  this.selectedRole = e.target.value;  
+		}
 	  }, 
 	}
 </script>
@@ -141,6 +194,59 @@
 		font-size: 16pt;
 	}
 	.authority{
-		    justify-content: flex-start!important;
+		justify-content: flex-start!important;
+		    height: 18vh;
+		.scrollBox{
+			margin-top: 3%;
+			width: 100%;
+			display: flex;
+			overflow-y: scroll;
+			flex-direction: column;
+			align-items: center;
+			align-content: center;
+			.peopleBox {
+			  display: flex;  
+			  justify-content: space-between;
+			  width: 80%;
+			}  
+			.infoBox {
+			  display: flex;  
+			  align-items: center;
+			  .name {
+			  margin-left: 10px;  
+			  }
+			  .img{
+			  	width: 18vw;
+			  	height: 18vw;
+			  	border: 2px solid rgba(221, 183, 247, 1);
+			  	border-radius: 50%;
+			      overflow: hidden;
+			  	image{
+			  		width: 100%;
+			  		height: 100%;
+			  	}
+			  }
+			}
+			.rightBox {
+			  display: flex;  
+			  align-items: center;  
+			  .picker {
+				border: 1px solid #999;  
+				padding: 5px;  
+				border-radius: 5px;  
+			  } 
+			}
+		}
+
 	}
+	
+	  
+	  
+	  
+  
+	  
+  
+	  
+ 
 </style>
+
