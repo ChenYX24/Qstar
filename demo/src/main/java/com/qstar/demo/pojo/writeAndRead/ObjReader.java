@@ -53,11 +53,11 @@ public class ObjReader {//读取user对象，根据用户的名字读取，用�
         return this.read(father+"/"+name);
     }
     public Questionaire readQuestionaire(int id) throws IOException {
-        //return  (Questionaire) JSON.parseObject((String) read(questionaireRoad,id+""), Questionaire.class);
-        return objectMapper.readValue(read(questionaireRoad,id+""),Questionaire.class);
+        return  (Questionaire) JSON.parseObject((String) read(questionaireRoad,id+""), Questionaire.class);
+        //return objectMapper.readValue(read(questionaireRoad,id+""),Questionaire.class);
     }
     public User readUser(String email) throws IOException {
-        //return (User) JSON.parseObject((String) read(userRoad,email), User.class);
-        return objectMapper.readValue(read(userRoad,email),User.class);
+        return (User) JSON.parseObject((String) read(userRoad,email), User.class);
+        //return objectMapper.readValue(read(userRoad,email),User.class);
     }
 }

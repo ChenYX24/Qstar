@@ -50,8 +50,13 @@ public class Controller {
         return Result.success(id);
     }
     //查看已经创建问卷的详细信息
-    @GetMapping("/check")
-    public Result check(Integer id,@RequestHeader("token") String token) throws IOException {
+    @RequestMapping("/check")
+    public Result check(@RequestHeader("token") String token,@RequestBody String info) throws IOException {
+        System.out.println(info);
+        String temp = userService.userio.getKeyValueofJson(info, "id");
+        int id = Integer.parseInt(temp);
+        System.out.println("id:" + id);
+        //int Id = Integer.parseInt(id);
         ResultForCheck result=handle.check(id,token);
         if(result!=null) {
             return Result.success(result);

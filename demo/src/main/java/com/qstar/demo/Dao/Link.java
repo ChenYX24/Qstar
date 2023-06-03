@@ -342,7 +342,9 @@ public class Link {
 
     public boolean checkQuestionaire(int id) throws IOException {//检查是否访问的问卷存在，不存在就读入
         if(!questionaires.containsKey(id)){
+            System.out.println("准备读取问卷文件");
             Object o=reader.readQuestionaire(id);
+            System.out.println("读取问卷文件成功!");
             if(o!=null&&o instanceof  Questionaire) {
                 questionaires.put(id, (Questionaire)o);
                 return true;
