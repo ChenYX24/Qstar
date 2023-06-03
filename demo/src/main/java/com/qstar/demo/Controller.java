@@ -101,7 +101,7 @@ public class Controller {
     }
     //返回已经填写的问卷的信息
     @GetMapping("/fillRecord")
-    public Result getFillRecord(@RequestHeader("token") String token){//获取填写记录
+    public Result getFillRecord(@RequestHeader("token") String token) throws IOException {//获取填写记录
         return Result.success(handle.getFillRecord(token));
     }
     //保存已经填写的数据
@@ -131,11 +131,14 @@ public class Controller {
         return handle.commitFill(id,token);
     }*/
     //获取数据
-    @GetMapping("/statistics/{index}")
-    public Result statistics(@PathVariable Integer index,Integer id,@RequestHeader("token") String token) throws IOException {
-        return handle.statistics(index,id,token);
+    @GetMapping("/statistics")
+    public Result statistics(Integer id,@RequestHeader("token") String token) throws IOException {
+        return handle.statistics(id,token);
     }
-
+    @GetMapping("/getFilled")
+    public Result getFilled(Integer id,@RequestHeader("token") String token) throws IOException {//用于获取这个问卷的所有填写记录
+        return handle.getFilled(id,token);
+    }
     @PostMapping("/setting")
     public Result setting(@RequestBody SettingReceive receive,@RequestHeader("token") String token) throws IOException {//设置问卷的配置信息
         Result result= handle.setting(receive.isRecordName(),receive.isMultiCommit(),receive.getBegin(),receive.getEnd(),receive.getId(),token);

@@ -33,35 +33,31 @@ public class User {//用户
     private String phonenumber;//用户手机号
     @JsonPropertyOrder("location")
     private String location;//用户位置
+
     //private Account account;   //用户的标识  //账户类应该是独立的，User对象内部仅仅储存一个名字用于定位，因为需要账户对象登录，获取token
     //
     @JsonPropertyOrder("questionaires")
     private  List<Integer> questionaires = null;    //问卷id的集合
     @JsonPropertyOrder("filledQuestionaires")
-    private  List<FilledQuestionaire> filledQuestionaires = null;
+    private  List<Integer> filledQuestionaires = null;
     @JsonPropertyOrder("allowCheckQuestionaires")
     private   Set<Integer> allowCheckQuestionaires = null;         //允许查看的问卷
     @JsonPropertyOrder("allowEditQuestionaires")
     private   Set<Integer> allowEditQuestionaires = null;        //允许编辑的问卷
     @JsonPropertyOrder("allowManageQuestionaires")
     private   Set<Integer> allowManageQuestionaires;
-    private   boolean modified;   //赃位，验证是否修改
-      
-    private   int indexDistribute;
+
     @JsonPropertyOrder("headPic")
     private String headPic;
     public User(){
         questionaires=new ArrayList<>();
         filledQuestionaires=new ArrayList<>();
-        indexDistribute=0;
         
     }
     public User(String Name,String Email,String Passwd){
         this.name = Name;
         this.email = Email;
         this.passwd = Passwd;
-        modified=true;
-        indexDistribute=0;
         this.phonenumber="保密";
         this.location="未知";
         this.headPic = " ";
@@ -73,8 +69,6 @@ public class User {//用户
         this.passwd = Passwd;
         this.phonenumber = Phonenumber;
         this.location = Location;
-        modified=true;
-        indexDistribute=0;
     }
     //  
     // public List<Questionaire> get_questionaires(){
@@ -133,49 +127,13 @@ public class User {//用户
     }*/
 
     //填写流程
-    @JsonIgnore
-    public List<FilledQuestionaireInfo> getFilledInfo(){//获取填写记录
-        List<FilledQuestionaireInfo> list=new ArrayList<>(3);
-       /* FilledQuestionaireInfo filledQuestionaireInfo1 = new FilledQuestionaireInfo(1,"尘",false,"关于早八是否会被饿死调查");
-        FilledQuestionaireInfo filledQuestionaireInfo2 = new FilledQuestionaireInfo(2,"yxw",true,"关于yxw老师的教学评价");
-        FilledQuestionaireInfo filledQuestionaireInfo3 = new FilledQuestionaireInfo(3,"尘",false,"如何上金铲铲大师的调查");*/
-        /*list.add(filledQuestionaireInfo1);
-        list.add(filledQuestionaireInfo2);
-        list.add(filledQuestionaireInfo3);*/
-        // List<FilledQuestionaireInfo> list=new ArrayList<>(filledQuestionaires.size());
-        // for(FilledQuestionaire fill:filledQuestionaires){
-        //     list.add(fill.getInfo());
-        // }
-        return list;
-    }
      
-    public int addFilled(String creator,int id,Questionaire questionaire){//添加到填写记录
-        filledQuestionaires.add(new FilledQuestionaire(creator,id,questionaire,indexDistribute));
-        indexDistribute++;
-        return indexDistribute-1;
+    public void addFilled(int id){//添加到填写记录
+        filledQuestionaires.add(id);
     }
-     
-    public FilledQuestionaire findFilled(int id){//查找指定的填写
-        if(id<filledQuestionaires.size()) {
-            return filledQuestionaires.get(id);
-        }
-        return null;
-    }
-     
-    public String[] getFilled(int id){//获取已填写数据
-        FilledQuestionaire filledQuestionaire=findFilled(id);
-        if(filledQuestionaire!=null) {
-            return filledQuestionaire.getData();
-        }
-        return null;
-    }
+
     public boolean containFilledID(int id){       //这个用户是否填写过这个ID的问卷
-        for(FilledQuestionaire filledQuestionaire:filledQuestionaires){
-            if(filledQuestionaire.getId()==id){
-                return true;
-            }
-        }
-        return false;
+        return filledQuestionaires.contains(id);
     }
 
     public void addManageQuestionaire(Integer id) {allowManageQuestionaires.add(id);

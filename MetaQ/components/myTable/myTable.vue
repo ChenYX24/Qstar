@@ -1,5 +1,26 @@
 <template>  
-  <view >  
+  <view v-if="Type=='blank'">
+	  	<view class="table-row first">
+	  	  <text class="table-cell">id</text>  
+	  	  <text class="table-cell">内容</text>   
+	  	</view>  
+	  	<view class="table-row" v-for="(item, index) in Data" :key="index">  
+	  	  <text class="table-cell">{{ index+1 }}</text>  
+	  	  <text class="table-cell">{{ item.name }}</text>  
+	  	</view>  
+  </view>
+  <view v-else-if="Type=='slider'">
+  	  	<view class="table-row first">
+  	  	  <text class="table-cell">id</text>  
+  	  	  <text class="table-cell">数值</text>   
+  	  	</view>  
+  	  	<view class="table-row" v-for="(item, index) in Data" :key="index">  
+  	  	  <text class="table-cell">{{ index+1 }}</text>  
+  	  	  <text class="table-cell">{{ item.name }}</text>  
+  	  	</view>  
+  </view>
+  <view v-else>
+	  
     <view class="table-row first">  
       <text class="table-cell">选项</text>  
       <text class="table-cell">比例</text>  
@@ -24,6 +45,10 @@ export default {
 		Data:{
 			type: Array,  
 			default: [] 
+	  },
+	  Type:{
+		  type:String,
+		  default:''
 	  }
 	},
   data() {  

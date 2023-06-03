@@ -10,7 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 public class StatisticsResult {//用于传输统计结果的类,放在result的data项内
     private String title;
-    private String question;
+/*    private String question;*/
     private Type type;
-    private List choices;//储存数字或者字符串的数据
+    private List<ChoiceResult> content;//储存数字或者字符串的数据
 }

@@ -10,12 +10,18 @@
       :current="currentSwiper"
       :loop="false"
     >
-      <swiper-item class="chart" v-for="(item, index) in SData" :key="index" style="overflow-y: scroll;">
+	  <swiper-item v-if="type=='blank'||type=='slider'" class="chart"  style="overflow-y: scroll;" >
+		  <view>
+		    <!-- 单选题列表 -->
+		    <my-table :Data="chartData" :Type="type"></my-table>
+		  </view>
+	  </swiper-item>
+      <swiper-item v-else v-for="(item, index) in SData" class="chart" :key="index" style="overflow-y: scroll;" >
 	          <view v-if="index === 0" >
 	            <!-- 单选题列表 -->
-	            <my-table :Data="chartData"></my-table>
+	            <my-table :Data="chartData" :Type="type"></my-table>
 	          </view>
-	          <view v-if="index === 1" class="chartContainer">
+	          <view v-if="index === 1"  class="chartContainer">
 	            <!-- 饼状图 -->
 					<echarts :options="pieOption" ></echarts>  <!-- @click-chart="handleClickChart" -->
 	          </view>
@@ -32,7 +38,6 @@
 			  <view v-if="index === 5" class="chartContainer">
 			  		<echarts :options="lineOption" ></echarts>  
 			  </view>
-
 	  </swiper-item>
     </swiper>
     <view class="bottomBox">
@@ -428,6 +433,9 @@
 				case 'blank':
 					this.CType="填空题"
 					break;
+				case 'slider':
+					this.CType="滑动条"
+					break;
 				default:
 					break;
 			}
@@ -570,9 +578,10 @@
 				this.lineOption.series[0].data=this.chartData.map(item => item.value)
 			  },
 			onSwiperChange(e) {
-			    const previousSwiper = this.currentSwiper;
+
+				const previousSwiper = this.currentSwiper;
 				  const currentSwiper = e.detail.current;
-			
+							
 				  if (currentSwiper - previousSwiper === 1 || currentSwiper - previousSwiper === -1) {
 					this.currentSwiper = currentSwiper;
 					
@@ -585,11 +594,13 @@
 				  {
 					  this.currentSwiper = previousSwiper-1;
 				  }
+				
+
 			  },
 			
 			  onBottomItemClick(index) {
-
-			    this.currentSwiper=index
+				if(this.type!=='blank'&&this.type!=='slider')
+					this.currentSwiper=index
 			  },
 		}
 	}
