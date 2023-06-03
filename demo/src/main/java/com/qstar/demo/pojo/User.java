@@ -1,7 +1,11 @@
 package com.qstar.demo.pojo;
 
 import com.qstar.demo.pojo.Result.StatisticsResult;
+import com.qstar.demo.pojo.writeAndRead.ObjReader;
+
 import lombok.Data;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.util.ArrayList;
@@ -95,6 +99,14 @@ public class User {//用户
         infolist.add(questionaire2.getInfo());
         infolist.add(questionaire3.getInfo());
         // List<QuestionaireInfo> infolist=new ArrayList<>(questionaires.size());
+        // for(int i = 0;i < questionaires.size();i++){
+        //     try {
+        //         infolist.add(QReader.readQuestionaire(questionaires.get(i)).getInfo());
+        //     } catch (Exception e) {
+        //         System.out.println(e.getMessage());
+        //     }
+            
+        // }
         // for(Questionaire questionaire:questionaires){
         //     infolist.add(questionaire.getInfo());
         // }

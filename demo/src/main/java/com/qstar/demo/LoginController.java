@@ -110,13 +110,14 @@ public class LoginController {
      }
      //测试用
     
-     @RequestMapping("/testss")
+     @RequestMapping("/test")
      //@RequestHeader("token") String token,@RequestBody String request
-     public Result testss(@RequestHeader("token") String token,@RequestBody String info) {
-      System.out.println(info);
-      if(userService.ChangPL(token, info)){
-         return Result.success("true");
-      }
-      return Result.fail("false");
+     public Result test(@RequestHeader("token") String token,@RequestBody String info) {
+      System.out.println("testinfo" + info);
+      System.out.println("testtoken" +token);
+      // if(userService.ChangPL(token, info)){
+      //    return Result.success("true");
+      // }
+      return Result.success("test:true");
      }
 }

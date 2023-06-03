@@ -41,7 +41,12 @@ public class Controller {
     @PostMapping("/create")
     public Result create(@RequestBody CreatedReceive receive, @RequestHeader("token") String token) throws IOException {
         /*String attach=handleFile(receive);*/
-        int id=handle.create(receive.getTitle(),receive.getDescription(),receive.getList(),token,receive.isCommit());
+        System.out.println("title:"+receive.getTitle());
+        System.out.println("content:"+receive.getContent());
+        //System.out.println("receive:"+receive);
+        System.out.println(token);
+        System.out.println(receive.isCommit());
+        int id=handle.create(receive.getTitle(),receive.getDescription(),receive.getContent(),token,receive.isCommit());
         return Result.success(id);
     }
     //查看已经创建问卷的详细信息

@@ -8,6 +8,8 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.qstar.demo.pojo.writeAndRead.ObjReader;
+
 @Configuration
 @PropertySource("classpath:application.properties")
 public class Config implements WebMvcConfigurer {//配置类,把properties文件导入，到时候一些数据在properties文件内定义即可
@@ -31,7 +33,6 @@ public class Config implements WebMvcConfigurer {//配置类,把properties文件
     public EmailSender emailSender(){
         return new EmailSender();
     }
-
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
