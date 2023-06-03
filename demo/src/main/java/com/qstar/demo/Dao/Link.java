@@ -60,6 +60,9 @@ public class Link {
         map=new HashMap<String, User>();
         User user=new User();//用于测试
         map.put("Test",user);
+        // User user2 = reader.readUser("2502160023@qq.com");
+        // String token = "{\"id\":3,\"email\":\"2502160023@qq.com\"}";
+        // map.put(token,user2);
         /*IDProperties=PropertiesLoaderUtils.loadAllProperties("IDProperty.properties");*/
          /*Integer.parseInt(IDProperties.getProperty(IDKey));*/
         // if(new File(base+"/"+IDFile).exists()) {    //测试用

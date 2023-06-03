@@ -13,7 +13,7 @@ import java.util.Map;
 public class CreatedReceive extends FileReceive{//用于创建的接受对象
     private String title;
     private String description;
-    private List<Question> list;
+    private List<Question> content;
     private boolean commit;
     /*private Map<Integer,List<MultipartFile>> files;     //前面的key代表题号，后面的代表文件队列
     private MultipartFile attach;*/

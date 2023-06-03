@@ -13,6 +13,7 @@ import java.util.*;
 
 @Data
 @NoArgsConstructor
+
 public class Questionaire {//创建的问卷
     private QuestionaireInfo info;  //问卷基本信息
     private String description;     //对于问卷的描述
