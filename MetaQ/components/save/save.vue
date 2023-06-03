@@ -31,6 +31,7 @@
 </template>
 
 <script>
+	import axios from 'axios'
 	export default {
 		name:"save",
 		data() {
@@ -77,6 +78,9 @@
 		    }
 		},
 		props: {
+			questionNirePorps:{
+				type:Object
+			},
 			isShow: {
 				type: Boolean,
 				default: false,
@@ -84,10 +88,23 @@
 			Type:{
 				type:Number,
 				default:0
-			}
+			},
+			
 		},
 		methods:{
 			save(){
+				axios.defaults.headers.common['token'] = localStorage.getItem('token');
+				console.log("this.questionNirePorps",this.questionNirePorps);
+				axios.post(/*'https://metaq.scutbot.icu/login'*/
+							'http://localhost:8080/create', 
+						this.questionNirePorps
+					)
+				    .then(response => {
+				      console.log(response.data);
+				    })
+				    .catch(error => {
+				      console.log(error);
+				    });
 				uni.navigateTo({
 					url:"/pages/myQ/myQ"
 				})

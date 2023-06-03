@@ -9,7 +9,7 @@
 				</view>
 			</view>
 			
-			<view class="" v-if=" content.type=='SINGLE'||'MULTIPLE'" >
+			<view class="" v-if=" content.type=='SINGLE' || content.type=='MULTIPLE'" >
 				<SingleChoice ref="danxuan" 
 				:text_copy="content.choice"
 				:num="num"
@@ -17,8 +17,8 @@
 				:questionProp="content.question">
 				</SingleChoice>
 			</view>
-			
-<!-- 			<view class="" v-else-if="content.type == 'MULTIPLE'">
+<!-- 			
+			<view class="" v-else-if="content.type == 'MULTIPLE'">
 				<SingleChoice ref="duoxuan" 
 				:text_copy="content.choice"
 				:num="num"
@@ -72,7 +72,7 @@
 			sliderSetting,
 		},
 		onLoad(options) {
-			// console.log(options.length)
+			// console.log(content.type=='SINGLE')
 			if(options.length){
 				let temp=JSON.parse(options.content);
 				let length=options.length;
@@ -80,8 +80,8 @@
 				this.$store.commit('setNowOperate',100000);
 			}
 			else if(options.content){//这里是对已经存在的问题进行编辑
-				let temp=JSON.parse(options.content)
-				this.content=temp
+				this.content=JSON.parse(options.content)
+				// console.log(this.content)
 			}
 		},
 		data() {

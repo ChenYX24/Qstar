@@ -1,6 +1,15 @@
 <template>
-	<swiper :duration="300">
-	  <swiper-item class="Block">
+	<swiper :duration="300" :current="currentIndex">
+
+		<!-- 第二个视图 -->
+		<swiper-item class="share" @tap="share">
+		  <view class="alternateView">
+		    <!-- Content for the alternate view -->
+		    分享问卷填写
+		  </view>
+		</swiper-item>
+		
+	  <swiper-item class="Block"  @tap="toEdit">
       <view class="topBox">
         <view class="title">{{ title }}</view>
         <view class="number" :style="{ fontSize: fontSize }">{{ number }}</view>
@@ -14,22 +23,24 @@
       </view>
     </swiper-item>
     
-    <!-- 第二个视图 -->
-    <swiper-item class="share" @tap="share">
-      <view class="alternateView">
-        <!-- Content for the alternate view -->
-        分享问卷填写
-      </view>
-    </swiper-item>
+
+	<swiper-item class="share" @tap="Delete">
+	  <view class="alternateView">
+	    <!-- Content for the alternate view -->
+	    删除问卷
+	  </view>
+	</swiper-item>
   </swiper>
 
 </template>
 
 <script>
+	import axios from 'axios'
 export default {
   name: 'QBlock',
   data() {
     return {
+		currentIndex:1,
     };
   },
   props: {
@@ -45,11 +56,43 @@ export default {
       type: Boolean,
       default: false,
     },
+	id:{
+		type:Number,
+		default:-1
+	}
   },
   methods:{
 	  share(){
 		  this.$emit('changeSave')
 	  },
+	  toEdit(){
+	  		console.log(132324)
+	  		axios.defaults.headers.common['token'] = localStorage.getItem('token');
+	  		axios.get(/*'https://metaq.scutbot.icu/login'*/
+	  					// 'http://localhost:8080/check',
+	  							'/static/test2.json',
+	  							{
+	  								id:this.id
+	  							})
+	  		    .then(response => {
+	  							// var temp=response.data.data.questionnire
+	  							// console.log(temp)
+	  							// temp.title=this.title
+	  							// this.$store.commit('setQuestionNire',temp);
+	  							// console.log(this.$store.state.questionNire)
+	  							uni.navigateTo({
+	  								url: '/pages/editQuestionnire/editQuestionnire?flag='+1
+	  							})
+	  		    })
+	  		    .catch(error => {
+	  		      console.log(error);
+	  		    });
+	  	
+	  	
+	  },
+	  Delete(){
+	  	
+	  }
   },
   computed: {
 	  pushText(){
@@ -91,6 +134,7 @@ export default {
         return "24pt";
       }
     },
+
   },
 };
 </script>

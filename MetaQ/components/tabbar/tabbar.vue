@@ -35,7 +35,7 @@
   <add :class="{show:isAdd}" :isShow="isAdd" @updateAdd="changeAdd"
   :questionNireProps='questionNire'
   ></add>
-  <save v-if="Type==1" :class="{show:isSave}" :isShow="isSave" @updateSave="changeSave" :Type="Type"></save>
+  <save v-if="Type==1" :class="{show:isSave}" :isShow="isSave" @updateSave="changeSave" :Type="Type" :questionNirePorps="questionNire"></save>
   <save v-else :class="{show:isSave}" :isShow="isSave" @updateSave="changeSave"></save>
   </view>
   
@@ -72,12 +72,12 @@ export default {
 	}  
   },
    props: {
-		questionNireProps:{
-			type:Object,
-			default:{
+	  questionNireProps:{
+		type:Object,
+		default:{
 				
-			}
-		},
+		}
+	  },
 	  outIsSave:{
 		  type:Boolean,
 		  default:false
@@ -96,6 +96,9 @@ export default {
 	  }
     },
 	methods: {
+		
+		
+		
 	  changeAdd(){
 		  this.isAdd=!this.isAdd;
 	  },

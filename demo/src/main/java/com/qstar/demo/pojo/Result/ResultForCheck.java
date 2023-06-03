@@ -12,5 +12,5 @@ public class ResultForCheck {//查询时使用
     private String title;
     private String description;
     private List<Question> list;
-    private String attach;
+/*    private String attach;*/
 }

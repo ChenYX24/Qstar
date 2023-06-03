@@ -120,6 +120,15 @@
             }
             
         }
+		,{
+		    "path" : "components/questionEdit/title/title",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "",
+		        "enablePullDownRefresh": false
+		    }
+		    
+		}
     ],
 	"globalStyle": {
 		"navigationStyle": "custom"
