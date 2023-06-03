@@ -9,19 +9,37 @@ public class QuestionaireInfo {//单个问卷的相关数据，能在"/created"�
     private int filled;//填写的人数
     private boolean commit;
     private int id;
-
+    private int authority;
     public QuestionaireInfo(String title,int id) {
         this.title = title;
         this.filled=0;
         this.commit = false;
         this.id=id;
     }
-    public QuestionaireInfo(int id,String title,int filled,boolean commit){
-        this.id = id;
+
+    public QuestionaireInfo(String title, int id, int authority) {
+        this.title = title;
+        this.filled=0;
+        this.commit = false;
+        this.id=id;
+        this.authority=authority;
+    }
+
+    public QuestionaireInfo(String title, int filled, boolean commit, int id, int authority) {
         this.title = title;
         this.filled = filled;
         this.commit = commit;
+        this.id = id;
+        this.authority = authority;
     }
+
+    public QuestionaireInfo(String title, int filled, boolean commit, int id) {
+        this.title = title;
+        this.filled = filled;
+        this.commit = commit;
+        this.id = id;
+    }
+
     public void commit() {
         this.commit =true;
     }
