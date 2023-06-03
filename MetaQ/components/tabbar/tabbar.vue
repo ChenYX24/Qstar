@@ -72,12 +72,12 @@ export default {
 	}  
   },
    props: {
-		questionNireProps:{
-			type:Object,
-			default:{
+	  questionNireProps:{
+		type:Object,
+		default:{
 				
-			}
-		},
+		}
+	  },
 	  outIsSave:{
 		  type:Boolean,
 		  default:false
@@ -96,6 +96,9 @@ export default {
 	  }
     },
 	methods: {
+		
+		
+		
 	  changeAdd(){
 		  this.isAdd=!this.isAdd;
 	  },

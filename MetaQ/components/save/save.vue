@@ -77,6 +77,9 @@
 		    }
 		},
 		props: {
+			questionNirePorps:{
+				type:Object
+			},
 			isShow: {
 				type: Boolean,
 				default: false,
@@ -84,10 +87,12 @@
 			Type:{
 				type:Number,
 				default:0
-			}
+			},
+			
 		},
 		methods:{
 			save(){
+				
 				uni.navigateTo({
 					url:"/pages/myQ/myQ"
 				})
