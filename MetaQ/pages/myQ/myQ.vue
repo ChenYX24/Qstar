@@ -93,9 +93,9 @@ export default {
 			      console.log(error);
 			    });
 			try {  
-			  // const response = await axios.get('/static/test2.json'); // TODO
-			  // this.blocks = response.data.data.blocks;
-			  // this.blocks1=response.data.data.blocks1
+			  const response = await axios.get('/static/test2.json'); // TODO
+			  this.blocks = response.data.data.blocks;
+			  this.blocks1=response.data.data.blocks1
 			} catch (error) {  
 			  console.error('Error fetching data:', error);  
 			}
