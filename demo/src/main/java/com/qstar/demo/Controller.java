@@ -31,7 +31,7 @@ public class Controller {
     }
     //获取已经用户已经创建的问卷，用于MyQ.vue
     @GetMapping("/getCreated")
-    public Result getCreated(@RequestHeader("token") String token){
+    public Result getCreated(@RequestHeader("token") String token) throws IOException {
         System.out.println("要获取问卷的token:"+token);
         List<QuestionaireInfo> infos=handle.getCreated(token);
         System.out.println("success");

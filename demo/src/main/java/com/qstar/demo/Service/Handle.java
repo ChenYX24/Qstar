@@ -22,7 +22,7 @@ import java.util.*;
 public class Handle {
     @Autowired
     Link link;
-    public List<QuestionaireInfo> getCreated(String token){
+    public List<QuestionaireInfo> getCreated(String token) throws IOException {
         return link.getCreated(token);
     }
     public int create(String title, String description/*,String filename*/,List<Question> questions,String token,boolean commit) throws IOException {

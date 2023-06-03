@@ -85,7 +85,7 @@ public class User {//用户
     //     return idDistribute;
     // }
     //获取问卷的概览信息，用于“我的问卷”页面
-    @JsonIgnore
+    /*@JsonIgnore
     public List<QuestionaireInfo> getCreateInfo(){
         List<QuestionaireInfo> infolist = new ArrayList<>(3);
         Questionaire questionaire1 = new Questionaire(1,"title1",200,true);
@@ -99,7 +99,7 @@ public class User {//用户
         //     infolist.add(questionaire.getInfo());
         // }
          return infolist;
-    }
+    }*/
      
     public boolean hasQuestionaireID(int id){//可能返回空，检验是否拥有这个问卷
         if(questionaires.contains(id)) {

@@ -71,8 +71,15 @@ public class Link {
     public boolean verifyToken(String token){
         return map.containsKey(token);
     }       //到时候直接用拦截器检测即可，不用在link类中检测
-    public List<QuestionaireInfo> getCreated(String token){
-            return map.get(token).getCreateInfo();
+    public List<QuestionaireInfo> getCreated(String token) throws IOException {
+            List<QuestionaireInfo> list=new ArrayList<>();
+            User user=map.get(token);
+            for(int id:user.getQuestionaires()){
+                if(checkQuestionaire(id)){
+                   list.add(questionaires.get(id).getInfo());
+                }
+            }
+            return list;
     }
     public int create(String title, String description/*,String filename*/,List<Question> questions,String token,boolean commit) throws IOException {
             User user=map.get(token);
