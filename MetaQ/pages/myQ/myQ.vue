@@ -146,10 +146,7 @@ export default {
 		        console.log(error);
 		      });
 	  }
-    }
-
-
-    },
+	},
 	computed: {
 		myCreateds() {
 		  if(this.inputValue&&this.currentTab===0)

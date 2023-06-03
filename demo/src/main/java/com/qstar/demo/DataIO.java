@@ -291,4 +291,19 @@ public class DataIO {
     }
     //根据id获取已创建问卷的信息
     //写一个token是否有效的函数，boolean checkToken(String token)
+    public boolean checkToken(String token){
+        try (BufferedReader reader = new BufferedReader(new FileReader(this.path))){
+            String line = "";
+            line = reader.readLine();
+            while(line != null){
+                if(token.hashCode() == line.hashCode()){
+                    return true;
+                }
+            }
+            reader.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return false;
+    }
 }
