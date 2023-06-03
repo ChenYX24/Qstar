@@ -180,8 +180,8 @@ public class UserService {
 		}
 		return "false";
 	}
-	//修改位置和电话号码
-	public void ChangPLByID(String token,String info){
+	//修改位置、电话号码
+	public boolean ChangPL(String token,String info){
 		String phoneNumber = userio.getKeyValueofJson(info, "phoneNumber");
         String location = userio.getKeyValueofJson(info, "location");
 		Map<String,User> map = link.getMap();
@@ -191,10 +191,28 @@ public class UserService {
 			user.setLocation(location);
 			try {
 				objWriter.writeUser(user);
+				return true;
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 			}
 		}
+		return false;
+	}
+	//修改用户名
+	public boolean ChangeName(String token,String info){
+		String username = userio.getKeyValueofJson(info, "username");
+		Map<String,User> map = link.getMap();
+		if(map.get(token) != null){
+			User user = map.get(token);
+			user.setName(username);
+			try {
+				objWriter.writeUser(user);
+				return true;
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
+		}
+		return false;
 	}
 	//获取个人详情页信息
 	public Userinfo getUserinfo(String info){
@@ -207,12 +225,14 @@ public class UserService {
 			userinfo.setPhoneNumber(user.getPhonenumber());
 			userinfo.setLocation(user.getLocation());
 			userinfo.setHeadPic(user.getHeadPic());
+			System.out.println("成功获取!");
 			return userinfo;
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 		return null;
 	}
+	
 	//判断邮箱和密码是否匹配
 	public Boolean MatchEmailtoPasswd(String Email,String Passwd){
 		try {

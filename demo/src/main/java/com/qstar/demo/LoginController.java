@@ -7,9 +7,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.*;
+
+import com.alibaba.fastjson.JSON;
 import com.qstar.demo.Dao.Link;
 import com.qstar.demo.pojo.User;
 import com.qstar.demo.pojo.writeAndRead.ObjReader;
+import com.qstar.demo.pojo.Result.Result;
+import com.qstar.demo.pojo.Userinfo;
 @RestController
 @CrossOrigin
 public class LoginController {
@@ -84,11 +88,35 @@ public class LoginController {
         qrcode = QRcodeGenerator.generate("https://www.baidu.com",id);
         return qrcode;
      }
+     //修改省份和电话号
+     @RequestMapping("/changepl")
+     //@RequestHeader("token") String token,@RequestBody String request
+     public Result changepl(@RequestHeader("token") String token,@RequestBody String info) {
+      System.out.println(info);
+      if(userService.ChangPL(token, info)){
+         return Result.success("true");
+      }
+      return Result.fail("false");
+     }
+     //修改用户名
+     @RequestMapping("/changename")
+     //@RequestHeader("token") String token,@RequestBody String request
+     public Result changename(@RequestHeader("token") String token,@RequestBody String info) {
+      System.out.println(info);
+      if(userService.ChangeName(token, info)){
+         return Result.success("true");
+      }
+      return Result.fail("false");
+     }
      //测试用
     
      @RequestMapping("/testss")
      //@RequestHeader("token") String token,@RequestBody String request
-     public void testss(@RequestBody String request) {
-         System.out.println(request);
+     public Result testss(@RequestHeader("token") String token,@RequestBody String info) {
+      System.out.println(info);
+      if(userService.ChangPL(token, info)){
+         return Result.success("true");
+      }
+      return Result.fail("false");
      }
 }

@@ -47,12 +47,19 @@ export default {
 	this.tab=options.tab
 	const Token = JSON.parse(localStorage.getItem('token'));
 	this.email = Token.email;
+	console.log(this.email);
 	axios.post(/*'https://metaq.scutbot.icu/login'*/
 				'http://localhost:8080/getPage', {
 			email:this.email
 		})
 	    .then(response => {
 			console.log(response.data);
+			this.name = response.data.data.username;
+			this.phone = response.data.data.phoneNumber;
+			this.currentProvince = response.data.data.location;
+			if(response.data.data.headPic != " "){
+				
+			}
 	    })
 	    .catch(error => {
 	      console.log(error);
@@ -73,6 +80,7 @@ export default {
 		currentProvince: '未知',
 		origin_phone:"13306715109",
 		origin_provinces:"未知",
+		origin_name:"",
 		token:""
 	}
   },
@@ -82,23 +90,6 @@ export default {
 			this.isExpanded = true;
       },
       confirmInput(event) {
-		//告诉后端数据修改
-		if(this.origin_phone != this.phone || this.origin_provinces != this.currentProvince){
-			this.origin_phone = this.phone;
-			this.origin_provinces = this.currentProvince;
-			axios.defaults.headers.common['token'] = this.token;
-			axios.post(/*'https://metaq.scutbot.icu/login'*/
-						'http://localhost:8080/test', {
-					phoneNumber:this.phone,
-					location:this.currentProvince
-				})
-			    .then(response => {
-					console.log(response.data);
-			    })
-			    .catch(error => {
-			      console.log(error);
-			    });
-		}
         // 恢复样式
 		if(this.isExpanded)
 		{
@@ -107,6 +98,21 @@ export default {
 				if (event.target.id != 'name') {
 				    this.isExpanded = false;
 					this.flag=false;
+					//
+					if(this.origin_name != this.name){
+						this.origin_name != this.name
+						axios.defaults.headers.common['token'] = localStorage.getItem('token');
+						axios.post(/*'https://metaq.scutbot.icu/login'*/
+									'http://localhost:8080/changename', {
+								username:this.name
+							})
+						    .then(response => {
+								console.log(response.data);
+						    })
+						    .catch(error => {
+						      console.log(error);
+						    });
+					}
 				}
 			}
 			else
@@ -122,6 +128,23 @@ export default {
 				if (!event.target.id.startsWith('infoBox')) {
 				    this.isInfoExpanded = false;
 					this.flag2=false;
+					//
+					if(this.origin_phone != this.phone || this.origin_provinces != this.currentProvince){
+						this.origin_phone = this.phone;
+						this.origin_provinces = this.currentProvince;
+						axios.defaults.headers.common['token'] = localStorage.getItem('token');
+						axios.post(/*'https://metaq.scutbot.icu/login'*/
+									'http://localhost:8080/changepl', {
+								phoneNumber:this.phone,
+								location:this.currentProvince
+							})
+						    .then(response => {
+								console.log(response.data);
+						    })
+						    .catch(error => {
+						      console.log(error);
+						    });
+					}
 				}
 			}
 			else
