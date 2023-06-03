@@ -2,6 +2,7 @@ package com.qstar.demo.pojo;
 
 import com.qstar.demo.pojo.Receiver.AuthorityReceive;
 import com.qstar.demo.pojo.Receiver.QuestionMiniUnit;
+import com.qstar.demo.pojo.Result.ChoiceResult;
 import com.qstar.demo.pojo.Result.Result;
 import com.qstar.demo.pojo.Result.ResultForSetting;
 import com.qstar.demo.pojo.Result.StatisticsResult;
@@ -13,38 +14,38 @@ import java.util.*;
 
 @Data
 @NoArgsConstructor
+
 public class Questionaire {//创建的问卷
     private QuestionaireInfo info;  //问卷基本信息
     private String description;     //对于问卷的描述
-    private boolean haveAttach;     //是否有附件
-    private String attachFile;      //附件文件
+/*    private boolean haveAttach;     //是否有附件
+    private String attachFile;      //附件文件*/
     private List<Question> questions;   //问题的集合
     private List<Statistics> statistics;    //统计数据
     private String creatorEmail;                 //创建者的邮箱
+    private String creator;     //创建者的名字
     private Set<UserProfile> authorizeManageID=new HashSet<>();     //被授权允许管理的用户
     private Set<UserProfile>  authorizeEditID=new HashSet<>();    //被授权允许编辑的用户的邮箱
     private Set<UserProfile> authorizeCheckID=new HashSet<>();     //被授权允许查看的用户的邮箱
     private boolean multiCommit;            //是否允许多次提交
     private boolean recordFillerName;          //是否记录名字
-    private Set<String> fillerNames=new HashSet<>();            //填写的用户名
+    private List<Integer> filledIDs=new ArrayList<>();  //只有当记录名字时才会使用
     private Date begin;                 //开始时间
     private Date end;                   //结束时间
 
 
-    public boolean judge(String title){//判断是否为这个问卷,用于填写问卷时找到对应的问卷
-        return title.equals(info.getTitle());
-    }
-
-    public Questionaire(String title,String description/*,String attachFile*/,List<Question> questions,int id,String creatorEmail){//初始化问卷对象，其中数据统计对象是和问题对象高度绑定的
+    public Questionaire(String title,String description/*,String attachFile*/,List<Question> questions,int id,String name,String creatorEmail,String photo){//初始化问卷对象，其中数据统计对象是和问题对象高度绑定的
         info=new QuestionaireInfo(title,id);
         this.questions=questions;
         this.description=description;
         //this.attachFile=attachFile;
         statistics=new ArrayList<>(questions.size());
         this.creatorEmail=creatorEmail;
+        this.creator=name;
+        authorizeManageID.add(new UserProfile(name,creatorEmail,photo));
     }
     public Questionaire(int id,String title,int filled,boolean commit){
-        info = new QuestionaireInfo(id,title,filled,commit);
+        info = new QuestionaireInfo(title,filled,commit,id);
     }
     public boolean save(String title,String description/*,String attachFile*/,List<Question> questions,String editorEmail){//问卷的保存，只有被授权的用户才能编辑
         if(info.isCommit()){
@@ -57,11 +58,11 @@ public class Questionaire {//创建的问卷
         this.questions=questions;
         this.description=description;
         /*this.attachFile=attachFile;*/
-        if(attachFile!=null){   //可能在保存中把上个存档的附件删除了，所以从true变false是有可能的
+        /*if(attachFile!=null){   //可能在保存中把上个存档的附件删除了，所以从true变false是有可能的
             haveAttach=false;
         }else{
             haveAttach=true;
-        }
+        }*/
         return true;
     }
     //编辑问卷，要先获取问卷已填写的数据
@@ -84,7 +85,7 @@ public class Questionaire {//创建的问卷
                     statistics.add(new Statistics(question.getType(), 1));
                 }
             }
-            info.commit();
+            info.isCommit();
             return true;
         }else{
             return false;
@@ -124,15 +125,27 @@ public class Questionaire {//创建的问卷
         }
         return true;
     }
-    public void uploadUsername(String filledName){
-        fillerNames.add(filledName);
-    }
-    public StatisticsResult getStatisticsResult(int index){//获取统计结果
-        if(index<questions.size()) {
+    public List<StatisticsResult> getStatisticsResult(){//获取多个问题的统计结果
+        List<StatisticsResult> statisticsResults=new ArrayList<>();
+        for(int index=0;index<questions.size();index++) {
             Question question = questions.get(index);
-            return new StatisticsResult(info.getTitle(), question.getQuestion(), question.getType(), statistics.get(index).getData());
+            Type type=question.getType();
+            List<ChoiceResult> choices=new ArrayList<>();
+            if(type==Type.SINGLE||type==Type.MULTIPLE){
+                String[] choice=question.getChoice();       //获取选项信息
+                List<Integer> list=( List<Integer>)statistics.get(index).getData();
+                for(int i=0;i<choice.length;i++) {
+                    choices.add(new ChoiceResult(list.get(i),choice[i]));
+                }
+            }else{
+                List<String> list=statistics.get(index).getData();
+                for(String str:list){
+                    choices.add(new ChoiceResult(str));
+                }
+            }
+            statisticsResults.add(new StatisticsResult(question.getQuestion(), question.getType(), choices));
         }
-        return null;
+        return statisticsResults;
     }
 
     public void addAuthorizeEditEmail(String name,String email,String photo){
@@ -145,7 +158,7 @@ public class Questionaire {//创建的问卷
         authorizeCheckID.add(new UserProfile(name,email,photo));
     }
     public boolean allowEdit(String email){
-        return authorizeEditID.contains(email)||email.equals(creatorEmail)||authorizeManageID.contains(email);
+        return authorizeEditID.contains(email)||authorizeManageID.contains(email);
     }
     public boolean allowCheck(String email){
         if(allowEdit(email)){
@@ -176,7 +189,7 @@ public class Questionaire {//创建的问卷
         for(int i=0;i<questions.size();i++){
             Question question=questions.get(i);
             question.setQuestion(unit[i].getQuestion());
-            if(question.getType()==Type.SINGLE||question.getType()==Type.MULTIPLE||question.getType()==Type.SLIDE) {//判断是否是选择题
+            if(question.getType()==Type.SINGLE||question.getType()==Type.MULTIPLE) {//判断是否是选择题
                 question.setChoice(unit[i].getChoices());
             }
         }
@@ -184,5 +197,8 @@ public class Questionaire {//创建的问卷
     public void uncommit(){//把内部已经保存的数据全部清空,置为未提交的状态
         statistics.clear();
         info.setCommit(false);
+    }
+    public void recordFiller(int filledid){
+            filledIDs.add(filledid);
     }
 }

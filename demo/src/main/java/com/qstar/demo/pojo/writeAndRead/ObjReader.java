@@ -2,6 +2,7 @@ package com.qstar.demo.pojo.writeAndRead;
 
 import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.annotation.JacksonStdImpl;
+import com.qstar.demo.pojo.FilledQuestionaire;
 import com.qstar.demo.pojo.Question;
 import com.qstar.demo.pojo.Questionaire;
 import com.qstar.demo.pojo.User;
@@ -20,21 +21,27 @@ public class ObjReader {//读取user对象，根据用户的名字读取，用�
     private String questionaireRoad;
     @Value("${store.userRoad}")
     private String userRoad;
+    @Value("${store.filledQustionaireRoad}")
+    private String filledQuestionaireRoad;
     private ObjectMapper objectMapper = new ObjectMapper();
     public String read(String name) throws IOException {
         //File file=new File(base+"/"+name+".txt");   //储存user对象的文件是txt格式的
-        System.out.println("读取路径："+base+"/"+name+".txt");
-        FileInputStream fis = new FileInputStream(base+"/"+name+".txt");
-        InputStreamReader  isr = new InputStreamReader(fis, "utf-8");
-        BufferedReader bf = new BufferedReader(isr);
-        String objstr = "";
-        String temp = "";
-        temp = bf.readLine();
-        while(temp != null){
-            objstr += temp;
+        String filename=base+"/"+name+".txt";
+        System.out.println("读取路径："+filename);
+        if(checkFile(filename)) {
+            FileInputStream fis = new FileInputStream(filename);
+            InputStreamReader isr = new InputStreamReader(fis, "utf-8");
+            BufferedReader bf = new BufferedReader(isr);
+            String objstr = "";
+            String temp = "";
             temp = bf.readLine();
+            while (temp != null) {
+                objstr += temp;
+                temp = bf.readLine();
+            }
+            return objstr;
         }
-        return objstr;
+        return null;
         // if(file.exists()) {//先检验文件是否存在，防止报错
         //     Reader r = new BufferedReader(new FileReader(file));
         //     String objstr = "";
@@ -54,10 +61,30 @@ public class ObjReader {//读取user对象，根据用户的名字读取，用�
     }
     public Questionaire readQuestionaire(int id) throws IOException {
         //return  (Questionaire) JSON.parseObject((String) read(questionaireRoad,id+""), Questionaire.class);
-        return objectMapper.readValue(read(questionaireRoad,id+""),Questionaire.class);
+        String json=read(questionaireRoad,id+"");
+        if(json!=null){
+        //return objectMapper.readValue(json,Questionaire.class);
+        return (Questionaire) JSON.parseObject((String) read(questionaireRoad,id+""), Questionaire.class);
+        }
+        return null;
     }
     public User readUser(String email) throws IOException {
-        //return (User) JSON.parseObject((String) read(userRoad,email), User.class);
-        return objectMapper.readValue(read(userRoad,email),User.class);
+        String json=read(questionaireRoad,email+"");
+        if(json!=null) {
+            return (User) JSON.parseObject((String) read(userRoad,email), User.class);
+            //return objectMapper.readValue(read(userRoad, email), User.class);
+        }
+        return null;
+    }
+    public FilledQuestionaire readFilledQuestionaire(int id) throws IOException {
+        String json=read(questionaireRoad,id+"");
+        if(json!=null) {
+            return  (Questionaire) JSON.parseObject((String) read(questionaireRoad,id+""), Questionaire.class);
+            //return objectMapper.readValue(read(filledQuestionaireRoad, id + ""), FilledQuestionaire.class);
+        }
+        return null;
+    }
+    public boolean checkFile(String file){
+        return new File(file).exists();
     }
 }

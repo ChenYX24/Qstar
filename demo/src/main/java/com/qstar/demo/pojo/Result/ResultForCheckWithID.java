@@ -14,7 +14,7 @@ public class ResultForCheckWithID {
     public ResultForCheckWithID(ResultForCheck check,int ID){
         this.title=check.getTitle();
         this.description=check.getDescription();
-        this.list=check.getList();
+        this.list=check.getContent();
         this.attach=check.getAttach();
         this.ID=ID;
     }

@@ -34,16 +34,27 @@
       "title": "3.你住在几楼",  
       "type": "blank",  
       "content": [  
-        { "value": 1048, "name": "Search Engine" },  
-        { "value": 735, "name": "Direct" },  
-        { "value": 580, "name": "Email" },  
-        { "value": 484, "name": "Union Ads" },  
-        { "value": 300, "name": "Video Ads" },  
-        { "value": 300, "name": "Vdeo" },  
-        { "value": 300, "name": "Vieo" },  
-        { "value": 300, "name": "Vido" },  
-        { "value": 300, "name": "Vide" }  
+        { "value":"" , "name": "aaa" },  
+        { "value": "", "name": "vvv" },  
+        { "value": "", "name": "xxx" },  
+        { "value": "", "name": "on Ads" },  
+        { "value": "", "name": "ideo Ads" },  
+        { "value": "", "name": "deo" },  
+        { "value": "", "name": "ieo" },  
+        { "value": "", "name": "Vdo" },  
+        { "value": "", "name": "Vde" }  
       ]  
-    }  
+    },
+	{
+	  "id": 4,  
+	  "title": "4.你住在几楼",  
+	  "type": "slider",  
+	  "content": [  
+	    { "value": "", "name": "1" },  
+	    { "value": "", "name": "2" },
+		{ "value": "", "name": "2" },
+		{ "value": "", "name": "5" }
+	  ]  
+	}
   ]  
 }  

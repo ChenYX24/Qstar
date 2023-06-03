@@ -31,7 +31,7 @@ public class Controller {
     }
     //获取已经用户已经创建的问卷，用于MyQ.vue
     @GetMapping("/getCreated")
-    public Result getCreated(@RequestHeader("token") String token){
+    public Result getCreated(@RequestHeader("token") String token) throws IOException {
         System.out.println("要获取问卷的token:"+token);
         List<QuestionaireInfo> infos=handle.getCreated(token);
         System.out.println("success");
@@ -41,12 +41,22 @@ public class Controller {
     @PostMapping("/create")
     public Result create(@RequestBody CreatedReceive receive, @RequestHeader("token") String token) throws IOException {
         /*String attach=handleFile(receive);*/
-        int id=handle.create(receive.getTitle(),receive.getDescription(),receive.getList(),token,receive.isCommit());
+        System.out.println("title:"+receive.getTitle());
+        System.out.println("content:"+receive.getContent());
+        //System.out.println("receive:"+receive);
+        System.out.println(token);
+        System.out.println(receive.isCommit());
+        int id=handle.create(receive.getTitle(),receive.getDescription(),receive.getContent(),token,receive.isCommit());
         return Result.success(id);
     }
     //查看已经创建问卷的详细信息
-    @GetMapping("/check")
-    public Result check(Integer id,@RequestHeader("token") String token) throws IOException {
+    @RequestMapping("/check")
+    public Result check(@RequestHeader("token") String token,@RequestBody String info) throws IOException {
+        System.out.println(info);
+        String temp = userService.userio.getKeyValueofJson(info, "id");
+        int id = Integer.parseInt(temp);
+        System.out.println("id:" + id);
+        //int Id = Integer.parseInt(id);
         ResultForCheck result=handle.check(id,token);
         if(result!=null) {
             return Result.success(result);
@@ -91,7 +101,7 @@ public class Controller {
     }
     //返回已经填写的问卷的信息
     @GetMapping("/fillRecord")
-    public Result getFillRecord(@RequestHeader("token") String token){//获取填写记录
+    public Result getFillRecord(@RequestHeader("token") String token) throws IOException {//获取填写记录
         return Result.success(handle.getFillRecord(token));
     }
     //保存已经填写的数据
@@ -121,11 +131,14 @@ public class Controller {
         return handle.commitFill(id,token);
     }*/
     //获取数据
-    @GetMapping("/statistics/{index}")
-    public Result statistics(@PathVariable Integer index,Integer id,@RequestHeader("token") String token) throws IOException {
-        return handle.statistics(index,id,token);
+    @GetMapping("/statistics")
+    public Result statistics(Integer id,@RequestHeader("token") String token) throws IOException {
+        return handle.statistics(id,token);
     }
-
+    @GetMapping("/getFilled")
+    public Result getFilled(Integer id,@RequestHeader("token") String token) throws IOException {//用于获取这个问卷的所有填写记录
+        return handle.getFilled(id,token);
+    }
     @PostMapping("/setting")
     public Result setting(@RequestBody SettingReceive receive,@RequestHeader("token") String token) throws IOException {//设置问卷的配置信息
         Result result= handle.setting(receive.isRecordName(),receive.isMultiCommit(),receive.getBegin(),receive.getEnd(),receive.getId(),token);

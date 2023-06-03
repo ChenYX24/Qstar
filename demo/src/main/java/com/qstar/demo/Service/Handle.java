@@ -22,7 +22,7 @@ import java.util.*;
 public class Handle {
     @Autowired
     Link link;
-    public List<QuestionaireInfo> getCreated(String token){
+    public List<QuestionaireInfo> getCreated(String token) throws IOException {
         return link.getCreated(token);
     }
     public int create(String title, String description/*,String filename*/,List<Question> questions,String token,boolean commit) throws IOException {
@@ -40,7 +40,7 @@ public class Handle {
     public Result fill(int id,String token,boolean commit) throws IOException{
         return link.fill(id,token,commit);
     }
-    public List<FilledQuestionaireInfo> getFillRecord(String token){
+    public List<FilledQuestionaireInfo> getFillRecord(String token) throws IOException {
         return link.getFillRecord(token);
     }
     public Result saveFill(int id,String[] data, String token,boolean commit) throws IOException {
@@ -52,8 +52,8 @@ public class Handle {
     /*public Result commitFill(int id, String token) throws IOException {
         return link.commitFill(id,token);
     }*/
-    public Result statistics(int index, int id, String token) throws IOException {
-        return link.statistics(index,id,token);
+    public Result statistics(int index,  String token) throws IOException {
+        return link.statistics(index,token);
     }
 
 
@@ -108,5 +108,9 @@ public class Handle {
 
     public Result authorizeManage(Integer id, String name, String email, String photo, String token) throws IOException {
         return link.authorizeManage(id,name,email,photo,token);
+    }
+
+    public Result getFilled(Integer id, String token) throws IOException {
+        return link.getFilled(id,token);
     }
 }

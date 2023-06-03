@@ -17,15 +17,16 @@
 		    >
 		      <swiper-item>
 				<view class="page1">
-				  <QBlock v-for="(block, index) in blocks1" :key="block.id" 
+				  <QBlock v-for="(block, index) in myCreateds" :key="block.id" 
 				  :onumber="block.filled" :title="block.title" 
-				  :isPush="block.commit" @changeSave="emitSave(index)" 
-				   @click='getData(index)'></QBlock>
+				  :isPush="block.commit" @changeSave="emitSave(index)"  @changePush="changePush(index)"
+				  :id="block.id"></QBlock>
 				</view>
 		      </swiper-item>
 		      <swiper-item>
 				<view class="page2">
-				  <QBlock2 v-for="item in myFilleds" :key="item.id" :title="item.title" :isEnd="item.commited" :name="item.name"></QBlock2>
+				  <QBlock2 v-for="item in myFilleds" :key="item.id" :title="item.title" :isEnd="item.commited" :name="item.name"
+				  ></QBlock2>
 				</view>
 		      </swiper-item>
 		    </swiper>
@@ -67,10 +68,14 @@ export default {
 		//下面两个要传
 		blocks:[],//我填写的
 		blocks1: [],//我创建的
-		isSave:false
+		isSave:false,
   	}
   },
     methods: {
+		changePush(index){
+			//ToDo
+			this.blocks1[index].commit=1//1已发布，-1已停止发布，0未发布
+		},
 		emitSave(index){
 			//TODO
 			if(index==0||index)
@@ -122,30 +127,6 @@ export default {
 	  test(e){
 		  console.log(e.target)
 	  },
-	  getData(index){
-		  // console.log(index);
-		  // console.log(this.blocks1)
-		  axios.defaults.headers.common['token'] = localStorage.getItem('token');
-		  axios.get(/*'https://metaq.scutbot.icu/login'*/
-		  			// 'http://localhost:8080/check',
-					'/static/test2.json',
-					{
-						id:this.blocks1[index].id
-					})
-		      .then(response => {
-					var temp=response.data.data.blocks1[index]
-					// console.log(temp)
-					temp.title=this.blocks1[index].title
-					this.$store.commit('setQuestionNire',temp);
-					// console.log(this.$store.state.questionNire)
-					uni.navigateTo({
-						url: '/pages/editQuestionnire/editQuestionnire?flag='+1
-					})
-		      })
-		      .catch(error => {
-		        console.log(error);
-		      });
-	  }
 	},
 	computed: {
 		myCreateds() {
