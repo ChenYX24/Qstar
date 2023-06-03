@@ -1,5 +1,8 @@
 <template>
 <view class="background" :class="{'edit':currentTab}">
+	<view class="navBar">
+		<image src="../../static/analysis/back.png" mode="aspectFit" class="back" @tap="goBack"></image>
+	</view>
 		<view class="title">
 			{{title}}
 		</view>
@@ -120,7 +123,10 @@ import axios from 'axios';
 			this.isCopy=false
 			this.isSave=false
 			this.isDelete=!this.isDelete  			
-		  }
+		  },
+		  goBack(){
+			uni.navigateBack()
+		  },
 		}
 	}
 </script>
@@ -244,5 +250,15 @@ import axios from 'axios';
 	.next.active{
 		background: linear-gradient(90deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 247, 255, 0.8) 100%);
 		color: rgba(179, 157, 194, 1);
+	}
+	.navBar{
+		position: absolute;
+		height: 5%;
+		top: 9vw;
+		width: 100%;
+		image{
+			height: 100%;
+			width: 10%;
+		}
 	}
 </style>

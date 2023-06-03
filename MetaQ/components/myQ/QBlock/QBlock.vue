@@ -1,11 +1,13 @@
 <template>
 	<swiper :duration="300" :current="currentIndex">
-
 		<!-- 第二个视图 -->
-		<swiper-item class="share" @tap="share">
-		  <view class="alternateView">
+		<swiper-item class="share" >
+		  <view v-if="isPush>0" class="alternateView" @tap="share">
 		    <!-- Content for the alternate view -->
 		    分享问卷填写
+		  </view>
+		  <view v-else class="alternateView" @tap="push">
+			点击发布问卷
 		  </view>
 		</swiper-item>
 		
@@ -16,7 +18,7 @@
       </view>
       <view class="bottomBox">
         <view class="pushBox">
-          <view :class="{ 'active-dot': isPush, 'dot': !isPush }"></view>
+          <view :class="{ 'active-dot': isPush>0, 'dot': isPush<=0 }"></view>
           <view class="push">{{ pushText }}</view>
         </view>
         <view class="text">答卷数量</view>
@@ -65,35 +67,48 @@ export default {
 	  share(){
 		  this.$emit('changeSave')
 	  },
+	  push(){
+		  this.$emit('changePush')
+	  },
 	  toEdit(){
-	  		console.log(132324)
-			console.log("id",this.id);
-	  		axios.defaults.headers.common['token'] = localStorage.getItem('token');
-	  		axios.post(/*'https://metaq.scutbot.icu/login'*/
-	  					'http://localhost:8080/check',
-	  							//'/static/test2.json',
-								{
-									id:this.id
-								})
-	  		    .then(response => {
-								console.log(response.data);
-	  							var temp=response.data.data
-								// var temp;
-								// temp['title'] = data.info.title;
-								// temp['description'] = data.description;
-								// temp['content'] = data.content;
-								//temp['commit'] = data.info.commit;
-	  							// console.log(temp)
-	  							// temp.title=this.title
-	  							this.$store.commit('setQuestionNire',temp);
-	  							// // console.log(this.$store.state.questionNire)
-	  							uni.navigateTo({
-	  								url: '/pages/editQuestionnire/editQuestionnire?flag='+1
-	  							})
-	  		    })
-	  		    .catch(error => {
-	  		      console.log(error);
-	  		    });
+		  if(this.isPush)
+		  {
+			  uni.navigateTo({
+			  	url:"/pages/analysis/analysis"
+			  })
+		  }
+		  else
+		  {
+			  console.log(132324)
+			  console.log("id",this.id);
+			  axios.defaults.headers.common['token'] = localStorage.getItem('token');
+			  axios.post(/*'https://metaq.scutbot.icu/login'*/
+			  			'http://localhost:8080/check',
+			  					//'/static/test2.json',
+			  					{
+			  						id:this.id
+			  					})
+			      .then(response => {
+			  					console.log(response.data);
+			  					var temp=response.data.data
+			  					// var temp;
+			  					// temp['title'] = data.info.title;
+			  					// temp['description'] = data.description;
+			  					// temp['content'] = data.content;
+			  					//temp['commit'] = data.info.commit;
+			  					// console.log(temp)
+			  					// temp.title=this.title
+			  					this.$store.commit('setQuestionNire',temp);
+			  					// // console.log(this.$store.state.questionNire)
+			  					uni.navigateTo({
+			  						url: '/pages/editQuestionnire/editQuestionnire?flag='+1
+			  					})
+			      })
+			      .catch(error => {
+			        console.log(error);
+			      });
+		  }
+
 	  	
 	  	
 	  },
@@ -103,9 +118,12 @@ export default {
   },
   computed: {
 	  pushText(){
-	  	if(this.isPush){
+	  	if(this.isPush==1){
 	  		return "已发布"
 	  	}
+		else if(this.isPush==-1){
+			return "已停止发布"
+		}
 	  	else{
 	  		return "未发布"
 	  	}
