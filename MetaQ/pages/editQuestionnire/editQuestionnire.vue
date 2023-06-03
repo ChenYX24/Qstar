@@ -24,29 +24,33 @@
 				
 			</view>
 			
-			<view class="" id='question-all' v-for="(item,index) in questionNire.content" :key=index>
+			<view  ref='questionComponents' class="" id='question-all' v-for="(item,index) in questionNire.content" :key=index>
 				<!-- 单选组件 -->
-				<view class="" v-if="item.type=='SINGLE'">
+				<view class="" v-if="item.type=='SINGLE'" @click="setOperateShow(index)">
 					<danxuanDisplay :content="questionNire.content[index]"
 					:num="(index+1).toString()"
+					:operate_show="operate_show[index]"
 					></danxuanDisplay>
 				</view>
 				<!-- 多选 -->
-				<view class="" v-if="item.type=='MULTIPLE'">
+				<view class="" v-if="item.type=='MULTIPLE'" @click="setOperateShow(index)">
 					<danxuanDisplay :content="questionNire.content[index]"
 					:num="(index+1).toString()"
+					:operate_show="operate_show[index]"
 					></danxuanDisplay>
 				</view>
 				<!-- 填空 -->
-				<view class="" v-else-if="item.type=='BLANK'">
+				<view class="" v-else-if="item.type=='BLANK'" @click="setOperateShow(index)">
 					<tiankongDisplay :content="questionNire.content[index]"
 					:num="(index+1).toString()"
+					:operate_show="operate_show[index]"
 					></tiankongDisplay>
 				</view>
 				<!-- 滑动条 -->
-				<view class="" v-else-if="item.type=='SLIDE'">
+				<view class="" v-else-if="item.type=='SLIDE'" @click="setOperateShow(index)">
 					<sliderDisplay :content="questionNire.content[index]"
 					:num="(index+1).toString()"
+					:operate_show="operate_show[index]"
 					></sliderDisplay>
 				</view>
 			</view>
@@ -208,21 +212,24 @@
 							}
 							]
 				},
-				
-				
+				operate_show:[],
+				operateBefore:-1,
 				//下面是决定两个页面互相切换的变量
 				questionnire_page_show:0,
 				question_page_show:0,
 				isAdd:0
 			}
 		},
+		created(){
+			this.operate_show=Array.from({ length: this.questionNire.content.length }, () => false);
+		},
 		watch: {
 		  '$store.state.IsJump': function(newVal, oldVal) {
 				this.toEdit()
 		  },
 		  '$store.state.otherOperate':function(newVal, oldVal) {
-			  console.log(1111111111);
-			  console.log(this.$store.state.index)
+			  // console.log(1111111111);
+			  // console.log(this.$store.state.index)
 				switch(this.$store.state.index){
 					case 1:
 						this.toCopy();
@@ -295,7 +302,6 @@
 				if(index==0)
 					return;
 				this.questionNire.content.splice(index-1, 2, this.questionNire.content[index], this.questionNire.content[index-1]);
-				
 			},
 			toDown(){
 				let index=this.$store.state.now_operate;
@@ -303,12 +309,27 @@
 					return;
 				[this.questionNire.content[index], this.questionNire.content[index+1]] = [this.questionNire.content[index+1], this.questionNire.content[index]];
 				// this.showOperation(index+1);
+				this.setViewHeight(index)
 			},
 			toDelete(){
 				let index=this.$store.state.now_operate;
 				this.questionNire.content.splice(index,1);
 			},
-			
+			setViewHeight(index){
+				console.log(11)
+				var question_all = document.getElementById('question-all');
+				var targetView = this.$refs.questionComponents[index].$el;
+				console.log(this.$refs.questionComponents[index],this.$refs.questionComponents[index].offsetHeight,targetView.offsetHeight)
+				// var editHeight = this.$store.state.editHeight;
+				var editHeight =0;
+				var question_all_height = questionnire_page.clientHeight;
+				var targetView_height = targetView.offsetHeight;  
+				var targetView_offset_top = targetView.offsetTop;  				
+				var scroll_position = targetView_offset_top-(question_all_height- (targetView_height-editHeight)) / 2;  
+				console.log(scroll_position,targetView_offset_top,question_all_height,targetView_height,editHeight)
+				// console.log(question_all_height , targetView_height,editHeight)
+				questionnire_page.scrollTo(0, scroll_position);
+			},
 			//更改页面当前显示位置的函数,为了使添加了新题目，滑动到最下面
 			toButton(){
 				this.$nextTick(()=>{
@@ -341,7 +362,25 @@
 				})
 
 
-			}
+			},
+			setOperateShow(index){
+				// console.log()
+				if(this.operateBefore==-1){
+					this.operate_show[index]=true;
+					this.operateBefore=index;
+				}
+				else if(this.operateBefore==index){
+					this.operate_show[index]=false;
+					this.operateBefore=-1;
+					// return;
+				}
+				else{
+					this.operate_show[index]=true;
+					this.operate_show[this.operateBefore]=false;
+					this.operateBefore=index;
+				}
+				// console.log(this.operate_show);
+			},
 			
 		}
 

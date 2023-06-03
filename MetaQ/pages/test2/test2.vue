@@ -1,72 +1,161 @@
 <template>
-	<view>
-<!-- 		<view class="bg">
-			<input type="text" v-model="testdata">
-			<button @tap="test">tests</button>
-		</view> -->
-		<danxuanAnswer></danxuanAnswer>
+	<view class="danxuanDisplay" id="test">
+		<view class="box">
+			<view class="inbox">
+				<view class="title">
+					{{num}}.{{content.question}}
+				</view>
+				<view class="">
+					<view class="input-div" id='inputDiv' @click="changeShow">
+									<view v-if="isRange">
+										{{range.start.toLocaleDateString()}}-{{range.end.toLocaleDateString()}}
+									</view>
+									<view v-else>
+										{{range.start.toLocaleDateString()}}
+									</view>
+							</view>
+					<view class="date">
+						<DatePicker v-if="isRange" v-model.range="range" 
+						:style="{display: isShow ? 'flex' : 'none'}" />
+					</view>
+						
+				</view>
+			</view>
+
+		</view>
+		
+		
 	</view>
 </template>
 
 <script>
-// import axios from 'axios';
-import danxuanAnswer from '/components/answerQuestion/danxuanAnswer/danxuanAnswer.vue'
+	import {DatePicker} from 'v-calendar';
+	import 'v-calendar/style.css';
+	
 	export default {
-		components:{
-			danxuanAnswer
-		},
 		data() {
 			return {
-				testdata:"",
-				base64Image:""
+				range:({
+					start: new Date(2023, 0, 6),
+					  end: new Date(2023, 0, 10)
+				}),
+				date:null,
+				answer:'',
+				isShow:false
 			};
 		},
-		methods: {
-			test() {
-				axios.defaults.headers.common['token'] = localStorage.getItem('token');
-				axios.get('http://localhost:8080/getqrcode')
-					.then(response => {
-						this.base64Image="data:image/png;base64," + response.data;
-						console.log("base64",this.base64Image);
-						console.log("response",response.data);
-					})
-					.catch(error => {
-					    console.log(error);
-					});
-				//console.log("testdata",this.testdata);
+		  watch: {
+			range(newVal) {
+			  // 在这里处理值变化的逻辑
+			  // console.log(this.range.start.toLocaleDateString()==this.range.end.toLocaleDateString())
+			  this.isShow=!this.isShow
 			}
+		  },
+		  computed: {
+		  	isRange() {
+				if(test==1)
+				{
+					return false
+				}
+				else if(test==2)
+				{
+					return true
+				}
+				else{
+					if(this.range.start.toLocaleDateString()==this.range.end.toLocaleDateString())
+					{
+						return false
+					}
+					else
+					{
+						return true
+					}
+				}
+
+		  	}
+		  },
+		props:{
+			num:{
+				type:String,
+				default:'2'
+			},
+			content:{
+				type:Object,
+				default:{
+					question:"3333",
+					type:'blank',
+					choice:['1','2','3','4'],
+				}
+			},
+
+		},
+		components:{
+			DatePicker
+		},
+		methods:{
+			setHeight(e){
+					var node=document.getElementById('textArea');
+					var parent=document.getElementById('inputDiv')
+					node.style.height=`${e.detail.height}px`
+					parent.style.height=`${e.detail.height}px`
+			},
+			changeShow(e){
+				this.isShow=!this.isShow
+			},
+			
+
 		}
 	}
 </script>
 
 <style lang="less">
-*{
-		margin: 0%;
-	}
-	@font-face {
-	  font-family: 'ali';
-	  src: url('/font/ali/Alimama_ShuHeiTi_Bold.ttf') format('truetype');
-	}
-	.bg {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-	    position: fixed;
-	    top: 0;
-	    left: 0;
-	    right: 0;
-	    bottom: 0;
-		width: 100vw;
-		height: 100vh;
-		opacity: 1;
-		background: url('/static/index/bg.png') center center / 225% 130% no-repeat,  linear-gradient(225deg, rgba(230, 247, 255, 1) 0%, rgba(255, 254, 247, 1) 38.89%, rgba(233, 229, 254, 1) 67.78%, rgba(230, 224, 250, 1) 100%);
-	}
-	.bg input {
-		border: 1px solid rgba(0,0,0,0.6);
-	}
-	.bg img {
-		height: 200px;
-		width: 200px;
-	}
+.danxuanDisplay{
+
+	margin-top: 10px;
+	display: flex;
+	width: 100vw;
+	// height: 100vh;
+	justify-content: center;
+}
+.box{
+	width: 90vw;
+	border-radius: 20px;
+	background: rgba(255, 255, 255, 0.8);
+	box-shadow: 2px 2px 20px 0px rgba(136, 63, 143, 0.15);
+}
+.inbox{
+	// border: 1px dashed green;
+}
+.title{
+	margin:10px 0px 5px 20px;
+	font-size: 20px;
+}
+
+
+
+
+.input-div{
+	display: flex;
+	margin: 10px 20px 20px 20px;
+	border: 1px solid rgba(225, 225, 235, 1);
+	border-radius: 3px;
+	background-color: #ffffff;
+	justify-content: center;
+	font-size: 20px;
+}
+
+.text-input{
+	display: flex;
+	width: 100%;
+	height: 100%;
+}
+.date{
+	display: flex;
+	margin: 10px 20px 20px 20px;
+	// border: 1px solid rgba(225, 225, 235, 1);
+	border-radius: 3px;
+	background-color: #ffffff;
+	justify-content: center
+}
+
 </style>

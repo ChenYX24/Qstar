@@ -121,7 +121,7 @@
             
         }
 		,{
-		    "path" : "components/questionEdit/title/title",
+		    "path" : "components/questionShow/dateSeleteShow/dateSeleteShow",
 		    "style" :                                                                                    
 		    {
 		        "navigationBarTitleText": "",
