@@ -37,7 +37,7 @@ export default {
 			},
 		data() {
 			return {
-				answer:200
+				answer:Math.floor(this.content.choice[2]*0.8),
 			};
 		},
 		props:{

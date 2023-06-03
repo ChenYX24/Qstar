@@ -57,7 +57,7 @@
 				<p>+</p>
 			</view>
 
-		</view>
+		</view>0.
 		<tab-bar :activeTab="tab" :Type="1" :questionNireProps='questionNire'></tab-bar>
 		
 		<!-- 下面是点击加号弹出选择题目 -->
@@ -150,9 +150,11 @@
 				// console.log(this.questionNire.content.length,this.$store.state.now_operate)
 				if(this.questionNire.content.length>this.$store.state.now_operate){
 					this.questionNire.content[this.$store.state.now_operate]=temp;
+					this.isAdd=this.$store.state.now_operate;
 				}
 				else{
 					this.questionNire.content.push(temp);
+					this.isAdd=-1;
 				}
 				//重置这个值
 				// this.$store.commit('setNowOperate',-1);
@@ -212,16 +214,33 @@
 				questionnire_page_show:0,
 				question_page_show:0,
 				isAdd:0
-
 			}
 		},
 		watch: {
 		  '$store.state.IsJump': function(newVal, oldVal) {
 				this.toEdit()
-		  }
+		  },
+		  '$store.state.otherOperate':function(newVal, oldVal) {
+			  console.log(1111111111);
+			  console.log(this.$store.state.index)
+				switch(this.$store.state.index){
+					case 1:
+						this.toCopy();
+						break;
+					case 2:
+						this.toUp()
+						break;
+					case 3:
+						this.toDown()
+						break;
+					case 4:
+						this.toDelete()
+						break;
+				}
+		  },
+		  
 		},
 		methods:{
-
 			test(e){
 					var node=document.getElementById(e.currentTarget.id);
 					node.style.height=`${e.detail.height}px`
@@ -264,16 +283,40 @@
 							
 				})
 			},
+			toCopy(){
+				let index=this.$store.state.now_operate;
+				const elementToCopy = this.questionNire.content[index];
+				const copiedElement = { ...elementToCopy };
+				this.questionNire.content.splice(index+1,0,copiedElement);
+			},
+			toUp(){
+				let index=this.$store.state.now_operate;
+				console.log('index:',index)
+				if(index==0)
+					return;
+				this.questionNire.content.splice(index-1, 2, this.questionNire.content[index], this.questionNire.content[index-1]);
+				
+			},
+			toDown(){
+				let index=this.$store.state.now_operate;
+				if(index==this.questionNire.content.length-1)
+					return;
+				[this.questionNire.content[index], this.questionNire.content[index+1]] = [this.questionNire.content[index+1], this.questionNire.content[index]];
+				// this.showOperation(index+1);
+			},
+			toDelete(){
+				let index=this.$store.state.now_operate;
+				this.questionNire.content.splice(index,1);
+			},
+			
 			//更改页面当前显示位置的函数,为了使添加了新题目，滑动到最下面
 			toButton(){
 				this.$nextTick(()=>{
 					const questionnire_page = document.getElementById("questionnire_page");
-					this.isAdd=this.questionNire.content.length>this.$store.state.now_operate?0:1
-					console.log(this.isAdd==1)
-					if(this.isAdd==1){
+					if(this.isAdd==-1){
 					// const backgroundElement = this.$refs.background;
 					// console.log(backgroundElement.scrollHeight)
-					console.log(111)
+					// console.log(111)
 					var scrollHeight=questionnire_page.scrollHeight;
 					var offsetHeight=questionnire_page.offsetHeight;
 					questionnire_page.scrollTop=scrollHeight>0?scrollHeight-offsetHeight:0;

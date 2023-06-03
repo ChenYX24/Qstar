@@ -7,19 +7,19 @@
 						<img src="/static/operationEditQuestion/edit.png" alt="" >
 						编辑
 					</view>
-					<view class="opration-concrete">
+					<view class="opration-concrete" @click="toOperate" id='1'>
 						<img src="/static/operationEditQuestion/copy.png" alt="">
 						复制
 					</view>
-					<view class="opration-concrete">
+					<view class="opration-concrete" @click="toOperate" id='2'>
 						<img src="/static/operationEditQuestion/up.png" alt="">
 						上移
 					</view>
-					<view class="opration-concrete">
+					<view class="opration-concrete" @click="toOperate" id='3'>
 						<img src="/static/operationEditQuestion/down.png" alt="">
 						下移
 					</view>
-					<view class="opration-concrete">
+					<view class="opration-concrete"  @click="toOperate" id='4'>
 						<img src="/static/operationEditQuestion/delete.png" alt="">
 						删除
 					</view>
@@ -51,13 +51,20 @@
 		methods:{
 			toEdit(e){
 				let editHeight=this.$el.clientHeight
-				console.log(this.$el.clientHeight)
+				// console.log(this.$el.clientHeight)
 				this.$store.commit('setEditHeight',editHeight);
 				//修改当前正在操作的值
 				this.$store.commit('setNowOperate',this.num-1);
 				this.$store.commit('setIsJump');
 				this.$emit('clickSon')
-			}
+			},
+			toOperate(e){
+				var index=parseInt(e.currentTarget.id);
+				this.$store.commit('setNowOperate',this.num-1);
+				this.$store.commit('setOtherOperate',index);
+				// console.log(this.$store.state.now_operate);
+				// console.log(otherOperate)
+			},
 		}
 	}
 </script>
