@@ -243,7 +243,7 @@
 			box-shadow: 2px 2px 20px 0px rgba(136, 63, 143, 0.15);
 			line-height: 32.93px;
 			color: rgba(179, 157, 194, 1);
-			font-size: 20pt;
+			font-size: 15pt;
 			width: 80%;
 			height: 10%;
 			display: flex;
@@ -258,7 +258,7 @@
 			box-shadow: 2px 2px 20px 0px rgba(136, 63, 143, 0.15);
 			line-height: 32.93px;
 			color: rgba(0, 0, 0, 1);
-			font-size: 20pt;
+			font-size: 15pt;
 			width: 80%;
 			height: 10%;
 			display: flex;
