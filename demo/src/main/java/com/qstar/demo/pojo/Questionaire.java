@@ -85,7 +85,7 @@ public class Questionaire {//创建的问卷
                     statistics.add(new Statistics(question.getType(), 1));
                 }
             }
-            info.commit();
+            info.isCommit();
             return true;
         }else{
             return false;

@@ -19,12 +19,14 @@
 				<view class="page1">
 				  <QBlock v-for="(block, index) in blocks1" :key="block.id" 
 				  :onumber="block.filled" :title="block.title" 
-				  :isPush="block.commit" @changeSave="emitSave(index)" ></QBlock>
+				  :isPush="block.commit" @changeSave="emitSave(index)" 
+				  :id="block.id"></QBlock>
 				</view>
 		      </swiper-item>
 		      <swiper-item>
 				<view class="page2">
-				  <QBlock2 v-for="item in myFilleds" :key="item.id" :title="item.title" :isEnd="item.commited" :name="item.name"></QBlock2>
+				  <QBlock2 v-for="item in myFilleds" :key="item.id" :title="item.title" :isEnd="item.commited" :name="item.name"
+				  ></QBlock2>
 				</view>
 		      </swiper-item>
 		    </swiper>
@@ -66,7 +68,7 @@ export default {
 		//下面两个要传
 		blocks:[],//我填写的
 		blocks1: [],//我创建的
-		isSave:false
+		isSave:false,
   	}
   },
     methods: {

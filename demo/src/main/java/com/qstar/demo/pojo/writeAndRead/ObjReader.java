@@ -63,23 +63,24 @@ public class ObjReader {//读取user对象，根据用户的名字读取，用�
         //return  (Questionaire) JSON.parseObject((String) read(questionaireRoad,id+""), Questionaire.class);
         String json=read(questionaireRoad,id+"");
         if(json!=null){
-        return objectMapper.readValue(json,Questionaire.class);
+        //return objectMapper.readValue(json,Questionaire.class);
+        return (Questionaire) JSON.parseObject((String) read(questionaireRoad,id+""), Questionaire.class);
         }
         return null;
     }
     public User readUser(String email) throws IOException {
         String json=read(questionaireRoad,email+"");
         if(json!=null) {
-            //return (User) JSON.parseObject((String) read(userRoad,email), User.class);
-            return objectMapper.readValue(read(userRoad, email), User.class);
+            return (User) JSON.parseObject((String) read(userRoad,email), User.class);
+            //return objectMapper.readValue(read(userRoad, email), User.class);
         }
         return null;
     }
     public FilledQuestionaire readFilledQuestionaire(int id) throws IOException {
         String json=read(questionaireRoad,id+"");
         if(json!=null) {
-            //return  (Questionaire) JSON.parseObject((String) read(questionaireRoad,id+""), Questionaire.class);
-            return objectMapper.readValue(read(filledQuestionaireRoad, id + ""), FilledQuestionaire.class);
+            return  (Questionaire) JSON.parseObject((String) read(questionaireRoad,id+""), Questionaire.class);
+            //return objectMapper.readValue(read(filledQuestionaireRoad, id + ""), FilledQuestionaire.class);
         }
         return null;
     }
