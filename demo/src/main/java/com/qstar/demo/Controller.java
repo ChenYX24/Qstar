@@ -99,7 +99,7 @@ public class Controller {
 
     //返回要填写的问卷的信息
     @Data
-    public static class fillRecive{
+    static class fillRecive{
         int id;
         boolean commit;
     }
@@ -126,6 +126,7 @@ public class Controller {
         }else{
             set=null;
         }*/
+        System.out.println(receive);
         return handle.saveFill(receive.getFilledID(), receive.getData(), token, receive.isCommit());
     }
     //查看已经填写过的问卷

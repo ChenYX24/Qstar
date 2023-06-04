@@ -1,1 +1,1 @@
-{"id":3,"name":"admin","email":"a@qq.com","passwd":"741963","phonenumber":"123456789","location":"上海市","headPic":" ","questionaires":[0,1],"filledQuestionaires":[1],"allowCheckQuestionaires":[],"allowEditQuestionaires":[],"allowManageQuestionaires":[]}
+{"id":3,"name":"admin","email":"a@qq.com","passwd":"741963","phonenumber":"123456789","location":"上海市","headPic":" ","questionaires":[0,1],"filledQuestionaires":[],"allowCheckQuestionaires":[],"allowEditQuestionaires":[],"allowManageQuestionaires":[]}
