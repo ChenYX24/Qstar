@@ -72,14 +72,16 @@ public class Link {
         System.out.println("questionaireRoad:" + questionaireRoad);
         /*IDProperties=PropertiesLoaderUtils.loadAllProperties("IDProperty.properties");*/
          /*Integer.parseInt(IDProperties.getProperty(IDKey));*/
-        if(new File(base+"/"+IDFile).exists()) {    //测试用
-            BufferedReader IDReader = new BufferedReader(new FileReader(base+"/"+IDFile));
-            idDistribute = Integer.parseInt(IDReader.readLine());     //读取
-            IDReader.close();
+        int[] IDs=reader.readQuestionaireID();
+        if(IDs!=null){
+            idDistribute=IDs[0];
+            filledIDDistribute=IDs[1];
         }else{
             idDistribute=0;
+            filledIDDistribute=0;
         }
         System.out.println("idDistribute:"+idDistribute);
+        System.out.println("filledIDDistribute"+filledIDDistribute);
         //idDistribute=0; //不用读写文件的话至少还要赋值，否则创建不了问卷和填写记录
         //filledIDDistribute=0;
     }
@@ -121,6 +123,7 @@ public class Link {
             writer.writeUser(user);
             /*public Questionaire(String title,String description,String attachFile,List<Question> questions,int id,String creatorEmail){*/
             idDistribute++;
+            writer.writeID(idDistribute,filledIDDistribute);
             //IDWriter.write(idDistribute);       //同步写入
             if(commit){ //当需要提交时
                     questionaire.commit();
@@ -205,6 +208,7 @@ public class Link {
                         }
                         writer.writeUser(user);//感觉IO用太多了
                         writer.writeFilledQuestionaire(filledQuestionaire);
+                        writer.writeID(idDistribute,filledIDDistribute);
                         System.out.println("success!!!!");
                         return Result.success(new ResultForCheckWithID(getfill(id, token),filledIDDistribute-1));
                     }

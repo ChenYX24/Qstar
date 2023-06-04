@@ -23,6 +23,8 @@ public class ObjReader {//读取user对象，根据用户的名字读取，用�
     private String userRoad;
     @Value("${store.filledQuestionaireRoad}")
     private String filledQuestionaireRoad;
+    @Value("${store.IDFile}")
+    private String IDFile;
     private ObjectMapper objectMapper = new ObjectMapper();
     public String read(String name) throws IOException {
         //File file=new File(base+"/"+name+".txt");   //储存user对象的文件是txt格式的
@@ -55,6 +57,17 @@ public class ObjReader {//读取user对象，根据用户的名字读取，用�
         // }else{
         //     return null;
         // }
+    }
+    public int[] readQuestionaireID() throws IOException {
+        File file=new File(base+"/"+IDFile+".txt");
+        if(file.exists()){
+            BufferedReader reader=new BufferedReader(new FileReader(file));
+            int[] a=new int[2];
+            a[0]=Integer.parseInt(reader.readLine());
+            a[1]=Integer.parseInt(reader.readLine());
+            return a;
+        }
+        return null;
     }
     public String read(String father,String name) throws IOException {
         return this.read(father+"/"+name);
