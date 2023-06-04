@@ -53,6 +53,14 @@
 					:operate_show="operate_show[index]"
 					></sliderDisplay>
 				</view>
+				<!-- 选择日期 -->
+				<view class="" v-else-if="item.type=='DATE'" @click="setOperateShow(index)">
+					<dateDisplay :content="questionNire.content[index]"
+					:num="(index+1).toString()"
+					:operate_show="operate_show[index]"
+					></dateDisplay>
+				</view>
+				
 			</view>
 			
 			
@@ -61,7 +69,7 @@
 				<p>+</p>
 			</view>
 
-		</view>0.
+		</view>
 		<tab-bar :activeTab="tab" :Type="1" :questionNireProps='questionNire'></tab-bar>
 		
 		<!-- 下面是点击加号弹出选择题目 -->
@@ -134,14 +142,15 @@
 	import store from '/store/index.js'
 	import tiankongDisplay from '/components/questionShow/tiankongDisplay/tiankongDisplay.vue'
 	import sliderDisplay from '/components/questionShow/sliderDisplay/sliderDisplay.vue'
-	
+	import dateDisplay from '/components/questionShow/dateSeleteDisplay/dateSeleteDisplay.vue'
 	// import Blank from '/components/blank/blank.vue';
 	export default {
 		components: {
 			TabBar,
 			danxuanDisplay,
 			tiankongDisplay,
-			sliderDisplay
+			sliderDisplay,
+			dateDisplay
 		},
 		onLoad: function(options) {
 			this.tab = options.tab
@@ -180,6 +189,12 @@
 					title:'早八大学生会不会饿死',
 					description:'大学士会饿死',
 					content:[
+							{
+								question:"日期",
+								type:'DATE',
+								choice:[2],
+								setting:[]
+							},
 							{
 								question:"标题1",
 								type:'SINGLE',
@@ -292,6 +307,7 @@
 			},
 			toCopy(){
 				let index=this.$store.state.now_operate;
+				console.log('copy:',index)
 				const elementToCopy = this.questionNire.content[index];
 				const copiedElement = { ...elementToCopy };
 				this.questionNire.content.splice(index+1,0,copiedElement);
@@ -313,6 +329,7 @@
 			},
 			toDelete(){
 				let index=this.$store.state.now_operate;
+				console.log('delete:',index)
 				this.questionNire.content.splice(index,1);
 			},
 			setViewHeight(index){

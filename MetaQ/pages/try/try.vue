@@ -40,6 +40,15 @@
 				:questionProp="content.question"></slider-setting>
 			</view>
 			
+			<view class="" v-else-if="content.type == 'DATE'">
+				<calendarSetting 
+				ref="calendarSetting"
+				:num="num"
+				:questionProp="content.question"
+				:indexProps='content.choice[0]'></calendarSetting>
+			</view>
+			
+			
 			<setting></setting>
 			
 			
@@ -61,7 +70,7 @@
 	import setting from "/components/questionEdit/setting/setting.vue"
 	import sliderSetting from "/components/questionEdit/sliderSetting/sliderSetting.vue"
 	import store from '/store/index.js'
-	
+	import calendarSetting from "/components/questionEdit/calendarSetting/calendarSetting.vue"
 	
 	export default {
 		components:{
@@ -70,6 +79,7 @@
 			SingleChoice,
 			setting,
 			sliderSetting,
+			calendarSetting
 		},
 		onLoad(options) {
 			// console.log(content.type=='SINGLE')
@@ -88,11 +98,10 @@
 			return {
 				num:this.$store.state.now_operate+1,
 				content:{
-					question:"444",
-					type:'BLANK',
-					choice:['3','5'],
-					setting:[]
-					
+						question:"日期",
+						type:'DATE',
+						choice:[2],
+						setting:[]
 				}
 			};
 		},
@@ -119,6 +128,10 @@
 					 case 'SLIDE':
 							this.content.question=this.$refs.sliderSet.question;
 							this.content.choice=this.$refs.sliderSet.setting;
+							break;
+					case 'DATE':
+							this.content.question=this.$refs.calendarSetting.question;
+							this.content.choice=this.$refs.calendarSetting.index;
 							break;
 					 default:
 							break;

@@ -83,6 +83,7 @@
 			const token = localStorage.getItem('token')
 			axios.defaults.headers.common['token'] = token;
 			//console.log("token",localStorage.getItem('token'));
+			this.id = options.id;
 			var info = {
 				id:options.id,
 				commit:false
@@ -92,6 +93,8 @@
 						'http://localhost:8080/fill',info)
 			    .then(response => {
 			      console.log(response.data);
+				  this.questionNaire = response.data.data;
+				  this.ID = response.data.data.id;
 			    })
 			    .catch(error => {
 			      console.log(error);
@@ -101,6 +104,8 @@
 		data() {
 			return {
 				answer:[],
+				ID:-1,
+				id:-1,
 				// mode:0,
 				componentName:['danxuanAnswer','duoxuanAnswer',
 				'tiankongAnswer','huadongtiaoAnswer','','riqiAnswer'],
@@ -183,7 +188,26 @@
 						else
 							this.answer.push(childComponent.answer);
 				});
-				
+				const token = localStorage.getItem('token')
+				axios.defaults.headers.common['token'] = token;
+				//console.log("token",localStorage.getItem('token'));
+				var info = {
+					filledID:this.ID,
+					data:this.answer,
+					commit:true,
+					id:this.id
+				}
+				console.log(info);
+				axios.post(/*'https://metaq.scutbot.icu/login'*/
+							'http://localhost:8080/saveFill',info)
+				    .then(response => {
+				      console.log(response.data);
+					  //this.questionNaire = response.data.data;
+				    })
+				    .catch(error => {
+				      console.log(error);
+				    });
+				console.log(this.answer);
 				
 			}
 		}

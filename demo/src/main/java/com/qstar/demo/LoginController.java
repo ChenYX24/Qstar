@@ -115,9 +115,7 @@ public class LoginController {
      public Result test(@RequestHeader("token") String token,@RequestBody String info) {
       System.out.println("testinfo" + info);
       System.out.println("testtoken" +token);
-      // if(userService.ChangPL(token, info)){
-      //    return Result.success("true");
-      // }
+     
       return Result.success("test:true");
      }
 }

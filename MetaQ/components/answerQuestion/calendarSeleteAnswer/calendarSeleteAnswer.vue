@@ -2,7 +2,7 @@
 	<view class="danxuanDisplay" id="test">
 		<view class="box">
 			<view class="inbox">
-				<view class="title">
+				<view class="title" @click="changeShow">
 					{{num}}.{{content.question}}
 				</view>
 				

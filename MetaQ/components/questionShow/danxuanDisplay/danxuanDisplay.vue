@@ -4,7 +4,7 @@
 			<view class="inbox">
 				<view class="title">
 					{{num}}.{{content.question}}
-					<view class="type" v-if="content.type==1">
+					<view class="type" v-if="content.type=='MULTIPLE'">
 						<text>[多选题]</text>
 					</view>
 					<view class="type" v-else>

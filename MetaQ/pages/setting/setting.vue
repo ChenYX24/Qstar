@@ -8,7 +8,7 @@
 		</view>  
 		<view class="select" @tap="toggleSelect(1)">  
 		  <image :src="selected[1] ? '/static/setting/selected.png' : '/static/setting/noSelected.png'" class="icon" />  
-		  <view class="text">每个用户只能回答一次</view>  
+		  <view class="text">此问卷提交后是否能更改答案</view>  
 		</view>  
 		<view class="select" @tap="toggleSelect(2)">  
 		  <image :src="selected[2] ? '/static/setting/selected.png' : '/static/setting/noSelected.png'" class="icon" />  

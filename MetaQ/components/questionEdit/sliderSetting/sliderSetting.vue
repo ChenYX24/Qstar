@@ -71,7 +71,7 @@
 			return {
 				setting:[0,'',100,'',0],
 				// question:''
-				question:this.questionProp
+				question:this.questionProp,
 				
 			};
 		},

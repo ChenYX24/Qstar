@@ -48,8 +48,7 @@ public class Controller {
         //System.out.println("receive:"+receive);
         System.out.println(token);
         System.out.println(receive.isCommit());
-        int id=handle.create(receive.getTitle(),receive.getDescription(),receive.getContent(),token,receive.isCommit());
-        return Result.success(id);
+        return handle.create(receive.getTitle(),receive.getDescription(),receive.getContent(),token,receive.isCommit());
     }
     //查看已经创建问卷的详细信息
     @RequestMapping("/check")
@@ -99,7 +98,7 @@ public class Controller {
 
     //返回要填写的问卷的信息
     @Data
-    public static class fillRecive{
+    static class fillRecive{
         int id;
         boolean commit;
     }
@@ -126,7 +125,8 @@ public class Controller {
         }else{
             set=null;
         }*/
-        return handle.saveFill(receive.getFilledID(), receive.getData(), token, receive.isCommit());
+        System.out.println(receive);
+        return handle.saveFill(receive.getFilledID(),receive.getId(), receive.getData(), token, receive.isCommit());
     }
     //查看已经填写过的问卷
     @RequestMapping("/checkFill")

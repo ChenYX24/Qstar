@@ -82,7 +82,7 @@ public class Questionaire {//创建的问卷
         return info.verify(id);
     }
     public boolean commit(){//问卷的提交
-        if(info.isCommit()) {
+        if(!info.isCommit()) {
             int index = 0;
             for (Question question : questions) {
                 if (question.getChoice() != null) {
@@ -91,7 +91,7 @@ public class Questionaire {//创建的问卷
                     statistics.add(new Statistics(question.getType(), 1));
                 }
             }
-            info.isCommit();
+            info.setCommit();
             return true;
         }else{
             return false;
