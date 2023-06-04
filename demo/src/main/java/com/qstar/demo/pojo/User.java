@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -41,11 +42,11 @@ public class User {//用户
     @JsonPropertyOrder("filledQuestionaires")
     private  List<Integer> filledQuestionaires = null;
     @JsonPropertyOrder("allowCheckQuestionaires")
-    private   Set<Integer> allowCheckQuestionaires = null;         //允许查看的问卷
+    private   Set<Integer> allowCheckQuestionaires = new HashSet<>();         //允许查看的问卷
     @JsonPropertyOrder("allowEditQuestionaires")
-    private   Set<Integer> allowEditQuestionaires = null;        //允许编辑的问卷
+    private   Set<Integer> allowEditQuestionaires = new HashSet<>();        //允许编辑的问卷
     @JsonPropertyOrder("allowManageQuestionaires")
-    private   Set<Integer> allowManageQuestionaires;
+    private   Set<Integer> allowManageQuestionaires = new HashSet<>();
 
     @JsonPropertyOrder("headPic")
     private String headPic;
@@ -109,13 +110,16 @@ public class User {//用户
      
     public boolean hasQuestionaireID(int id){//可能返回空，检验是否拥有这个问卷
         if(questionaires.contains(id)) {
+            System.out.println("拥有问卷:"+id);
             return true;
         }
         return false;
     }
      
     public void addQuestionaire(int id){//添加问卷
-        questionaires.add(id);
+        if(!questionaires.contains(id)){
+            questionaires.add(id);
+        }
     }
     /* 
     *//*public StatisticsResult getStatistics(int id, int index){
@@ -129,7 +133,9 @@ public class User {//用户
     //填写流程
      
     public void addFilled(int id){//添加到填写记录
-        filledQuestionaires.add(id);
+        if(!filledQuestionaires.contains(id)){
+            filledQuestionaires.add(id);
+        }
     }
 
     public boolean containFilledID(int id){       //这个用户是否填写过这个ID的问卷

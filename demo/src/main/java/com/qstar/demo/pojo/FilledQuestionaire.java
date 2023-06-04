@@ -5,7 +5,12 @@ import lombok.Data;
 import java.util.Arrays;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonPropertyOrder({"id", "title","creator", "committed","commitCount","index","data"})//规定转为json的格式
 public class FilledQuestionaire {//已填写的问卷
     private String creator;     //问卷作者，仅仅用于查看，不用于查找
     private int id;    //问卷名字
@@ -17,13 +22,15 @@ public class FilledQuestionaire {//已填写的问卷
     private int commitCount;     //提交次数，只有问卷允许提交多次才能大于1
     private int index;      //相当于填写的问卷的id
 
-    public FilledQuestionaire(String creator,int id,int index){
+    public FilledQuestionaire(String title, String creator,int id,int index){
+        this.title = title;
         this.creator=creator;
         this.id=id;
         committed=false;
         commitCount=0;
         this.index=index;
     }
+    @JsonIgnore
     public FilledQuestionaireInfo getInfo(){
         return new FilledQuestionaireInfo(id,creator,committed,title,commitCount);
     }

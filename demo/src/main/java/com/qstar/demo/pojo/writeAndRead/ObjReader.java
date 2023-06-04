@@ -21,7 +21,7 @@ public class ObjReader {//读取user对象，根据用户的名字读取，用�
     private String questionaireRoad;
     @Value("${store.userRoad}")
     private String userRoad;
-    @Value("${store.filledQustionaireRoad}")
+    @Value("${store.filledQuestionaireRoad}")
     private String filledQuestionaireRoad;
     private ObjectMapper objectMapper = new ObjectMapper();
     public String read(String name) throws IOException {
@@ -69,7 +69,7 @@ public class ObjReader {//读取user对象，根据用户的名字读取，用�
         return null;
     }
     public User readUser(String email) throws IOException {
-        String json=read(questionaireRoad,email+"");
+        String json=read(userRoad,email+"");
         if(json!=null) {
             return (User) JSON.parseObject((String) read(userRoad,email), User.class);
             //return objectMapper.readValue(read(userRoad, email), User.class);
@@ -77,9 +77,9 @@ public class ObjReader {//读取user对象，根据用户的名字读取，用�
         return null;
     }
     public FilledQuestionaire readFilledQuestionaire(int id) throws IOException {
-        String json=read(questionaireRoad,id+"");
+        String json=read(filledQuestionaireRoad,id+"");
         if(json!=null) {
-            return  (Questionaire) JSON.parseObject((String) read(questionaireRoad,id+""), Questionaire.class);
+            return  (FilledQuestionaire) JSON.parseObject((String) read(filledQuestionaireRoad,id+""), FilledQuestionaire.class);
             //return objectMapper.readValue(read(filledQuestionaireRoad, id + ""), FilledQuestionaire.class);
         }
         return null;

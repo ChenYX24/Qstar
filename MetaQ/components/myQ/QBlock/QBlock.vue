@@ -38,6 +38,7 @@
 
 <script>
 	import axios from 'axios'
+	import store from '/store/index.js'
 export default {
   name: 'QBlock',
   data() {
@@ -71,44 +72,35 @@ export default {
 		  this.$emit('changePush')
 	  },
 	  toEdit(){
-		  if(this.isPush)
-		  {
-			  uni.navigateTo({
-			  	url:"/pages/analysis/analysis"
-			  })
-		  }
-		  else
-		  {
-			  console.log(132324)
-			  console.log("id",this.id);
-			  axios.defaults.headers.common['token'] = localStorage.getItem('token');
-			  axios.post(/*'https://metaq.scutbot.icu/login'*/
-			  			'http://localhost:8080/check',
-			  					//'/static/test2.json',
-			  					{
-			  						id:this.id
-			  					})
-			      .then(response => {
-			  					console.log(response.data);
-			  					var temp=response.data.data
-			  					// var temp;
-			  					// temp['title'] = data.info.title;
-			  					// temp['description'] = data.description;
-			  					// temp['content'] = data.content;
-			  					//temp['commit'] = data.info.commit;
-			  					// console.log(temp)
-			  					// temp.title=this.title
-			  					this.$store.commit('setQuestionNire',temp);
-			  					// // console.log(this.$store.state.questionNire)
-			  					uni.navigateTo({
-			  						url: '/pages/editQuestionnire/editQuestionnire?flag='+1
-			  					})
-			      })
-			      .catch(error => {
-			        console.log(error);
-			      });
-		  }
-
+	  		console.log(132324)
+			console.log("id",this.id);
+	  		axios.defaults.headers.common['token'] = localStorage.getItem('token');
+	  		axios.post(/*'https://metaq.scutbot.icu/login'*/
+	  					'http://localhost:8080/check',
+	  							//'/static/test2.json',
+								{
+									id:this.id
+								})
+	  		    .then(response => {
+								console.log(response.data);
+	  							var temp=response.data.data
+								// var temp;
+								// temp['title'] = data.info.title;
+								// temp['description'] = data.description;
+								// temp['content'] = data.content;
+								//temp['commit'] = data.info.commit;
+	  							// console.log(temp)
+	  							// temp.title=this.title
+								this.$store.commit('setIsCreate',this.id);
+	  							this.$store.commit('setQuestionNire',temp);
+	  							// // console.log(this.$store.state.questionNire)
+	  							uni.navigateTo({
+	  								url: '/pages/editQuestionnire/editQuestionnire?flag='+1
+	  							})
+	  		    })
+	  		    .catch(error => {
+	  		      console.log(error);
+	  		    });
 	  	
 	  	
 	  },

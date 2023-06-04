@@ -50,6 +50,7 @@
 </template>
 
 <script>
+	import axios from 'axios'
 	import store from '/store/index.js'
 	import danxuanAnswer from '/components/answerQuestion/danxuanAnswer/danxuanAnswer.vue'
 	import tiankongAnswer from '/components/answerQuestion/tiankongAnswer/tiankongAnswer.vue'
@@ -69,10 +70,42 @@
 			// if(options.mode){
 			// 	this.mode=options.mode
 			// }
+			// if(options.id){
+			// 	this.$store.commit('setIsCreate',options.id)
+			// 	const token = localStorage.getItem('token')
+				
+			// 	if(!token){
+			// 		uni.navigateTo({
+			// 			url:'/pages/login/login?id='+options.id
+			// 		})
+			// 	}
+			// }
+			const token = localStorage.getItem('token')
+			axios.defaults.headers.common['token'] = token;
+			//console.log("token",localStorage.getItem('token'));
+			this.id = options.id;
+			var info = {
+				id:options.id,
+				commit:false
+			}
+			console.log(info);
+			axios.post(/*'https://metaq.scutbot.icu/login'*/
+						'http://localhost:8080/fill',info)
+			    .then(response => {
+			      console.log(response.data);
+				  this.questionNaire = response.data.data;
+				  this.ID = response.data.data.id;
+			    })
+			    .catch(error => {
+			      console.log(error);
+			    });
+			console.log(this.answer);
 		},
 		data() {
 			return {
 				answer:[],
+				ID:-1,
+				id:-1,
 				// mode:0,
 				componentName:['danxuanAnswer','duoxuanAnswer',
 				'tiankongAnswer','huadongtiaoAnswer','','riqiAnswer'],
@@ -155,7 +188,26 @@
 						else
 							this.answer.push(childComponent.answer);
 				});
-				console.log(this.answer)
+				const token = localStorage.getItem('token')
+				axios.defaults.headers.common['token'] = token;
+				//console.log("token",localStorage.getItem('token'));
+				var info = {
+					filledID:this.ID,
+					data:this.answer,
+					commit:true,
+					id:this.id
+				}
+				console.log(info);
+				axios.post(/*'https://metaq.scutbot.icu/login'*/
+							'http://localhost:8080/saveFill',info)
+				    .then(response => {
+				      console.log(response.data);
+					  //this.questionNaire = response.data.data;
+				    })
+				    .catch(error => {
+				      console.log(error);
+				    });
+				console.log(this.answer);
 				
 			}
 		}
