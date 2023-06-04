@@ -4,6 +4,9 @@
 			<view class="inbox">
 				<view class="title">
 					{{num}}.{{content.question}}
+					<view class="type">
+						<text>[日期]</text>
+					</view>
 				</view>
 				
 				<view class="calendar-range">
@@ -27,7 +30,14 @@
 				</view>
 				
 			</view>
-
+			
+			<operationEditQuestion
+			:style="{display: operate_show ? 'flex' : 'none'}"
+			:num="num"
+			@clickSon="getOffsetTop"
+			 >
+			</operationEditQuestion>
+			
 		</view>
 		
 		
@@ -35,6 +45,7 @@
 </template>
 
 <script>
+	import operationEditQuestion from "/components/questionShow/operationEditQuestion/operationEditQuestion.vue"
 	import {DatePicker} from 'v-calendar';
 	import 'v-calendar/style.css';
 	
@@ -62,12 +73,12 @@
 				    icon:'none',  
 				  });  
 			  }else{
-				  this.isShow=!this.isShow
+				  // this.isShow=!this.isShow
 			  }
 			  console.log(333)
 			},
 			date(newVal,oldVal) {
-				this.isShow=!this.isShow 
+				// this.isShow=!this.isShow 
 			}
 		  },
 		  computed: {
@@ -103,6 +114,10 @@
 			}
 		  },
 		props:{
+			operate_show:{
+				type:Boolean,
+				default:false
+			},
 			num:{
 				type:String,
 				default:'2'
@@ -118,7 +133,8 @@
 
 		},
 		components:{
-			DatePicker
+			DatePicker,
+			operationEditQuestion
 		},
 		methods:{
 			setHeight(e){
@@ -128,9 +144,19 @@
 					parent.style.height=`${e.detail.height}px`
 			},
 			changeShow(e){
-				this.isShow=!this.isShow
+				// this.isShow=!this.isShow
 
 			},
+			getOffsetTop: function() {
+				let viewElements = document.querySelectorAll("#test");  
+				if(viewElements)
+				{
+					let target_view = viewElements[(this.num-1)];
+					// target_view={'targetView_height':target_view.offsetHeight,'targetView_offset_top':target_view.offsetTop)}
+					target_view={'targetView_height':target_view.offsetHeight,'targetView_offset_top':target_view.offsetTop}
+					this.$store.commit('setTargetView',target_view);
+				}
+			}
 			// ttt(e){
 			// 	this.range=({
 			// 		start: this.range.start,
@@ -158,6 +184,7 @@
 	border-radius: 20px;
 	background: rgba(255, 255, 255, 0.8);
 	box-shadow: 2px 2px 20px 0px rgba(136, 63, 143, 0.15);
+	padding-bottom: 5%;
 }
 .inbox{
 	// border: 1px dashed green;
@@ -165,14 +192,19 @@
 .title{
 	margin:10px 0px 5px 20px;
 	font-size: 20px;
+	display: flex;
+	align-items: center;
+	.type{
+		margin-left: 5px;
+		color: rgb(143 68 238);
+		font-size: 14px;
+	}
 }
-
-
 
 
 .input-div{
 	display: flex;
-	margin: 10px 20px 20px 20px;
+	margin: 10px 20px 10px 20px;
 	border: 1px solid rgba(225, 225, 235, 1);
 	border-radius: 3px;
 	background-color: #ffffff;
@@ -187,7 +219,7 @@
 }
 .date{
 	display: flex;
-	margin: 10px 20px 20px 20px;
+	// margin: 10px 20px 20px 20px;
 	// border: 1px solid rgba(225, 225, 235, 1);
 	border-radius: 3px;
 	background-color: #ffffff;

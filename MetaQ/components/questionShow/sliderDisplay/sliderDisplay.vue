@@ -4,6 +4,9 @@
 			<view class="inbox">
 				<view class="title">
 					{{num}}.{{content.question}}
+					<view class="type">
+						<text>[滑动条]</text>
+					</view>
 				</view>
 				<view class="slider-box">
 					<sliderBar
@@ -94,6 +97,7 @@ export default {
 	border-radius: 20px;
 	background: rgba(255, 255, 255, 0.8);
 	box-shadow: 2px 2px 20px 0px rgba(136, 63, 143, 0.15);
+	padding-bottom: 5%;
 }
 .inbox{
 	// border: 1px dashed green;
@@ -101,10 +105,17 @@ export default {
 .title{
 	margin:10px 0px 5px 20px;
 	font-size: 20px;
+	display: flex;
+	align-items: center;
+	.type{
+		margin-left: 5px;
+		color: rgb(143 68 238);
+		font-size: 14px;
+	}
 }
 
 .slider-box{
-	margin: 20px 20px 20px 20px;
+	margin: 20px 20px 0px 20px;
 }
 
 /deep/.uni-slider-value{

@@ -121,7 +121,7 @@
             
         }
 		,{
-		    "path" : "components/questionShow/dateSeleteShow/dateSeleteShow",
+		    "path" : "components/questionShow/dateSeleteDisplay/dateSeleteDisplay",
 		    "style" :                                                                                    
 		    {
 		        "navigationBarTitleText": "",
@@ -131,6 +131,15 @@
 		}
         ,{
             "path" : "components/answerQuestion/calendarSeleteAnswer/calendarSeleteAnswer",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "components/questionEdit/calendarSetting/calendarSetting",
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "",

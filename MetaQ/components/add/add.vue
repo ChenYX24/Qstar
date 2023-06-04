@@ -44,12 +44,15 @@
 	import tiankongAnswer from '/components/answerQuestion/tiankongAnswer/tiankongAnswer.vue'
 	import huadongtiaoAnswer from '/components/answerQuestion//huadongtiaoAnswer/huadongtiaoAnswer.vue'
 	import duoxuanAnswer from '/components/answerQuestion/duoxuanAnswer/duoxuanAnswer.vue'
+	import riqiAnswer from '/components/answerQuestion/calendarSeleteAnswer/calendarSeleteAnswer.vue'
+	
 	export default {
 		components: {
 			danxuanAnswer,
 			tiankongAnswer,
 			huadongtiaoAnswer,
-			duoxuanAnswer
+			duoxuanAnswer,
+			riqiAnswer
 		},
 		props:{
 			questionNireProps:{
@@ -71,7 +74,7 @@
 				answer:[],
 				mode:0,
 				componentName:['danxuanAnswer','duoxuanAnswer',
-				'tiankongAnswer','huadongtiaoAnswer'],
+				'tiankongAnswer','huadongtiaoAnswer','','riqiAnswer'],
 				title:'关于c10居住学生学校住宿感受的的调研',
 				description:'请c10的同学填写，谢谢配合！',
 				questionNire:this.questionNireProps,
@@ -124,6 +127,10 @@
 						return this.componentName[2];
 					case 'SLIDE':
 						return this.componentName[3];
+					case  'PHONE':
+						return this.componentName[4];
+					case 'DATE':
+						return this.componentName[5];
 				};
 				// var temp=parseInt(this.all_content[index].type);
 				// this.componentName[temp]

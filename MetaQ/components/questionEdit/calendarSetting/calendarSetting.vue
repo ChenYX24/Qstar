@@ -41,12 +41,15 @@
 				// setting:[0,'',100,'',0],
 				// question:''
 				question:this.questionProp,
-				arr:['单个日期','范围日期','皆可'],
-				index:0//这是需要放入对应问题choice中的数据
-				
+				arr:['皆可','单个日期','范围日期'],
+				index:this.indexProps//这是需要放入对应问题choice中的数据
 			};
 		},
 		props:{
+			indexProps:{
+				type:Number,
+				default:1
+			},
 			num:{
 				type:Number,
 				default:-1
