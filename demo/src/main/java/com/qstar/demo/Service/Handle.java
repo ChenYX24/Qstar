@@ -25,7 +25,7 @@ public class Handle {
     public List<QuestionaireInfo> getCreated(String token) throws IOException {
         return link.getCreated(token);
     }
-    public int create(String title, String description/*,String filename*/,List<Question> questions,String token,boolean commit) throws IOException {
+    public Result create(String title, String description/*,String filename*/,List<Question> questions,String token,boolean commit) throws IOException {
          return link.create(title,description,questions,token,commit);
     }
     public ResultForCheck check(int id, String token) throws IOException {
@@ -43,8 +43,8 @@ public class Handle {
     public List<FilledQuestionaireInfo> getFillRecord(String token) throws IOException {
         return link.getFillRecord(token);
     }
-    public Result saveFill(int id,String[] data, String token,boolean commit) throws IOException {
-        return link.saveFill(id,data,token,commit);
+    public Result saveFill(int filledid,int id,String[] data, String token,boolean commit) throws IOException {
+        return link.saveFill(filledid,id,data,token,commit);
     }
     public ResultForFill checkFill(int id, String token) throws IOException{
         return link.checkFill(id,token);

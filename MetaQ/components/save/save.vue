@@ -128,6 +128,39 @@
 				}
 			},
 			push(){
+				this.questionNirePorps['commit'] = true;
+				axios.defaults.headers.common['token'] = localStorage.getItem('token');
+				console.log("this.questionNirePorps",this.questionNirePorps);
+				if(this.$store.state.qnid==-1){
+					axios.post(/*'https://metaq.scutbot.icu/login'*/
+								'http://localhost:8080/create', 
+							this.questionNirePorps
+						)
+						.then(response => {
+						  console.log(response.data);
+						})
+						.catch(error => {
+						  console.log(error);
+						});
+					uni.navigateTo({
+						url:"/pages/myQ/myQ"
+					})
+				}else{
+					this.questionNirePorps['id'] = this.$store.state.qnid;
+					axios.post(/*'https://metaq.scutbot.icu/login'*/
+								'http://localhost:8080/save', 
+							this.questionNirePorps,
+						)
+						.then(response => {
+						  console.log(response.data);
+						})
+						.catch(error => {
+						  console.log(error);
+						});
+					uni.navigateTo({
+						url:"/pages/myQ/myQ"
+					})
+				}
 				uni.navigateTo({
 					url:"/pages/myQ/myQ"
 				})

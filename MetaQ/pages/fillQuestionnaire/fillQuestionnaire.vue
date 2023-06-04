@@ -83,6 +83,7 @@
 			const token = localStorage.getItem('token')
 			axios.defaults.headers.common['token'] = token;
 			//console.log("token",localStorage.getItem('token'));
+			this.id = options.id;
 			var info = {
 				id:options.id,
 				commit:false
@@ -104,6 +105,7 @@
 			return {
 				answer:[],
 				ID:-1,
+				id:-1,
 				// mode:0,
 				componentName:['danxuanAnswer','duoxuanAnswer',
 				'tiankongAnswer','huadongtiaoAnswer','','riqiAnswer'],
@@ -192,7 +194,8 @@
 				var info = {
 					filledID:this.ID,
 					data:this.answer,
-					commit:true
+					commit:true,
+					id:this.id
 				}
 				console.log(info);
 				axios.post(/*'https://metaq.scutbot.icu/login'*/

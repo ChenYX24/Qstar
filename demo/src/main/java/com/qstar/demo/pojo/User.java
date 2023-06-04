@@ -117,7 +117,9 @@ public class User {//用户
     }
      
     public void addQuestionaire(int id){//添加问卷
-        questionaires.add(id);
+        if(!questionaires.contains(id)){
+            questionaires.add(id);
+        }
     }
     /* 
     *//*public StatisticsResult getStatistics(int id, int index){
@@ -131,7 +133,9 @@ public class User {//用户
     //填写流程
      
     public void addFilled(int id){//添加到填写记录
-        filledQuestionaires.add(id);
+        if(!filledQuestionaires.contains(id)){
+            filledQuestionaires.add(id);
+        }
     }
 
     public boolean containFilledID(int id){       //这个用户是否填写过这个ID的问卷
