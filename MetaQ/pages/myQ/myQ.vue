@@ -17,9 +17,9 @@
 		    >
 		      <swiper-item>
 				<view class="page1">
-				  <QBlock v-for="(block, index) in blocks1" :key="block.id" 
+				  <QBlock v-for="(block, index) in myCreateds" :key="block.id" 
 				  :onumber="block.filled" :title="block.title" 
-				  :isPush="block.commit" @changeSave="emitSave(index)" 
+				  :isPush="block.commit" @changeSave="emitSave(index)"  @changePush="changePush(index)"
 				  :id="block.id"></QBlock>
 				</view>
 		      </swiper-item>
@@ -72,6 +72,10 @@ export default {
   	}
   },
     methods: {
+		changePush(index){
+			//ToDo
+			this.blocks1[index].commit=1//1已发布，-1已停止发布，0未发布
+		},
 		emitSave(index){
 			//TODO
 			if(index==0||index)
@@ -107,9 +111,9 @@ export default {
 			      console.log(error);
 			    });
 			try {  
-			  // const response = await axios.get('/static/test2.json'); // TODO
-			  // this.blocks = response.data.data.blocks;
-			  // this.blocks1=response.data.data.blocks1
+			  const response = await axios.get('/static/test2.json'); // TODO
+			  this.blocks = response.data.data.blocks;
+			  this.blocks1=response.data.data.blocks1
 			} catch (error) {  
 			  console.error('Error fetching data:', error);  
 			}

@@ -1,7 +1,7 @@
 <template>
 	<view class="danxuanDisplay" id="test">
 		<view class="box">
-			<view class="inbox" @click="showOperation">
+			<view class="inbox">
 				<view class="title">
 					{{num}}.{{content.question}}
 				</view>
@@ -15,7 +15,7 @@
 			</view>
 
 			<operationEditQuestion 
-			:style="{display: operation_show ? 'flex' : 'none'}"
+			:style="{display: operate_show ? 'flex' : 'none'}"
 			:num="num"
 			@clickSon="getOffsetTop"
 			 >
@@ -32,10 +32,14 @@
 	export default {
 		data() {
 			return {
-				operation_show:false
+				// operation_show:false
 			};
 		},
 		props:{
+			operate_show:{
+				type:Boolean,
+				default:false
+			},
 			num:{
 				type:String,
 				default:'1'
@@ -72,9 +76,9 @@
 				}
 
 			},
-			showOperation(){
-					this.operation_show=!this.operation_show
-			},
+			// showOperation(){
+			// 		this.operation_show=!this.operation_show
+			// },
 			// getTop()
 			// {
 			// 	console.log(111)

@@ -7,7 +7,7 @@
 							  id="title"
 							  placeholder="请输入问卷标题"
 							  @linechange="autoChange"
-							  v-model="title"
+							  v-model="questionNaire.title"
 							  disabled
 						></textarea>
 				</view>
@@ -16,12 +16,12 @@
 							  id="descripition"
 							  placeholder="请输入问卷简介"
 							  @linechange="autoChange"
-							  v-model="description"
+							  v-model="questionNaire.description"
 							  disabled
 							  ></textarea>
 				</view>		
 			</view>
-			<view class="question-all" v-for="(item,index) in content" :key="index">
+			<view class="question-all" v-for="(item,index) in questionNaire.content" :key="index">
 				<component
 				ref="questionAnswerRef"
 				:num="(index+1).toString()"
@@ -35,7 +35,7 @@
 				</view>
 			</view>
 
-			<view class="" v-if="mode==0">
+			<view class="">
 				<view class="submit" @click="submitSuccess">
 					提交
 				</view>
@@ -56,12 +56,15 @@
 	import tiankongAnswer from '/components/answerQuestion/tiankongAnswer/tiankongAnswer.vue'
 	import huadongtiaoAnswer from '/components/answerQuestion//huadongtiaoAnswer/huadongtiaoAnswer.vue'
 	import duoxuanAnswer from '/components/answerQuestion/duoxuanAnswer/duoxuanAnswer.vue'
+	import riqiAnswer from '/components/answerQuestion/calendarSeleteAnswer/calendarSeleteAnswer.vue'
+	
 	export default {
 		components: {
 			danxuanAnswer,
 			tiankongAnswer,
 			huadongtiaoAnswer,
-			duoxuanAnswer
+			duoxuanAnswer,
+			riqiAnswer
 		},
 		onLoad: function(options) {
 			// if(options.mode){
@@ -98,43 +101,52 @@
 		data() {
 			return {
 				answer:[],
-				mode:0,
+				// mode:0,
 				componentName:['danxuanAnswer','duoxuanAnswer',
-				'tiankongAnswer','huadongtiaoAnswer'],
-				title:'关于c10居住学生学校住宿感受的的调研',
-				description:'请c10的同学填写，谢谢配合！',
-				content:[
-						{
-							question:"标题1",
-							type:'SINGLE',
-							choice:['a','b','c'],
-							setting:[]
-						},
-						{
-							question:"填空题",
-							type:'BLANK',
-							choice:[],
-							setting:[]
-						},
-						{
-							question:"滑动条",
-							type:'SLIDE',
-							choice:[10,'非常差',1000,'非常好',0],
-							setting:[]
-						},
-						{
-							question:"标题2",
-							type:'MULTIPLE',
-							choice:['m','n','b'],
-							setting:[]
-					    },
-						{
-							question:"标题2",
-							type:'SINGLE',
-							choice:['m','n','b'],
-							setting:[]
-						}
-						],
+				'tiankongAnswer','huadongtiaoAnswer','','riqiAnswer'],
+				questionNaire:{
+					title:'关于c10居住学生学校住宿感受的的调研',
+					description:'请c10的同学填写，谢谢配合！',
+					content:[
+							{
+								question:"日期",
+								type:'DATE',
+								choice:[2],
+								setting:[]
+							},
+							{
+								question:"标题1",
+								type:'SINGLE',
+								choice:['a','b','c'],
+								setting:[]
+							},
+							{
+								question:"填空题",
+								type:'BLANK',
+								choice:[],
+								setting:[]
+							},
+							{
+								question:"滑动条",
+								type:'SLIDE',
+								choice:[10,'非常差',1000,'非常好',0],
+								setting:[]
+							},
+							{
+								question:"标题2",
+								type:'MULTIPLE',
+								choice:['m','n','b'],
+								setting:[]
+							},
+							{
+								question:"标题2",
+								type:'SINGLE',
+								choice:['m','n','b'],
+								setting:[]
+							},
+
+							],
+				},
 			}
 		},
 		methods:{
@@ -143,7 +155,7 @@
 					node.style.height=`${e.detail.height}px`
 			},
 			chooseComponent(index){
-				switch(this.content[index].type){
+				switch(this.questionNaire.content[index].type){
 					case 'SINGLE':
 						return this.componentName[0];
 					case 'MULTIPLE':
@@ -152,6 +164,10 @@
 						return this.componentName[2];
 					case 'SLIDE':
 						return this.componentName[3];
+					case  'PHONE':
+						return this.componentName[4];
+					case 'DATE':
+						return this.componentName[5];
 				};
 				
 				
