@@ -12,7 +12,7 @@ public class QuestionaireReceive extends FileReceive{//用于问卷的接受对�
     private Integer id;
     private String title;
     private String description;
-    private List<Question> list;
+    private List<Question> content;
     /*private Map<Integer,List<MultipartFile>> files;
     private MultipartFile attach;*/
     private boolean commit;

@@ -12,6 +12,8 @@ import com.qstar.demo.pojo.*;
 import com.qstar.demo.pojo.Result.Result;
 import com.qstar.demo.pojo.Result.ResultForCheck;
 import com.qstar.demo.pojo.Result.ResultForFill;
+import com.alibaba.fastjson.JSON;
+import lombok.Data;
 
 import java.io.IOException;
 import java.util.List;
@@ -59,6 +61,7 @@ public class Controller {
         //int Id = Integer.parseInt(id);
         ResultForCheck result=handle.check(id,token);
         if(result!=null) {
+            System.out.println("check success");
             return Result.success(result);
         }
         return Result.fail("问卷id有误！");
@@ -66,7 +69,7 @@ public class Controller {
     //保存问卷
     @PostMapping("/save")
     public Result save(@RequestBody QuestionaireReceive receive, @RequestHeader("token") String token) throws IOException {
-        return handle.save(receive.getId(),receive.getTitle(),receive.getDescription(),receive.getList(),token,receive.isCommit());
+        return handle.save(receive.getId(),receive.getTitle(),receive.getDescription(),receive.getContent(),token,receive.isCommit());
     }
     //提交问卷
     /*@PostMapping("/commit")
@@ -95,9 +98,18 @@ public class Controller {
 
 
     //返回要填写的问卷的信息
-    @GetMapping("/fill")
-    public Result fill(Integer id,boolean commit,@RequestHeader("token") String token) throws IOException {
-        return handle.fill(id,token,commit);
+    @Data
+    public static class fillRecive{
+        int id;
+        boolean commit;
+    }
+    @RequestMapping("/fill")
+    //public Result fill(Integer id,boolean commit,@RequestHeader("token") String token) throws IOException {
+    public Result fill(@RequestBody String info,@RequestHeader("token") String token) throws IOException {
+        System.out.println(info);
+        fillRecive fill = JSON.parseObject(info,fillRecive.class);
+        return handle.fill(fill.getId(),token,fill.isCommit());
+        //return Result.success();
     }
     //返回已经填写的问卷的信息
     @GetMapping("/fillRecord")
@@ -117,8 +129,9 @@ public class Controller {
         return handle.saveFill(receive.getFilledID(), receive.getData(), token, receive.isCommit());
     }
     //查看已经填写过的问卷
-    @GetMapping("/checkFill")
-    public Result checkFill(Integer id,@RequestHeader("token") String token) throws IOException {
+    @RequestMapping("/checkFill")
+    public Result checkFill(@RequestBody String info,@RequestHeader("token") String token) throws IOException {
+        int id = Integer.parseInt(userService.userio.getKeyValueofJson(info, "id"));
         ResultForFill result=handle.checkFill(id,token);
         if(result!=null) {
             return Result.success(result);

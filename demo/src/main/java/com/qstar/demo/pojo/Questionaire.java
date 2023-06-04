@@ -1,5 +1,8 @@
 package com.qstar.demo.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+//import com.fasterxml.jackson.annotation.JsonIncludeProperties;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.qstar.demo.pojo.Receiver.AuthorityReceive;
 import com.qstar.demo.pojo.Receiver.QuestionMiniUnit;
 import com.qstar.demo.pojo.Result.ChoiceResult;
@@ -14,7 +17,7 @@ import java.util.*;
 
 @Data
 @NoArgsConstructor
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Questionaire {//创建的问卷
     private QuestionaireInfo info;  //问卷基本信息
     private String description;     //对于问卷的描述
@@ -39,7 +42,9 @@ public class Questionaire {//创建的问卷
         this.questions=questions;
         this.description=description;
         //this.attachFile=attachFile;
-        statistics=new ArrayList<>(questions.size());
+        //statistics=new ArrayList<>(questions.size());
+        statistics=new ArrayList<>();
+        System.out.println(questions.size());
         this.creatorEmail=creatorEmail;
         this.creator=name;
         authorizeManageID.add(new UserProfile(name,creatorEmail,photo));
@@ -48,12 +53,13 @@ public class Questionaire {//创建的问卷
         info = new QuestionaireInfo(title,filled,commit,id);
     }
     public boolean save(String title,String description/*,String attachFile*/,List<Question> questions,String editorEmail){//问卷的保存，只有被授权的用户才能编辑
-        if(info.isCommit()){
-            return false;
-        }
-        if(!allowEdit(editorEmail)){//如果不是问卷的创建者或者被授权者，不能编辑
-            return false;
-        }
+        // if(info.isCommit()){
+        //     System.out.println("commit:true");
+        //     return false;
+        // }
+        // if(!allowEdit(editorEmail)){//如果不是问卷的创建者或者被授权者，不能编辑
+        //     return false;
+        // }
         this.info.setTitle(title);
         this.questions=questions;
         this.description=description;
@@ -76,7 +82,7 @@ public class Questionaire {//创建的问卷
         return info.verify(id);
     }
     public boolean commit(){//问卷的提交
-        if(!info.isCommit()) {
+        if(info.isCommit()) {
             int index = 0;
             for (Question question : questions) {
                 if (question.getChoice() != null) {
@@ -125,6 +131,7 @@ public class Questionaire {//创建的问卷
         }
         return true;
     }
+    @JsonIgnore
     public List<StatisticsResult> getStatisticsResult(){//获取多个问题的统计结果
         List<StatisticsResult> statisticsResults=new ArrayList<>();
         for(int index=0;index<questions.size();index++) {

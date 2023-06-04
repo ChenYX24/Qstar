@@ -36,6 +36,7 @@
 
 <script>
 	import axios from 'axios'
+	import store from '/store/index.js'
 export default {
   name: 'QBlock',
   data() {
@@ -85,6 +86,7 @@ export default {
 								//temp['commit'] = data.info.commit;
 	  							// console.log(temp)
 	  							// temp.title=this.title
+								this.$store.commit('setIsCreate',this.id);
 	  							this.$store.commit('setQuestionNire',temp);
 	  							// // console.log(this.$store.state.questionNire)
 	  							uni.navigateTo({

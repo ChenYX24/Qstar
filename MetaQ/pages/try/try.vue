@@ -100,7 +100,8 @@
 			toEditQuestion(){
 				console.log(this.content.type)
 				 switch(this.content.type){
-					 case 'SINGLE' ||'MULTIPLE':
+					 case 'MULTIPLE':
+					 case 'SINGLE' :
 							this.content.choice=this.$refs.danxuan.copy;
 							//去除空值
 							this.content.question=this.$refs.danxuan.question;

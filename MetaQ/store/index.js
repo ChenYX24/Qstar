@@ -14,7 +14,8 @@ const store = createStore({
 	IsJump:false,
 	//最后一位用来记录选择了那个操作
 	otherOperate:false,
-	index:-1
+	index:-1,
+	qnid:-1
   }, 
   mutations: {  
 	    setNowOperate(state, id){
@@ -38,6 +39,9 @@ const store = createStore({
 		setOtherOperate(state,index){
 			state.otherOperate=!state.otherOperate;
 			state.index=index;
+		},
+		setIsCreate(state,T){
+			state.qnid=T;
 		}
   },
 //   actions: {  

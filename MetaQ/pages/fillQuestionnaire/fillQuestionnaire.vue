@@ -50,6 +50,7 @@
 </template>
 
 <script>
+	import axios from 'axios'
 	import store from '/store/index.js'
 	import danxuanAnswer from '/components/answerQuestion/danxuanAnswer/danxuanAnswer.vue'
 	import tiankongAnswer from '/components/answerQuestion/tiankongAnswer/tiankongAnswer.vue'
@@ -63,9 +64,36 @@
 			duoxuanAnswer
 		},
 		onLoad: function(options) {
-			if(options.mode){
-				this.mode=options.mode
+			// if(options.mode){
+			// 	this.mode=options.mode
+			// }
+			// if(options.id){
+			// 	this.$store.commit('setIsCreate',options.id)
+			// 	const token = localStorage.getItem('token')
+				
+			// 	if(!token){
+			// 		uni.navigateTo({
+			// 			url:'/pages/login/login?id='+options.id
+			// 		})
+			// 	}
+			// }
+			const token = localStorage.getItem('token')
+			axios.defaults.headers.common['token'] = token;
+			//console.log("token",localStorage.getItem('token'));
+			var info = {
+				id:options.id,
+				commit:false
 			}
+			console.log(info);
+			axios.post(/*'https://metaq.scutbot.icu/login'*/
+						'http://localhost:8080/fill',info)
+			    .then(response => {
+			      console.log(response.data);
+			    })
+			    .catch(error => {
+			      console.log(error);
+			    });
+			console.log(this.answer);
 		},
 		data() {
 			return {
@@ -139,7 +167,7 @@
 						else
 							this.answer.push(childComponent.answer);
 				});
-				console.log(this.answer)
+				
 				
 			}
 		}

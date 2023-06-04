@@ -20,7 +20,7 @@ public class ObjWriter {//把对象储存，需要储存的应该就User对象
     private String questionaireRoad;
     @Value("${store.userRoad}")
     private String userRoad;
-    @Value("${store.filledQustionaireRoad}")
+    @Value("${store.filledQuestionaireRoad}")
     private String filledQuestionaireRoad;
     private ObjectMapper objectMapper = new ObjectMapper();
     public void writeUser(User user) throws IOException {//用邮箱作为文件名

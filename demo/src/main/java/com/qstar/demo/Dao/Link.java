@@ -1,23 +1,26 @@
 package com.qstar.demo.Dao;
 
+import com.alibaba.fastjson.JSON;
 import com.qstar.demo.pojo.*;
 import com.qstar.demo.pojo.Receiver.QuestionMiniUnit;
 import com.qstar.demo.pojo.Result.*;
 import com.qstar.demo.pojo.writeAndRead.ObjReader;
 import com.qstar.demo.pojo.writeAndRead.ObjWriter;
 
+import ch.qos.logback.classic.helpers.WithLayoutListAppender;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
-import org.springframework.core.io.support.PropertiesLoaderUtils;
+// import org.springframework.core.env.Environment;
+// import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.multipart.MultipartFile;
+// import org.springframework.web.bind.annotation.RequestHeader;
+// import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.util.*;
 
-import com.qstar.demo.DataIO;
+//import com.qstar.demo.DataIO;
 @Repository
 public class Link {
     private Map<String,User> map=new HashMap<String, User>();//储存token-用户对象对，登录时加入，表示现在在线的用户
@@ -49,8 +52,9 @@ public class Link {
     private ObjReader reader;
     @Autowired
     private ObjWriter writer;
-    @Autowired
-    DataIO userio;
+    // @Autowired
+    // private DataIO userio;
+
     private int idDistribute;       //这个IDistribute应该和硬盘高度同步
     private int filledIDDistribute;     //填写记录ID的分配，也需要从文件中实时读取
 
@@ -64,18 +68,20 @@ public class Link {
         map=new HashMap<String, User>();
         User user=new User();//用于测试
         map.put("Test",user);
-        // User user2 = reader.readUser("2502160023@qq.com");
-        // String token = "{\"id\":3,\"email\":\"2502160023@qq.com\"}";
-        // map.put(token,user2);
+        System.out.println("idfilepath:" + IDFile);
+        System.out.println("questionaireRoad:" + questionaireRoad);
         /*IDProperties=PropertiesLoaderUtils.loadAllProperties("IDProperty.properties");*/
          /*Integer.parseInt(IDProperties.getProperty(IDKey));*/
-        // if(new File(base+"/"+IDFile).exists()) {    //测试用
-        //     idDistribute = Integer.parseInt(IDReader.readLine());     //读取
-        // }else{
-        //     idDistribute=0;
-        // }
-        idDistribute=0; //不用读写文件的话至少还要赋值，否则创建不了问卷和填写记录
-        filledIDDistribute=0;
+        if(new File(base+"/"+IDFile).exists()) {    //测试用
+            BufferedReader IDReader = new BufferedReader(new FileReader(base+"/"+IDFile));
+            idDistribute = Integer.parseInt(IDReader.readLine());     //读取
+            IDReader.close();
+        }else{
+            idDistribute=0;
+        }
+        System.out.println("idDistribute:"+idDistribute);
+        //idDistribute=0; //不用读写文件的话至少还要赋值，否则创建不了问卷和填写记录
+        //filledIDDistribute=0;
     }
     public List<QuestionaireInfo> getCreated(String token) throws IOException {//不仅要获取自己创建的，还得获取被别人授权的
             List<QuestionaireInfo> list=new ArrayList<>();
@@ -94,6 +100,9 @@ public class Link {
         }
     }
     public void addAuthorityInfoList(List<QuestionaireInfo> list,Collection<Integer> ids,int authority) throws IOException {
+        if(ids == null){
+            return;
+        }
         for(int id:ids){
             if(checkQuestionaire(id)){
                 QuestionaireInfo info=questionaires.get(id).getInfo();
@@ -106,7 +115,9 @@ public class Link {
             user.addQuestionaire(idDistribute);
             Questionaire questionaire=new Questionaire(title,description,questions,idDistribute,user.getName(),user.getEmail(),user.getHeadPic());
             questionaires.put(idDistribute,questionaire);
-            writer.writeQuestionaire(questionaire);    //创建时顺便写入
+            System.out.println("开始写入问卷");
+            writer.writeQuestionaire(questionaire); //创建时顺便写入
+            System.out.println("开始写入user");   
             writer.writeUser(user);
             /*public Questionaire(String title,String description,String attachFile,List<Question> questions,int id,String creatorEmail){*/
             idDistribute++;
@@ -126,9 +137,13 @@ public class Link {
         if(user.hasQuestionaireID(id)) {//如果id正确中
             if(checkQuestionaire(id)) {
                 Questionaire questionaire = questionaires.get(id);
-                if (questionaire != null&&questionaire.allowCheck(user.getEmail())) {//是否允许查看
-                    return new ResultForCheck(questionaire.getInfo().getTitle(),questionaire.getDescription(), questionaire.getQuestions());
+                //System.out.println(JSON.toJSONString(questionaire));
+                if(questionaire == null){
+                    System.out.println("获取不到问卷:" + id);
                 }
+                //if (questionaire != null&&questionaire.allowCheck(user.getEmail())) {//是否允许查看
+                    return new ResultForCheck(questionaire.getInfo().getTitle(),questionaire.getDescription(), questionaire.getQuestions());
+                //}
             }
         }
         return null;
@@ -183,13 +198,14 @@ public class Link {
                 if (questionaire.isCommit()) {
                     if((user.containFilledID(id)&&questionaire.isMultiCommit())||!(user.containFilledID(id))) {//检验是否填写过，可以填写吗
                         user.addFilled(filledIDDistribute);//添加填写问卷对象
-                        FilledQuestionaire filledQuestionaire=new FilledQuestionaire(questionaire.getCreator(),id,filledIDDistribute);
+                        FilledQuestionaire filledQuestionaire=new FilledQuestionaire(questionaire.getInfo().getTitle(),questionaire.getCreator(),id,filledIDDistribute);
                         filledIDDistribute++;
                         if(commit){
                             return commitFill(filledQuestionaire,user);
                         }
                         writer.writeUser(user);//感觉IO用太多了
                         writer.writeFilledQuestionaire(filledQuestionaire);
+                        System.out.println("success!!!!");
                         return Result.success(new ResultForCheckWithID(getfill(id, token),filledIDDistribute-1));
                     }
                     return Result.fail("已填写过");
@@ -386,14 +402,19 @@ public class Link {
     }*/
 
     public boolean checkQuestionaire(int id) throws IOException {//检查是否访问的问卷存在，不存在就读入
+        System.out.println("checkQuestionaire!");
         if(!questionaires.containsKey(id)){
+            System.out.println("准备读取问卷");
             Questionaire o=reader.readQuestionaire(id);
+            System.out.println("读取问卷成功");
             if(o!=null) {
                 questionaires.put(id, o);
+                System.out.println(id + ":问卷信息已经写入内存");
                 return true;
             }
             return false;
         }
+        System.out.println("问卷已在内存中");
         return true;
     }
     public Result setting(boolean recordName, boolean multiCommit, Date begin, Date end, Integer id, String token) throws IOException {
