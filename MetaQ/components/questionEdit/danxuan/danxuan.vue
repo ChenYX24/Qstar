@@ -99,7 +99,8 @@
 			},    
 			add_options(){    
 				this.copy.push('');    
-				this.text=[...this.copy];        
+				this.text=[...this.copy];
+				this.showOperation(this.copy.length-1);		
 			},
 			showOperation(index){
 				if(this.beforeIndex==-1){

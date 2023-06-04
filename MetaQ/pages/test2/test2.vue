@@ -5,21 +5,27 @@
 				<view class="title">
 					{{num}}.{{content.question}}
 				</view>
-				<view class="">
+				
+				<view class="calendar-range">
 					<view class="input-div" id='inputDiv' @click="changeShow">
-									<view v-if="isRange">
+									<view v-if="showRange">
 										{{range.start.toLocaleDateString()}}-{{range.end.toLocaleDateString()}}
 									</view>
-									<view v-else>
+									<view v-else-if="isRange">
 										{{range.start.toLocaleDateString()}}
 									</view>
-							</view>
+									<view v-else>
+										{{date.toLocaleDateString()}}
+									</view>
+					</view>
 					<view class="date">
 						<DatePicker v-if="isRange" v-model.range="range" 
 						:style="{display: isShow ? 'flex' : 'none'}" />
+						<DatePicker v-else v-model="date"
+						:style="{display: isShow ? 'flex' : 'none'}" />
 					</view>
-						
 				</view>
+				
 			</view>
 
 		</view>
@@ -39,29 +45,49 @@
 					start: new Date(2023, 0, 6),
 					  end: new Date(2023, 0, 10)
 				}),
-				date:null,
+				date: new Date(2023, 0, 6),
 				answer:'',
 				isShow:false
 			};
 		},
 		  watch: {
-			range(newVal) {
+			range(newVal,oldVal) {
 			  // 在这里处理值变化的逻辑
 			  // console.log(this.range.start.toLocaleDateString()==this.range.end.toLocaleDateString())
-			  this.isShow=!this.isShow
+			  if((this.content.choice[0]==2)&&newVal.start.toLocaleDateString()==newVal.end.toLocaleDateString()){
+				  // this.range=oldVal
+				this.range=oldVal
+				  uni.showToast({
+				    title: '请选择一段日期',  
+				    icon:'none',  
+				  });  
+			  }else{
+				  this.isShow=!this.isShow
+			  }
+			  console.log(333)
+			},
+			date(newVal,oldVal) {
+				this.isShow=!this.isShow 
 			}
 		  },
 		  computed: {
 		  	isRange() {
-				if(test==1)
+				if(this.content.choice[0]==1)//只能single
 				{
 					return false
 				}
-				else if(test==2)
+				else if(this.content.choice[0]==2)//只能range
 				{
 					return true
 				}
 				else{
+						return true
+				}
+
+		  	},
+			showRange(){
+				if(this.isRange)
+				{
 					if(this.range.start.toLocaleDateString()==this.range.end.toLocaleDateString())
 					{
 						return false
@@ -71,8 +97,10 @@
 						return true
 					}
 				}
-
-		  	}
+				else{
+					return false
+				}
+			}
 		  },
 		props:{
 			num:{
@@ -84,7 +112,7 @@
 				default:{
 					question:"3333",
 					type:'blank',
-					choice:['1','2','3','4'],
+					choice:[2],
 				}
 			},
 
@@ -101,7 +129,15 @@
 			},
 			changeShow(e){
 				this.isShow=!this.isShow
+
 			},
+			// ttt(e){
+			// 	this.range=({
+			// 		start: this.range.start,
+			// 		  end: this.range.end
+			// 	}),
+			// 	console.log(this.range)
+			// }
 			
 
 		}
