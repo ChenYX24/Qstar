@@ -40,7 +40,6 @@
 				<view class="submit" @click="submitSuccess">
 					提交
 				</view>
-				<button @click="getT">111</button>
 			</view>
 			
 

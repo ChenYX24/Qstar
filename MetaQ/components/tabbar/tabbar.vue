@@ -44,6 +44,7 @@
 <script>
 import add from "/components/add/add.vue"
 import save from "/components/save/save.vue"
+import store from '/store/index.js'
 export default {
   components: {
     add,
@@ -116,13 +117,19 @@ export default {
 	{
 		if (tab === 'add'&&this.Type==0) {
 		  // 点击加号按钮跳转到相应页面
-		  uni.navigateTo({
+		  // var questionNaire={
+			 //  	title:'',
+			 //  	description:'',
+			 //  	content:[],
+		  // }
+		  // this.$store.commit('setQuestionNire',questionNaire);
+		  uni.reLaunch({
 		    url: '/pages/editQuestionnire/editQuestionnire',
 		  });
 		} 
 		else if(tab === 'add'&&this.Type==1){
 			// this.isAdd=!this.isAdd
-			uni.navigateTo({
+			uni.reLaunch({
 			  url: '/pages/fillQuestionnaire/fillQuestionnaire',
 			});
 		}

@@ -154,6 +154,7 @@
 		},
 		onLoad: function(options) {
 			this.tab = options.tab
+			
 			if(options.content){
 				// console.log(this.$store.state.questionNire.content)
 				//重新获取content
@@ -187,45 +188,45 @@
 			return {
 				tab: '',
 				questionNire:{
-					title:'早八大学生会不会饿死',
-					description:'大学士会饿死',
+					title:'',
+					description:'',
 					content:[
-							{
-								question:"日期",
-								type:'DATE',
-								choice:[2],
-								setting:[]
-							},
-							{
-								question:"标题1",
-								type:'SINGLE',
-								choice:['a','b','c'],
-								setting:[]
-							},
-							{
-								question:"填空题",
-								type:'BLANK',
-								choice:[],
-								setting:[]
-							},
-							{
-								question:"滑动条",
-								type:'SLIDE',
-								choice:[10,'非常差',1000,'非常好',0],
-								setting:[]
-							},
-							{
-								question:"标题2",
-								type:'MULTIPLE',
-								choice:['m','n','b'],
-								setting:[]
-						    },
-							{
-								question:"标题2",
-								type:'SINGLE',
-								choice:['m','n','b'],
-								setting:[]
-							}
+							// {
+							// 	question:"日期",
+							// 	type:'DATE',
+							// 	choice:[2],
+							// 	setting:[]
+							// },
+							// {
+							// 	question:"标题1",
+							// 	type:'SINGLE',
+							// 	choice:['a','b','c'],
+							// 	setting:[]
+							// },
+							// {
+							// 	question:"填空题",
+							// 	type:'BLANK',
+							// 	choice:[],
+							// 	setting:[]
+							// },
+							// {
+							// 	question:"滑动条",
+							// 	type:'SLIDE',
+							// 	choice:[10,'非常差',1000,'非常好',0],
+							// 	setting:[]
+							// },
+							// {
+							// 	question:"标题2",
+							// 	type:'MULTIPLE',
+							// 	choice:['m','n','b'],
+							// 	setting:[]
+						 //    },
+							// {
+							// 	question:"标题2",
+							// 	type:'SINGLE',
+							// 	choice:['m','n','b'],
+							// 	setting:[]
+							// }
 							]
 				},
 				operate_show:[],
