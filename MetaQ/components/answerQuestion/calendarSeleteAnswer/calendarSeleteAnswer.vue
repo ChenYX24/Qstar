@@ -47,7 +47,7 @@
 					  end: new Date(2023, 0, 10)
 				}),
 				date: new Date(2023, 0, 6),
-				answer:'',
+				answer:this.answerProps,
 				isShow:false
 			};
 		},
@@ -112,6 +112,10 @@
 			}
 		  },
 		props:{
+			answerProps:{
+				type:String,
+				default:''
+			},
 			num:{
 				type:String,
 				default:'2'

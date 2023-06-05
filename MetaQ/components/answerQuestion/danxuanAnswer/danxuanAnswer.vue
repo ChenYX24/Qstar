@@ -5,10 +5,12 @@
 				<view class="title">
 					{{num}}.{{content.question}}<text>[单选题]</text>
 				</view>
+				<!-- {{answerProps}}aaa -->
 				<radio-group name="" @change="getValue" class="radioGroup">
 					<view class="danxuan_radio" v-for="(item,index) in content.choice" :key="index" :class="{'active':index==answer&&answer!=''}">
 						<label class="radio" >
-							<radio :value="index.toString()" color="#c695ff"/><text>{{item}}</text>
+							<radio :value="index.toString()" color="#c695ff"
+							:checked="index.toString()==answer"/><text>{{item}}</text>
 						</label>
 					</view>
 				</radio-group>
@@ -24,11 +26,14 @@
 		
 		data() {
 			return {
-				answer:''
+				answer:this.answerProps
 			};
 		},
 		props:{
-			//是预览模式还是填写模式
+			answerProps:{
+				type:String,
+				default:''
+			},
 			num:{
 				type:String,
 				default:'1'

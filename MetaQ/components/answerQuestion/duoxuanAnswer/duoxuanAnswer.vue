@@ -8,7 +8,8 @@
 					<checkbox-group name="" @change="getValue" class="checkboxGroup">
 						<view class="duoxuan-checkbox" v-for="(item,index) in content.choice" :key="index" :class="{'active':answer.includes(index.toString())&&answer!=''}">
 							<label class="checkbox">
-								<checkbox :value="index.toString()" color="#c695ff" class="checkBox"/>
+								<checkbox :value="index.toString()" color="#c695ff" class="checkBox"
+								:checked="answer.includes(index.toString())"/>
 								<text class="duoxuantext">{{item}}</text>
 							</label>
 						</view>
@@ -25,13 +26,13 @@
 		name:'duoxuanAnswer',
 		data() {
 			return {
-				answer:''
+				answer:this.answerProps
 			};
 		},
 		props:{
-			//是预览模式还是填写模式
-			mode:{
-				default:0
+			answerProps:{
+				type:String,
+				default:''
 			},
 			num:{
 				type:String,
@@ -45,12 +46,13 @@
 					choice:['1','2','3','4'],
 				}
 			}
-
+			
 		},
 		methods:{
 			getValue(e){
 				this.answer=e.detail.value
-				// console.log(e.detail.value)
+				this.answer=this.answer.join(',');
+				// console.log(this.answer)
 			}
 		}
 	}

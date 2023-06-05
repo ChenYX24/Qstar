@@ -300,7 +300,7 @@
 				// console.log(this.questionNire.content[this.$store.state.now_operate])
 				//每次跳转前都要把信息转存
 				this.$store.commit('setQuestionNire',this.questionNire);
-				uni.navigateTo({
+				uni.reLaunch({
 					url: '/pages/try/try?content='+JSON.stringify(this.questionNire.content[this.$store.state.now_operate])
 							
 				})

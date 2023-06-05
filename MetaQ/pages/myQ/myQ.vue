@@ -26,7 +26,8 @@
 		      <swiper-item>
 				<view class="page2">
 				  <QBlock2 v-for="item in myFilleds" :key="item.id" :title="item.title" :isEnd="item.commited" :name="item.creator"
-				  @tap="checkFill(item.id)"></QBlock2>
+				  @tap="checkFill(item.id)"
+				  ></QBlock2>
 				</view>
 		      </swiper-item>
 		    </swiper>
@@ -85,16 +86,19 @@ export default {
 			this.isSave=!this.isSave
 		},
 		checkFill(id){
-			axios.defaults.headers.common['token'] = localStorage.getItem('token');
-			console.log("token",localStorage.getItem('token'));
-			axios.post(/*'https://metaq.scutbot.icu/login'*/
-						'http://localhost:8080/checkFill',{id:id})
-			    .then(response => {
-			      console.log(response.data);
-			    })
-			    .catch(error => {
-			      console.log(error);
-			    });
+			//一旦对应的QBlock被点击，就把对应的问卷id写入qnid中
+			//这里的id是指answer的id，不是问卷的id
+			this.$store.state.commit('setIsCreate',id)
+			// axios.defaults.headers.common['token'] = localStorage.getItem('token');
+			// console.log("token",localStorage.getItem('token'));
+			// axios.post(/*'https://metaq.scutbot.icu/login'*/
+			// 			'http://localhost:8080/checkFill',{id:id})
+			//     .then(response => {
+			//       console.log(response.data);
+			//     })
+			//     .catch(error => {
+			//       console.log(error);
+			//     });
 		},
 		async fetchData() {
 			//获取已经创建的问卷
@@ -111,9 +115,9 @@ export default {
 			      console.log(error);
 			    });
 			try {  
-			  // const response = await axios.get('/static/test2.json'); // TODO
-			  // this.blocks = response.data.data.blocks;
-			  // this.blocks1=response.data.data.blocks1
+			  const response = await axios.get('/static/test2.json'); // TODO
+			  this.blocks = response.data.data.blocks;
+			  this.blocks1=response.data.data.blocks1
 			} catch (error) {  
 			  console.error('Error fetching data:', error);  
 			}

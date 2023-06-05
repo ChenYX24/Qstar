@@ -37,10 +37,15 @@ export default {
 			},
 		data() {
 			return {
-				answer:Math.floor(this.content.choice[2]*0.8),
+				// answer:				
+				answer:this.answerProps === '' ? Math.floor(this.content.choice[2]*0.8) : parseInt(this.answerProps),	
 			};
 		},
 		props:{
+			answerProps:{
+				type:String,
+				default:''
+			},
 			num:{
 				type:String,
 				default:'1'

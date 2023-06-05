@@ -26,7 +26,8 @@
 				ref="questionAnswerRef"
 				:num="(index+1).toString()"
 				:content="item"
-				:is="chooseComponent(index)">
+				:is="chooseComponent(index)"
+				:answerProps="answerTemp[index]">
 				</component>
 			</view>
 			
@@ -80,45 +81,65 @@
 			// 		})
 			// 	}
 			// }
-			const token = localStorage.getItem('token')
-			axios.defaults.headers.common['token'] = token;
-			//console.log("token",localStorage.getItem('token'));
-			this.id = options.id;
-			var info = {
-				id:options.id,
-				commit:false
+			if(options.id){
+				const token = localStorage.getItem('token')
+				axios.defaults.headers.common['token'] = token;
+				//console.log("token",localStorage.getItem('token'));
+				this.id = options.id;
+				var info = {
+					id:options.id,
+					commit:false,
+				}
+				console.log(info);
+				axios.post(/*'https://metaq.scutbot.icu/login'*/
+							'http://localhost:8080/fill',info)
+				    .then(response => {
+				      console.log(response.data);
+					  this.questionNaire = response.data.data;
+					  this.ID = response.data.data.id;
+				    })
+				    .catch(error => {
+				      console.log(error);
+				    });
+				console.log(this.answer);
+				this.answerTemp=Array.from({length:this.questionNaire.content.length}, () => '');
 			}
-			console.log(info);
-			axios.post(/*'https://metaq.scutbot.icu/login'*/
-						'http://localhost:8080/fill',info)
-			    .then(response => {
-			      console.log(response.data);
-				  this.questionNaire = response.data.data;
-				  this.ID = response.data.data.id;
-			    })
-			    .catch(error => {
-			      console.log(error);
-			    });
-			console.log(this.answer);
+			else if(options.check){
+				//这里是answer的id
+				this.ID= this.$store.state.qnid;
+				axios.defaults.headers.common['token'] = localStorage.getItem('token');
+				console.log("token",localStorage.getItem('token'));
+				axios.post(/*'https://metaq.scutbot.icu/login'*/
+							'http://localhost:8080/checkFill',{id:this.ID})
+				    .then(response => {
+				      console.log(response.data);
+					  this.answerTemp=response.data.data.filled;
+					  this.questionNaire=response.data.data.check;
+				    })
+				    .catch(error => {
+				      console.log(error);
+				    });
+					
+			}
 		},
 		data() {
 			return {
+				answerTemp:['0','kkk','100','0,2','0'],
 				answer:[],
-				ID:-1,
-				id:-1,
-				// mode:0,
+				ID:-1,//问卷的一份答案的id
+				id:-1,//问卷id
 				componentName:['danxuanAnswer','duoxuanAnswer',
 				'tiankongAnswer','huadongtiaoAnswer','','riqiAnswer'],
 				questionNaire:{
 					title:'关于c10居住学生学校住宿感受的的调研',
 					description:'请c10的同学填写，谢谢配合！',
 					content:[
-							{
-								question:"日期",
-								type:'DATE',
-								choice:[2],
-								setting:[]
-							},
+							// {
+							// 	question:"日期",
+							// 	type:'DATE',
+							// 	choice:[2],
+							// 	setting:[]
+							// },
 							{
 								question:"标题1",
 								type:'SINGLE',
@@ -181,11 +202,6 @@
 			},
 			submitSuccess(){
 				this.$refs.questionAnswerRef.forEach(childComponent => {
-						if(childComponent.$options.name === 'duoxuanAnswer'){
-							// console.log('duoxuan',Array.from(childComponent.answer))
-							this.answer.push(Array.from(childComponent.answer).join(''));
-						}
-						else
 							this.answer.push(childComponent.answer);
 				});
 				const token = localStorage.getItem('token')

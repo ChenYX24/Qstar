@@ -4,7 +4,7 @@
 			<view class="title">
 				{{title}}
 			</view>
-			<view class="check">
+			<view class="check" @click="check">
 				查看
 			</view>
 		</view>
@@ -52,6 +52,13 @@
 					return '修改'
 				}
 		    },
+		},
+		methods:{
+			check(){
+				uni.reLaunch({
+					url:"/pages/fillQuestionnaire/fillQuestionnaire?check"+'1'
+				})
+			}
 		}
 	}
 </script>

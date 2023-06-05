@@ -25,10 +25,14 @@
 	export default {
 		data() {
 			return {
-				answer:''
+				answer:this.answerProps
 			};
 		},
 		props:{
+			answerProps:{
+				type:String,
+				default:''
+			},
 			num:{
 				type:String,
 				default:'2'
