@@ -78,6 +78,7 @@ public class Link {
             IDReader.close();
         }else{
             idDistribute=0;
+            filledIDDistribute=0;
         }
         System.out.println("idDistribute:"+idDistribute);
         //idDistribute=0; //不用读写文件的话至少还要赋值，否则创建不了问卷和填写记录
@@ -110,7 +111,7 @@ public class Link {
             }
         }
     }
-    public int create(String title, String description/*,String filename*/,List<Question> questions,String token,boolean commit) throws IOException {
+    public Result create(String title, String description/*,String filename*/,List<Question> questions,String token,boolean commit) throws IOException {
             User user=map.get(token);
             user.addQuestionaire(idDistribute);
             Questionaire questionaire=new Questionaire(title,description,questions,idDistribute,user.getName(),user.getEmail(),user.getHeadPic());
@@ -123,10 +124,16 @@ public class Link {
             idDistribute++;
             //IDWriter.write(idDistribute);       //同步写入
             if(commit){ //当需要提交时
-                    questionaire.commit();
+                boolean b=questionaire.commit();
+                if(!b){
+                    return Result.fail("问卷已提交，重复提交!");
+                }
+                System.out.println("开始写入问卷");
+                writer.writeQuestionaire(questionaire); //创建时顺便写入
             }
             /*updateProperties(); *///创建问卷时同步问题，暂时不用，会报错
-            return idDistribute-1;
+            return Result.success(idDistribute-1);
+            //return idDistribute-1;
     }
     /*public void updateProperties() throws IOException {//更新idDistribute到文件中
         IDProperties.setProperty(IDKey,idDistribute+"");
@@ -197,16 +204,17 @@ public class Link {
                 Questionaire questionaire=questionaires.get(id);
                 if (questionaire.isCommit()) {
                     if((user.containFilledID(id)&&questionaire.isMultiCommit())||!(user.containFilledID(id))) {//检验是否填写过，可以填写吗
-                        user.addFilled(filledIDDistribute);//添加填写问卷对象
-                        FilledQuestionaire filledQuestionaire=new FilledQuestionaire(questionaire.getInfo().getTitle(),questionaire.getCreator(),id,filledIDDistribute);
+                        //user.addFilled(filledIDDistribute);//添加填写问卷对象
+                        //FilledQuestionaire filledQuestionaire=new FilledQuestionaire(questionaire.getInfo().getTitle(),questionaire.getCreator(),id,filledIDDistribute);
                         filledIDDistribute++;
-                        if(commit){
-                            return commitFill(filledQuestionaire,user);
-                        }
-                        writer.writeUser(user);//感觉IO用太多了
-                        writer.writeFilledQuestionaire(filledQuestionaire);
-                        System.out.println("success!!!!");
-                        return Result.success(new ResultForCheckWithID(getfill(id, token),filledIDDistribute-1));
+                        return Result.success(new ResultForCheckWithID(getfill(id),filledIDDistribute-1));
+                        // if(commit){
+                        //     return commitFill(filledQuestionaire,user);
+                        // }
+                        // writer.writeUser(user);//感觉IO用太多了
+                        // writer.writeFilledQuestionaire(filledQuestionaire);
+                        // System.out.println("success!!!!");
+                        // return Result.success(new ResultForCheckWithID(getfill(id, token),filledIDDistribute-1));
                     }
                     return Result.fail("已填写过");
                 }
@@ -214,10 +222,10 @@ public class Link {
             }
         return Result.fail("问卷ID错误");
     }
-    public ResultForCheck getfill(int id,String token) throws IOException{//获取指定问卷
+    public ResultForCheck getfill(int id) throws IOException{//获取指定问卷
             if(checkQuestionaire(id)) { //检验这个问卷是否在文件中或questionaires中
                 Questionaire questionaire = questionaires.get(id);
-                if (questionaire != null && questionaire.commit()) {//检验是否提交
+                if (questionaire != null && questionaire.isCommit()) {//检验是否提交
                     return new ResultForCheck(questionaire.getInfo().getTitle(),questionaire.getDescription(), questionaire.getQuestions());
                 }
             }
@@ -227,33 +235,55 @@ public class Link {
         List<Integer> list=map.get(token).getFilledQuestionaires();
         List<FilledQuestionaireInfo> filledQuestionaires=new ArrayList<>();
         for(int id:list){
-            filledQuestionaires.add(findFilled(id).getInfo());
+            filledQuestionaires.add(findFilled(id,token).getInfo());
         }
         return filledQuestionaires;
     }
-    public Result saveFill(int filledId,String[] data/*, Set<Integer> set,String attach*/,String token,boolean commit) throws IOException {
+    public Result saveFill(int filledId,int id,String[] data/*, Set<Integer> set,String attach*/,String token,boolean commit) throws IOException {
         User user=map.get(token);
-        FilledQuestionaire filledQuestionaire=findFilled(filledId);
+        FilledQuestionaire filledQuestionaire=null;
+        if(!user.containFilledID(filledId)){
+            user.addFilled(filledId);//添加填写问卷对象
+        if(checkQuestionaire(id)){
+            Questionaire questionaire=questionaires.get(id);
+            filledQuestionaire=new FilledQuestionaire(questionaire.getInfo().getTitle(),questionaire.getCreator(),id,filledId);
+            filledQuestionaireMap.put(filledId,filledQuestionaire);
+        }
+        }else{
+            filledQuestionaire=findFilled(filledId, token);
+        }
+        //FilledQuestionaire filledQuestionaire=findFilled(filledId);
         if(filledQuestionaire!=null) {
-            /*deleteFilledFiles(filledQuestionaire,set);*/
-            filledQuestionaire.setData(data);
-            /*deleteFile(filledQuestionaire.getAttach());*/
-            /*filledQuestionaire.setAttach(attach);*/
-            if(commit){
-                return commitFill(filledQuestionaire,user);
+            if(!filledQuestionaire.isCommitted()){
+                filledQuestionaire.setData(data);
+                if(!user.containFilledID(filledId)){
+                    user.addFilled(filledId);
+                }
+                writer.writeUser(user);
+                if(commit){
+                    return commitFill(filledQuestionaire,user);
+                }else{
+                    writer.writeFilledQuestionaire(filledQuestionaire);
+                }
+                return Result.success();
             }
-            writer.writeUser(user);
-        return Result.success();
         }
         return Result.fail("填写记录的ID错误");
     }
-    public FilledQuestionaire findFilled(int filledID) throws IOException {
-        if(!filledQuestionaireMap.containsKey(filledID)){
-            FilledQuestionaire filledQuestionaire=reader.readFilledQuestionaire(filledID);
-            filledQuestionaireMap.put(filledID,filledQuestionaire);
-            return filledQuestionaire;
+    public FilledQuestionaire findFilled(int filledID,String token) throws IOException {
+        User user=map.get(token);
+        if(user.containFilledID(filledID)){
+            System.out.println("containFilledID");
+            if(!filledQuestionaireMap.containsKey(filledID)){
+                System.out.println("findFilled：从文件中获取问卷");
+                FilledQuestionaire filledQuestionaire=reader.readFilledQuestionaire(filledID);
+                System.out.println("文件中读取到的问卷数据:" + filledQuestionaire.getData());
+                filledQuestionaireMap.put(filledID,filledQuestionaire);
+                return filledQuestionaire;
+            }
+            return filledQuestionaireMap.get(filledID);
         }
-        return filledQuestionaireMap.get(filledID);
+        return null;
     }
     /*public void deleteFilledFiles(FilledQuestionaire questionaire,Set<Integer> set){//删除填写问卷的文件，后面那个集合指定的是哪几个题是要删除的
         String[] data=questionaire.getData();
@@ -264,9 +294,8 @@ public class Link {
         }
     }*/
     public ResultForFill checkFill(int id, String token) throws IOException {
-            List<Question> questions;
             String[] filled;    //已填写的数据
-            FilledQuestionaire fq = findFilled(id, token);
+            FilledQuestionaire fq = findFilled(id,token);
             filled = fq.getData();
             ResultForCheck check = getfill(fq.getId());
             if (check != null) {
@@ -357,7 +386,7 @@ public class Link {
             putQuestionaire(user.getAllowEditQuestionaires());
             putQuestionaire(user.getAllowCheckQuestionaires());
             for(int id:user.getFilledQuestionaires()){
-                FilledQuestionaire filledQuestionaire=findFilled(id);
+                FilledQuestionaire filledQuestionaire=findFilled(id,token);
                 if(filledQuestionaire!=null){
                     System.out.println("登录自动将已填写问卷载入内存");
                     System.out.println("载入问卷id:" + filledQuestionaire.getIndex());
@@ -594,7 +623,7 @@ public class Link {
                 if(questionaire.isRecordFillerName()) {
                     List<String[]> datas = new ArrayList<>();
                     for (int filledID : questionaire.getFilledIDs()) {
-                        datas.add(findFilled(filledID).getData());
+                        datas.add(findFilled(filledID,token).getData());
                     }
                     return Result.success(new ResultForMultiFilledCheck(
                             new ResultForCheck(questionaire.getInfo().getTitle(), questionaire.getDescription(), questionaire.getQuestions()
