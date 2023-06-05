@@ -56,7 +56,7 @@
 				<view class="button_ok_or_no" @click="toEditQuestion">
 					确认
 				</view>
-				<view class="button_ok_or_no">
+				<view class="button_ok_or_no"  @click="bcakEdit">
 					返回
 				</view>
 			</view>
@@ -140,13 +140,18 @@
 				this.generateQuestion();
 				 },
 				 generateQuestion(){
-					 uni.navigateTo({
+					 uni.reLaunch({
 					 	url: '/pages/editQuestionnire/editQuestionnire?content='+JSON.stringify(this.content)
 					 })
-				 }
-				 
+				 },
+				bcakEdit(){
+					uni.reLaunch({
+						url: '/pages/editQuestionnire/editQuestionnire'
+					})
+				} 
 			
-		}
+		},
+
 		
 	}
 </script>

@@ -48,7 +48,8 @@
 				}),
 				date: new Date(2023, 0, 6),
 				answer:this.answerProps,
-				isShow:false
+				isShow:false,
+				dateState:0,
 			};
 		},
 		  watch: {
@@ -65,16 +66,30 @@
 			  }else{
 				  this.isShow=!this.isShow
 			  }
-			  console.log(333)
 			},
 			date(newVal,oldVal) {
 				this.isShow=!this.isShow 
+			},
+			answerProps(newVal,oldVal){
+				if(this.dateState==0){
+					var temp=newVal.split(",")
+					if(temp.length==1)
+						this.range.start=toDateFormat(temp)
+					else{
+						this.range.start=toDateFormat(temp[0])
+						this.range.end=toDateFormat(temp[1])
+					}
+				}
+				else{
+					this.date=toDateFormat(newVal)
+				}
 			}
 		  },
 		  computed: {
 		  	isRange() {
 				if(this.content.choice[0]==1)//只能single
 				{
+					this.dateState=1;
 					this.answer=this.date.toLocaleDateString().replace(/\//g, '-')
 					return false
 				}
@@ -109,7 +124,8 @@
 				else{
 					return false
 				}
-			}
+			},
+
 		  },
 		props:{
 			answerProps:{
@@ -146,6 +162,13 @@
 			},
 			test(){
 				console.log(this.answer);
+			},
+			toDateFormat(str){
+				let dateArr = str.split("-");
+				let year = parseInt(dateArr[0]);
+				let month = parseInt(dateArr[1]) - 1;
+				let day = parseInt(dateArr[2]);
+				return new Date(year,month,day);
 			}
 			// ttt(e){
 			// 	this.range=({

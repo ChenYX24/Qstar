@@ -29,7 +29,6 @@
 				:is="chooseComponent(index)"
 				:answerProps="answerTemp[index]">
 				</component>
-				{{answerTemp[index]}}
 			</view>
 			
 			<view class="">
@@ -70,20 +69,6 @@
 			riqiAnswer
 		},
 		onLoad: function(options) {
-			// if(options.mode){
-			// 	this.mode=options.mode
-			// }
-			// if(options.id){
-			// 	this.$store.commit('setIsCreate',options.id)
-			// 	const token = localStorage.getItem('token')
-				
-			// 	if(!token){
-			// 		uni.navigateTo({
-			// 			url:'/pages/login/login?id='+options.id
-			// 		})
-			// 	}
-			// }
-			this.answerTemp=this.A;
 			if(options.id){
 				const token = localStorage.getItem('token')
 				axios.defaults.headers.common['token'] = token;
@@ -109,7 +94,6 @@
 			}
 			else if(options.check){
 				//这里是answer的id
-				console.log(111)
 				this.ID= this.$store.state.qnid;
 				axios.defaults.headers.common['token'] = localStorage.getItem('token');
 				console.log("token",localStorage.getItem('token'));
@@ -117,14 +101,9 @@
 							'http://localhost:8080/checkFill',{id:this.ID})
 				    .then(response => {
 				      console.log(response.data);
-					  // this.answerTemp=response.data.data.filled;//问题fill是答案，但是这个赋值给answerTemp，answerTemp没有渲染出来
-					  let testList=[]
-					  let newList=[...response.data.data.filled]
-					  this.A=newList
-					  console.log(this.A,this.answerTemp)
+					  this.answerTemp=response.data.data.filled;
 					  this.questionNaire=response.data.data.check;//这个是问卷内容
 					  this.id = response.data.data.id;
-					  console.log(this.answerTemp)
 				    })
 				    .catch(error => {
 				      console.log(error);
@@ -133,8 +112,8 @@
 		},
 		data() {
 			return {
-				A:['1','ttt','500','0,1','0'],
-				answerTemp:[],
+				// A:['1','ttt','500','0,1','0'],
+				answerTemp:['2022-1-10,2022-1-20','1','ttt','500','0,1','0'],
 				answer:[],
 				ID:-1,//问卷的一份答案的id
 				id:-1,//问卷id
@@ -144,12 +123,12 @@
 					title:'关于c10居住学生学校住宿感受的的调研',
 					description:'请c10的同学填写，谢谢配合！',
 					content:[
-							// {
-							// 	question:"日期",
-							// 	type:'DATE',
-							// 	choice:[2],
-							// 	setting:[]
-							// },
+							{
+								question:"日期",
+								type:'DATE',
+								choice:[2],
+								setting:[2]
+							},
 							{
 								question:"标题1",
 								type:'SINGLE',
@@ -183,11 +162,6 @@
 
 							],
 				},
-			}
-		},
-		computed:{
-			answerTemp(){
-				return this.A
 			}
 		},
 		methods:{
