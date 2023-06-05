@@ -22,10 +22,11 @@ public class ObjWriter {//把对象储存，需要储存的应该就User对象
     private String userRoad;
     @Value("${store.filledQuestionaireRoad}")
     private String filledQuestionaireRoad;
+    @Value("${store.IDFile}")
+    private String IDFile;
     private ObjectMapper objectMapper = new ObjectMapper();
     public void writeUser(User user) throws IOException {//用邮箱作为文件名
-        
-        //Writer w=new BufferedWriter(new FileWriter(base+"/"+userRoad+"/"+user.getEmail()+".txt"));
+        /*Writer w=new BufferedWriter(new FileWriter(base+"/"+userRoad+"/"+user.getEmail()+".txt"));*/
         FileOutputStream fos = new FileOutputStream(base+"/"+userRoad+"/"+user.getEmail()+".txt");
         OutputStreamWriter osw = new OutputStreamWriter(fos,"utf-8");
         osw.write(objectMapper.writeValueAsString(user));
@@ -49,5 +50,11 @@ public class ObjWriter {//把对象储存，需要储存的应该就User对象
         OutputStreamWriter osw = new OutputStreamWriter(fos,"utf-8");
         osw.write(objectMapper.writeValueAsString(questionaire));
         osw.close();
+    }
+    public void writeID(int questionaireID,int filledID) throws IOException {
+        BufferedWriter w=new BufferedWriter(new FileWriter(base+"/"+IDFile+".txt"));
+        w.write(questionaireID);
+        w.newLine();
+        w.write(filledID);
     }
 }
