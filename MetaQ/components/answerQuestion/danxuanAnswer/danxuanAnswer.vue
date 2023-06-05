@@ -30,9 +30,9 @@
 			};
 		},
 		watch:{
-			answerProps:function(newVal, oldVal) {
-				this.answer=newVal;
-			},
+		   answerProps:function(newVal, oldVal) {
+			this.answer=newVal;
+		   },
 		},
 		props:{
 			answerProps:{

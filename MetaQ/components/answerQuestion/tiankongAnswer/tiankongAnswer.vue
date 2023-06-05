@@ -25,8 +25,13 @@
 	export default {
 		data() {
 			return {
-				answer:this.answerProps
+				answer:''
 			};
+		},
+		watch:{
+		   answerProps:function(newVal, oldVal) {
+			this.answer=newVal;
+		   },
 		},
 		props:{
 			answerProps:{

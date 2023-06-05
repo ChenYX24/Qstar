@@ -41,6 +41,11 @@ export default {
 				answer:this.answerProps === '' ? Math.floor(this.content.choice[2]*0.8) : parseInt(this.answerProps),	
 			};
 		},
+		watch:{
+		   answerProps:function(newVal, oldVal) {
+			this.answer=this.answerProps === '' ? Math.floor(this.content.choice[2]*0.8) : parseInt(this.answerProps)
+		   },
+		},
 		props:{
 			answerProps:{
 				type:String,
