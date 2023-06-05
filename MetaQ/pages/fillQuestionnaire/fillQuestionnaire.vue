@@ -29,6 +29,7 @@
 				:is="chooseComponent(index)"
 				:answerProps="answerTemp[index]">
 				</component>
+				{{answerTemp[index]}}
 			</view>
 			
 			<view class="">
@@ -40,6 +41,7 @@
 				<view class="submit" @click="submitSuccess">
 					提交
 				</view>
+				<button @click="getT">111</button>
 			</view>
 			
 
@@ -113,18 +115,23 @@
 							'http://localhost:8080/checkFill',{id:this.ID})
 				    .then(response => {
 				      console.log(response.data);
-					  this.answerTemp=response.data.data.filled;
-					  this.questionNaire=response.data.data.check;
+					  // this.answerTemp=response.data.data.filled;//问题fill是答案，但是这个赋值给answerTemp，answerTemp没有渲染出来
+					  let testList=[]
+					  let newList=[...response.data.data.filled]
+					  this.A=newList
+					  console.log(this.A,this.answerTemp)
+					  this.questionNaire=response.data.data.check;//这个是问卷内容
+					  this.id = response.data.data.id;
+					  console.log(this.answerTemp)
 				    })
 				    .catch(error => {
 				      console.log(error);
 				    });
-					
 			}
 		},
 		data() {
 			return {
-				answerTemp:['0','kkk','100','0,2','0'],
+				A:[],
 				answer:[],
 				ID:-1,//问卷的一份答案的id
 				id:-1,//问卷id
@@ -175,7 +182,15 @@
 				},
 			}
 		},
+		computed:{
+			answerTemp(){
+				return this.A
+			}
+		},
 		methods:{
+			getT(){
+				console.log(this.answerTemp)
+			},
 			autoChange(e){
 					var node=document.getElementById(e.currentTarget.id);
 					node.style.height=`${e.detail.height}px`

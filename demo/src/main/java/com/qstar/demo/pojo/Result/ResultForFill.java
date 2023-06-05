@@ -11,4 +11,5 @@ import java.util.List;
 public class ResultForFill {
     private ResultForCheck check;
     private String[] filled;
+    private int id;
 }

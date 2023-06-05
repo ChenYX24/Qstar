@@ -244,11 +244,11 @@ public class Link {
         FilledQuestionaire filledQuestionaire=null;
         if(!user.containFilledID(filledId)){
             user.addFilled(filledId);//添加填写问卷对象
-        if(checkQuestionaire(id)){
-            Questionaire questionaire=questionaires.get(id);
-            filledQuestionaire=new FilledQuestionaire(questionaire.getInfo().getTitle(),questionaire.getCreator(),id,filledId);
-            filledQuestionaireMap.put(filledId,filledQuestionaire);
-        }
+            if(checkQuestionaire(id)){
+                Questionaire questionaire=questionaires.get(id);
+                filledQuestionaire=new FilledQuestionaire(questionaire.getInfo().getTitle(),questionaire.getCreator(),id,filledId);
+                filledQuestionaireMap.put(filledId,filledQuestionaire);
+            }
         }else{
             filledQuestionaire=findFilled(filledId, token);
         }
@@ -299,7 +299,7 @@ public class Link {
             filled = fq.getData();
             ResultForCheck check = getfill(fq.getId());
             if (check != null) {
-                return new ResultForFill(check, filled);
+                return new ResultForFill(check, filled,fq.getId());
             }
         return null;
     }
