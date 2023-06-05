@@ -169,6 +169,7 @@
 					this.questionNire.content.push(temp);
 					this.isAdd=-1;
 				}
+				console.log(this.questionNire.content);
 				//重置这个值
 				// this.$store.commit('setNowOperate',-1);
 				// this.$store.commit('setQuestionNire',this.questionNire);
@@ -232,7 +233,7 @@
 				//下面是决定两个页面互相切换的变量
 				questionnire_page_show:0,
 				question_page_show:0,
-				isAdd:0
+				isAdd:0,
 			}
 		},
 		created(){
@@ -245,20 +246,23 @@
 		  '$store.state.otherOperate':function(newVal, oldVal) {
 			  // console.log(1111111111);
 			  // console.log(this.$store.state.index)
-				switch(this.$store.state.index){
-					case 1:
-						this.toCopy();
-						break;
-					case 2:
-						this.toUp()
-						break;
-					case 3:
-						this.toDown()
-						break;
-					case 4:
-						this.toDelete()
-						break;
-				}
+
+				  console.log("hawl",newVal, oldVal)
+				  switch(this.$store.state.index){
+				  	case 1:
+				  		this.toCopy();
+				  		break;
+				  	case 2:
+				  		this.toUp()
+				  		break;
+				  	case 3:
+				  		this.toDown()
+				  		break;
+				  	case 4:
+				  		this.toDelete()
+				  		break;
+				  }
+
 		  },
 		  
 		},
@@ -284,7 +288,7 @@
 			creat(type_num){
 				var length=this.questionNire.content.length
 				var content_temp={
-					title:'',
+					question:'',
 					type:type_num,
 					choice:[],
 					setting:[]
@@ -292,7 +296,7 @@
 				//每次跳转前都要把信息转存
 				this.$store.commit('setQuestionNire',this.questionNire);
 				this.$store.commit('setNowOperate',length);
-				uni.navigateTo({
+				uni.reLaunch({
 					url: '/pages/try/try?content='+JSON.stringify(content_temp)+'&length='+length  
 				})
 			},

@@ -62,6 +62,7 @@
 				var index=parseInt(e.currentTarget.id);
 				this.$store.commit('setNowOperate',this.num-1);
 				this.$store.commit('setOtherOperate',index);
+				console.log(index)
 				// console.log(this.$store.state.now_operate);
 				// console.log(otherOperate)
 			},

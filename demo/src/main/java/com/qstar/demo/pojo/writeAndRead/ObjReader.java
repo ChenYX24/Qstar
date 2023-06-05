@@ -23,6 +23,8 @@ public class ObjReader {//读取user对象，根据用户的名字读取，用�
     private String userRoad;
     @Value("${store.filledQuestionaireRoad}")
     private String filledQuestionaireRoad;
+    @Value("${store.IDFile}")
+    private String IDFile;
     private ObjectMapper objectMapper = new ObjectMapper();
     public String read(String name) throws IOException {
         //File file=new File(base+"/"+name+".txt");   //储存user对象的文件是txt格式的
@@ -56,6 +58,17 @@ public class ObjReader {//读取user对象，根据用户的名字读取，用�
         //     return null;
         // }
     }
+    public int[] readQuestionaireID() throws IOException {
+        File file=new File(base+"/"+IDFile+".txt");
+        if(file.exists()){
+            BufferedReader reader=new BufferedReader(new FileReader(file));
+            int[] a=new int[2];
+            a[0]=Integer.parseInt(reader.readLine());
+            a[1]=Integer.parseInt(reader.readLine());
+            return a;
+        }
+        return null;
+    }
     public String read(String father,String name) throws IOException {
         return this.read(father+"/"+name);
     }
@@ -64,14 +77,14 @@ public class ObjReader {//读取user对象，根据用户的名字读取，用�
         String json=read(questionaireRoad,id+"");
         if(json!=null){
         //return objectMapper.readValue(json,Questionaire.class);
-        return (Questionaire) JSON.parseObject((String) read(questionaireRoad,id+""), Questionaire.class);
+        return (Questionaire) JSON.parseObject(json, Questionaire.class);
         }
         return null;
     }
     public User readUser(String email) throws IOException {
         String json=read(userRoad,email+"");
         if(json!=null) {
-            return (User) JSON.parseObject((String) read(userRoad,email), User.class);
+            return (User) JSON.parseObject(json, User.class);
             //return objectMapper.readValue(read(userRoad, email), User.class);
         }
         return null;
@@ -79,8 +92,8 @@ public class ObjReader {//读取user对象，根据用户的名字读取，用�
     public FilledQuestionaire readFilledQuestionaire(int id) throws IOException {
         String json=read(filledQuestionaireRoad,id+"");
         if(json!=null) {
-            return  (FilledQuestionaire) JSON.parseObject((String) read(filledQuestionaireRoad,id+""), FilledQuestionaire.class);
-            //return objectMapper.readValue(read(filledQuestionaireRoad, id + ""), FilledQuestionaire.class);
+            return  (FilledQuestionaire) JSON.parseObject(json, FilledQuestionaire.class);
+            //return objectMapper.readValue(json, FilledQuestionaire.class);
         }
         return null;
     }
