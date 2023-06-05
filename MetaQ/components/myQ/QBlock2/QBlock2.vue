@@ -56,7 +56,7 @@
 		methods:{
 			check(){
 				uni.reLaunch({
-					url:"/pages/fillQuestionnaire/fillQuestionnaire?check"+'1'
+					url:"/pages/fillQuestionnaire/fillQuestionnaire?check="+'1'
 				})
 			}
 		}

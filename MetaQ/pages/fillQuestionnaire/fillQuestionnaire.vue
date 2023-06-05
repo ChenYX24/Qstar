@@ -81,6 +81,7 @@
 			// 		})
 			// 	}
 			// }
+			this.answerTemp=this.A;
 			if(options.id){
 				const token = localStorage.getItem('token')
 				axios.defaults.headers.common['token'] = token;
@@ -106,6 +107,7 @@
 			}
 			else if(options.check){
 				//这里是answer的id
+				console.log(111)
 				this.ID= this.$store.state.qnid;
 				axios.defaults.headers.common['token'] = localStorage.getItem('token');
 				console.log("token",localStorage.getItem('token'));
@@ -124,7 +126,8 @@
 		},
 		data() {
 			return {
-				answerTemp:['0','kkk','100','0,2','0'],
+				A:['1','ttt','500','0,1','0'],
+				answerTemp:[],
 				answer:[],
 				ID:-1,//问卷的一份答案的id
 				id:-1,//问卷id

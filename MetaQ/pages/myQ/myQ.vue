@@ -88,7 +88,7 @@ export default {
 		checkFill(id){
 			//一旦对应的QBlock被点击，就把对应的问卷id写入qnid中
 			//这里的id是指answer的id，不是问卷的id
-			this.$store.state.commit('setIsCreate',id)
+			this.$store.commit('setIsCreate',id)
 			// axios.defaults.headers.common['token'] = localStorage.getItem('token');
 			// console.log("token",localStorage.getItem('token'));
 			// axios.post(/*'https://metaq.scutbot.icu/login'*/
