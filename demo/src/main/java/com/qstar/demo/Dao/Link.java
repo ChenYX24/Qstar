@@ -268,9 +268,12 @@ public class Link {
     }
     public FilledQuestionaire findFilled(int filledID,String token) throws IOException {
         User user=map.get(token);
-            if(user.containFilledID(filledID)){
+        if(user.containFilledID(filledID)){
+            System.out.println("containFilledID");
             if(!filledQuestionaireMap.containsKey(filledID)){
+                System.out.println("findFilled：从文件中获取问卷");
                 FilledQuestionaire filledQuestionaire=reader.readFilledQuestionaire(filledID);
+                System.out.println("文件中读取到的问卷数据:" + filledQuestionaire.getData());
                 filledQuestionaireMap.put(filledID,filledQuestionaire);
                 return filledQuestionaire;
             }
@@ -289,8 +292,9 @@ public class Link {
     }*/
     public ResultForFill checkFill(int id, String token) throws IOException {
             String[] filled;    //已填写的数据
-            ResultForCheck check = getfill(id);
-            filled = findFilled(id,token).getData();
+            FilledQuestionaire fq = findFilled(id, token);
+            filled = fq.getData();
+            ResultForCheck check = getfill(fq.getId());
             if (check != null) {
                 return new ResultForFill(check, filled);
             }
@@ -381,8 +385,12 @@ public class Link {
             for(int id:user.getFilledQuestionaires()){
                 FilledQuestionaire filledQuestionaire=findFilled(id,token);
                 if(filledQuestionaire!=null){
+                    System.out.println("登录自动将已填写问卷载入内存");
+                    System.out.println("载入问卷id:" + filledQuestionaire.getIndex());
+                    System.out.println("载入问卷数据:" + Arrays.toString(filledQuestionaire.getData()));
                     filledQuestionaireMap.put(id,filledQuestionaire);
                 }else{
+                    System.out.println("获取到的问卷为空:删除问卷");
                     user.getFilledQuestionaires().remove(id);
                 }
             }

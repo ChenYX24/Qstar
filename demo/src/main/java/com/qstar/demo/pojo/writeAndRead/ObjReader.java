@@ -64,14 +64,14 @@ public class ObjReader {//读取user对象，根据用户的名字读取，用�
         String json=read(questionaireRoad,id+"");
         if(json!=null){
         //return objectMapper.readValue(json,Questionaire.class);
-        return (Questionaire) JSON.parseObject((String) read(questionaireRoad,id+""), Questionaire.class);
+        return (Questionaire) JSON.parseObject(json, Questionaire.class);
         }
         return null;
     }
     public User readUser(String email) throws IOException {
         String json=read(userRoad,email+"");
         if(json!=null) {
-            return (User) JSON.parseObject((String) read(userRoad,email), User.class);
+            return (User) JSON.parseObject(json, User.class);
             //return objectMapper.readValue(read(userRoad, email), User.class);
         }
         return null;
@@ -79,8 +79,8 @@ public class ObjReader {//读取user对象，根据用户的名字读取，用�
     public FilledQuestionaire readFilledQuestionaire(int id) throws IOException {
         String json=read(filledQuestionaireRoad,id+"");
         if(json!=null) {
-            return  (FilledQuestionaire) JSON.parseObject((String) read(filledQuestionaireRoad,id+""), FilledQuestionaire.class);
-            //return objectMapper.readValue(read(filledQuestionaireRoad, id + ""), FilledQuestionaire.class);
+            return  (FilledQuestionaire) JSON.parseObject(json, FilledQuestionaire.class);
+            //return objectMapper.readValue(json, FilledQuestionaire.class);
         }
         return null;
     }

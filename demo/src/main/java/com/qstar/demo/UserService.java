@@ -47,11 +47,8 @@ public class UserService {
 		// this.MatchEmailtoPasswd(email, password)
         if(this.MatchEmailtoPasswd(email, password)){
 			try {
-				System.out.println(email);
 				User user = objReader.readUser(email);
-				System.out.println("useremail" + user.getEmail());
 				result = userio.getIEByEmail(email);
-				System.out.println(result);
 				link.put(result,user);
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
