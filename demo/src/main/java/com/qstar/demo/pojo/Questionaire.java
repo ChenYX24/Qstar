@@ -208,4 +208,12 @@ public class Questionaire {//创建的问卷
     public void recordFiller(int filledid){
             filledIDs.add(filledid);
     }
+
+    public boolean setEnd(Date end) {
+        if(new Date().after(end)){
+            return false;
+        }
+        this.end = end;
+        return true;
+    }
 }

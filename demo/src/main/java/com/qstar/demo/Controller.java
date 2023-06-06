@@ -71,10 +71,10 @@ public class Controller {
         return handle.save(receive.getId(),receive.getTitle(),receive.getDescription(),receive.getContent(),token,receive.isCommit());
     }
     //提交问卷
-    /*@PostMapping("/commit")
+    @PostMapping("/commit")
     public Result commit(Integer id,@RequestHeader("token") String token) throws IOException {//直接提交
             return handle.commit(id,token);
-    }*/
+    }
 
     /*public String handleFile(FileReceive receive) throws IOException {
         if(receive.getFiles()!=null) {
@@ -104,10 +104,8 @@ public class Controller {
     }
     @RequestMapping("/fill")
     //public Result fill(Integer id,boolean commit,@RequestHeader("token") String token) throws IOException {
-    public Result fill(@RequestBody String info,@RequestHeader("token") String token) throws IOException {
-        System.out.println(info);
-        fillRecive fill = JSON.parseObject(info,fillRecive.class);
-        return handle.fill(fill.getId(),token,fill.isCommit());
+    public Result fill(@RequestBody Integer id,@RequestHeader("token") String token) throws IOException {
+        return handle.fill(id,token);
         //return Result.success();
     }
     //返回已经填写的问卷的信息
@@ -139,10 +137,6 @@ public class Controller {
         return Result.fail("填写记录的ID错误!");
     }
     //提交填写
-    /*@PostMapping("/commitFill")
-    public Result commitFill(Integer id,@RequestHeader("token") String token) throws IOException {
-        return handle.commitFill(id,token);
-    }*/
     //获取数据
     @GetMapping("/statistics")
     public Result statistics(Integer id,@RequestHeader("token") String token) throws IOException {
@@ -155,7 +149,7 @@ public class Controller {
     @PostMapping("/setting")
     public Result setting(@RequestBody SettingReceive receive,@RequestHeader("token") String token) throws IOException {//设置问卷的配置信息
         Result result= handle.setting(receive.isRecordName(),receive.isMultiCommit(),receive.getBegin(),receive.getEnd(),receive.getId(),token);
-        if(result.getCode()==1){//如果前面的没问题，不需要直接返回
+        /*if(result.getCode()==1){//如果前面的没问题，不需要直接返回
             switch (receive.getPeople().getAuthority()){
                 case 0:
                     result=authorizeManage(receive.getId(),receive.getPeople().getName(),receive.getPeople().getEmail(),receive.getPeople().getPhoto(),token);
@@ -167,7 +161,7 @@ public class Controller {
                     result=authorizeCheck(receive.getId(),receive.getPeople().getName(),receive.getPeople().getEmail(),receive.getPeople().getPhoto(),token);
                     break;
             }
-        }
+        }*/
         return result;
     }
     @GetMapping("/getSetting")

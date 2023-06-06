@@ -65,17 +65,16 @@ public class Link {
     // private BufferedReader IDReader=new BufferedReader((new FileReader(base+"/"+IDFile+"txt")));
 
     public Link() throws IOException {
-        map=new HashMap<String, User>();
         User user=new User();//用于测试
         map.put("Test",user);
         System.out.println("idfilepath:" + IDFile);
         System.out.println("questionaireRoad:" + questionaireRoad);
         /*IDProperties=PropertiesLoaderUtils.loadAllProperties("IDProperty.properties");*/
          /*Integer.parseInt(IDProperties.getProperty(IDKey));*/
-        if(new File(base+"/"+IDFile).exists()) {    //测试用
-            BufferedReader IDReader = new BufferedReader(new FileReader(base+"/"+IDFile));
-            idDistribute = Integer.parseInt(IDReader.readLine());     //读取
-            IDReader.close();
+        int[] ids=reader.readQuestionaireID();      //可能还是读不出来，可能reader还是null
+        if(ids!=null) {    //测试用
+            idDistribute=ids[0];
+            filledIDDistribute=ids[1];
         }else{
             idDistribute=0;
             filledIDDistribute=0;
@@ -189,17 +188,23 @@ public class Link {
     public String comboPicFileRoad(String filename){    //图片路径
         return base+"/"+picSonRoad+"/"+filename;
     }*/
-   /* public Result commit(int id,String token) throws IOException {  //暂时性放弃
+    public Result commit(int id,String token) throws IOException {  //暂时性放弃
         User user=map.get(token);
         if(user.hasQuestionaireID(id)) {//如果id正确中
             if(checkQuestionaire(id) ){
             Questionaire questionaire = questionaires.get(id);   //在用户map读入时，问卷map同步读入
-
+                if (questionaire.allowEdit(user.getEmail())) {//允许编辑的才允许查看
+                    if(questionaire.commit()){  //
+                        writer.writeQuestionaire(questionaire);     //提交也会修改这个问卷对象，需要写入
+                        return Result.success();
+                    }
+                    return Result.fail("已提交");
+                }
             }
         }
-        return null;
-    }*/
-    public Result fill(int id,String token,boolean commit) throws IOException {//填写问卷时返回问题，并在加到自己的填写记录上    这里的ID改了，这不是问卷的ID，这是已填写的问卷的ID
+        return Result.fail("ID错误");
+    }
+    public Result fill(int id,String token) throws IOException {//填写问卷时返回问题，并在加到自己的填写记录上    这里的ID改了，这不是问卷的ID，这是已填写的问卷的ID
             User user=map.get(token);
             if(checkQuestionaire(id)){
                 Questionaire questionaire=questionaires.get(id);
@@ -461,7 +466,9 @@ public class Link {
                 questionaire.setRecordFillerName(recordName);
                 questionaire.setMultiCommit(multiCommit);
                 questionaire.setBegin(begin);
-                questionaire.setEnd(end);
+                if(questionaire.setEnd(end)){
+                    return Result.fail("设置结束时间失败，目前时间比结束时间还晚！");
+                }
                 return Result.success();
             }else{
                 return Result.fail("不允许编辑");
