@@ -26,8 +26,7 @@ public class Questionaire {//创建的问卷
     private String attachFile;      //附件文件*/
     private List<Question> questions;   //问题的集合
     private List<Statistics> statistics;    //统计数据
-    private String creatorEmail;                 //创建者的邮箱
-    private String creator;     //创建者的名字
+    private String creator;
     private Set<UserProfile> authorizeManageID=new HashSet<>();     //被授权允许管理的用户
     private Set<UserProfile>  authorizeEditID=new HashSet<>();    //被授权允许编辑的用户的邮箱
     private Set<UserProfile> authorizeCheckID=new HashSet<>();     //被授权允许查看的用户的邮箱
@@ -37,7 +36,7 @@ public class Questionaire {//创建的问卷
     private Date begin;                 //开始时间
     private Date end;                   //结束时间
     @JsonCreator
-    public Questionaire(int id,String title,String description,List<Question> questions,String creator,String creatorEmail,List<Statistics> statistics){
+    public Questionaire(int id,String title,String description,List<Question> questions,List<Statistics> statistics){
         info=new QuestionaireInfo(title,id);
         this.questions=questions;
         this.description=description;
@@ -45,10 +44,8 @@ public class Questionaire {//创建的问卷
         //statistics=new ArrayList<>(questions.size());
         this.statistics=statistics;
         System.out.println(questions.size());
-        this.creatorEmail=creatorEmail;
-        this.creator=creator;
     }
-    public Questionaire(String title,String description/*,String attachFile*/,List<Question> questions,int id,String name,String creatorEmail,String photo){//初始化问卷对象，其中数据统计对象是和问题对象高度绑定的
+    public Questionaire(String title,String description/*,String attachFile*/,List<Question> questions,String creator,int id,String photo){//初始化问卷对象，其中数据统计对象是和问题对象高度绑定的
         info=new QuestionaireInfo(title,id);
         this.questions=questions;
         this.description=description;
@@ -56,14 +53,13 @@ public class Questionaire {//创建的问卷
         //statistics=new ArrayList<>(questions.size());
         this.statistics=new ArrayList<>();
         System.out.println(questions.size());
-        this.creatorEmail=creatorEmail;
-        this.creator=name;
-        authorizeManageID.add(new UserProfile(name,creatorEmail,photo));
+        this.creator=creator;
+        /*authorizeManageID.add(new UserProfile(name,creatorEmail,photo));*/
     }
     public Questionaire(int id,String title,int filled,boolean commit){
         info = new QuestionaireInfo(title,filled,commit,id);
     }
-    public boolean save(String title,String description/*,String attachFile*/,List<Question> questions,String editorEmail){//问卷的保存，只有被授权的用户才能编辑
+    public boolean save(String title,String description/*,String attachFile*/,List<Question> questions){//问卷的保存，只有被授权的用户才能编辑
         // if(info.isCommit()){
         //     System.out.println("commit:true");
         //     return false;
