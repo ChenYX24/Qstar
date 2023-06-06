@@ -66,41 +66,53 @@ export default {
   },
   methods:{
 	  share(){
-		  this.$emit('changeSave')
+		  this.$emit('changeSave');
+		  this.$store.commit('setIsCreate',this.id);
 	  },
 	  push(){
 		  this.$emit('changePush')
 	  },
 	  toEdit(){
-	  		console.log(132324)
+		  if(this.isPush)
+		  {
+			 this.$store.state.qnid = -1;
+			 uni.navigateTo({
+			 	url: "/pages/analysis/analysis"
+			 }) 
+		  }
+		  else{
+			console.log(132324)
 			console.log("id",this.id);
-	  		axios.defaults.headers.common['token'] = localStorage.getItem('token');
-	  		axios.post(/*'https://metaq.scutbot.icu/login'*/
-	  					'http://localhost:8080/check',
-	  							//'/static/test2.json',
+			axios.defaults.headers.common['token'] = localStorage.getItem('token');
+			axios.post(/*'https://metaq.scutbot.icu/login'*/
+						'http://localhost:8080/check',
+								//'/static/test2.json',
 								{
 									id:this.id
 								})
-	  		    .then(response => {
+			    .then(response => {
 								console.log(response.data);
-	  							var temp=response.data.data
+								var temp=response.data.data
 								// var temp;
 								// temp['title'] = data.info.title;
 								// temp['description'] = data.description;
 								// temp['content'] = data.content;
 								//temp['commit'] = data.info.commit;
-	  							// console.log(temp)
-	  							// temp.title=this.title
+								// console.log(temp)
+								// temp.title=this.title
 								this.$store.commit('setIsCreate',this.id);
-	  							this.$store.commit('setQuestionNire',temp);
-	  							// // console.log(this.$store.state.questionNire)
-	  							uni.navigateTo({
-	  								url: '/pages/editQuestionnire/editQuestionnire?flag='+1
-	  							})
-	  		    })
-	  		    .catch(error => {
-	  		      console.log(error);
-	  		    });
+								this.$store.commit('setQuestionNire',temp);
+								
+								// // console.log(this.$store.state.questionNire)
+								uni.navigateTo({
+									url: '/pages/editQuestionnire/editQuestionnire?flag='+1
+								})
+			    })
+			    .catch(error => {
+			      console.log(error);
+			    });  
+		  }
+	  		
 	  	
 	  	
 	  },
