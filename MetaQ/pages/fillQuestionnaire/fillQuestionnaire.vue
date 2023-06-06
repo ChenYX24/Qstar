@@ -35,9 +35,11 @@
 				<view class="block">
 				</view>
 			</view>
-
 			<view class="">
-				<view class="submit" @click="submitSuccess">
+				<view class="submit" @click="submitSuccess(false)">
+					保存
+				</view>
+				<view class="submit" @click="submitSuccess(true)">
 					提交
 				</view>
 			</view>
@@ -114,54 +116,37 @@
 		data() {
 			return {
 				// A:['1','ttt','500','0,1','0'],
-				answerTemp:['2022-1-10,2022-1-20','1','ttt','500','0,1','0'],
+				answerTemp:['0','012','太好了，没有建议','10',''],
 				answer:[],
 				ID:-1,//问卷的一份答案的id
 				id:-1,//问卷id
 				componentName:['danxuanAnswer','duoxuanAnswer',
 				'tiankongAnswer','huadongtiaoAnswer','','riqiAnswer'],
 				questionNaire:{
-					// title:'关于c10居住学生学校住宿感受的的调研',
-					// description:'请c10的同学填写，谢谢配合！',
-					// content:[
-					// 		{
-					// 			question:"日期",
-					// 			type:'DATE',
-					// 			choice:[2],
-					// 			setting:[2]
-					// 		},
-					// 		{
-					// 			question:"标题1",
-					// 			type:'SINGLE',
-					// 			choice:['a','b','c'],
-					// 			setting:[]
-					// 		},
-					// 		{
-					// 			question:"填空题",
-					// 			type:'BLANK',
-					// 			choice:[],
-					// 			setting:[]
-					// 		},
-					// 		{
-					// 			question:"滑动条",
-					// 			type:'SLIDE',
-					// 			choice:[10,'非常差',1000,'非常好',0],
-					// 			setting:[]
-					// 		},
-					// 		{
-					// 			question:"标题2",
-					// 			type:'MULTIPLE',
-					// 			choice:['m','n','b'],
-					// 			setting:[]
-					// 		},
-					// 		{
-					// 			question:"标题2",
-					// 			type:'SINGLE',
-					// 			choice:['m','n','b'],
-					// 			setting:[]
-					// 		},
-
-					// 		],
+				     title:'关于生活中常用的问卷系统的使用情况以及喜爱程度的调查',
+				     description:'请大家认真填写，谢谢大家！',
+				     content:[
+				      {
+				       "choice": ["MetaQ", "问卷星", "星问卷", "QStar"],
+				       "question": "你最喜欢哪个问卷系统",
+				       "type": "SINGLE"
+				      }, {
+				       "choice": ["外观", "功能", "便捷"],
+				       "question": "你喜欢什么方面",
+				       "type": "MULTIPLE"
+				      }, {
+				       "choice": [],
+				       "question": "有什么建议吗",
+				       "type": "BLANK"
+				      }, {
+				       "choice": [0, "", "10", "", 0],
+				       "question": "评个分吧",
+				       "type": "SLIDE"
+				      }, {
+				       "choice": 0,
+				       "question": "什么时候使用最频繁",
+				       "type": "DATE"
+				      }]
 				},
 			}
 		},
@@ -193,7 +178,7 @@
 				// var temp=parseInt(this.all_content[index].type);
 				// return this.componentName[temp];
 			},
-			submitSuccess(){
+			submitSuccess(commitValue){
 				this.$refs.questionAnswerRef.forEach(childComponent => {
 							this.answer.push(childComponent.answer);
 				});
@@ -203,7 +188,7 @@
 				var info = {
 					filledID:this.ID,
 					data:this.answer,
-					commit:true,
+					commit:commitValue,
 					id:this.id
 				}
 				console.log(info);
@@ -211,14 +196,18 @@
 							'http://localhost:8080/saveFill',info)
 				    .then(response => {
 				      console.log(response.data);
+					  uni.reLaunch({
+					  	url:'/pages/myQ/myQ'
+					  })
 					  //this.questionNaire = response.data.data;
 				    })
 				    .catch(error => {
 				      console.log(error);
 				    });
 				console.log(this.answer);
+
 				
-			}
+			},
 		}
 
 	};
@@ -316,7 +305,7 @@
 
 .submit{
 	// margin-top: 20px;
-	margin-bottom: 50px;
+	margin-bottom: 30px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
