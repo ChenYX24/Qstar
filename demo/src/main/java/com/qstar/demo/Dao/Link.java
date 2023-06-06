@@ -122,6 +122,7 @@ public class Link {
             writer.writeUser(user);
             /*public Questionaire(String title,String description,String attachFile,List<Question> questions,int id,String creatorEmail){*/
             idDistribute++;
+            writer.writeID(idDistribute,filledIDDistribute);
             //IDWriter.write(idDistribute);       //同步写入
             if(commit){ //当需要提交时
                 boolean b=questionaire.commit();
@@ -207,6 +208,7 @@ public class Link {
                         //user.addFilled(filledIDDistribute);//添加填写问卷对象
                         //FilledQuestionaire filledQuestionaire=new FilledQuestionaire(questionaire.getInfo().getTitle(),questionaire.getCreator(),id,filledIDDistribute);
                         filledIDDistribute++;
+                        writer.writeID(idDistribute,filledIDDistribute);
                         return Result.success(new ResultForCheckWithID(getfill(id),filledIDDistribute-1));
                         // if(commit){
                         //     return commitFill(filledQuestionaire,user);
