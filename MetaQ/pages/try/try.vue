@@ -146,7 +146,7 @@
 				 },
 				bcakEdit(){
 					uni.reLaunch({
-						url: '/pages/editQuestionnire/editQuestionnire'
+						url: '/pages/editQuestionnire/editQuestionnire?flag='+'1'
 					})
 				} 
 			

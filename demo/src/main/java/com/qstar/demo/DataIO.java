@@ -20,6 +20,8 @@ public class DataIO {
     private ObjectMapper objectMapper = new ObjectMapper();
     private String path = "id.json";
     private String base = "./userinfo";
+    private String QIDFile = "./qidfile.txt";
+    private String FIDFile = "./fidfile.txt";
     DataIO()
     {
 
@@ -305,5 +307,64 @@ public class DataIO {
             System.out.println(e.getMessage());
         }
         return false;
+    }
+    //问卷id递增
+    public int readQID(){
+        int id = -1;
+        String line = "";
+        try (BufferedReader reader = new BufferedReader(new FileReader(this.QIDFile))){
+            line = reader.readLine();
+            if(line != null){
+                id = Integer.parseInt(line);
+            }
+            else{
+                System.out.println("获取问卷ID失败");
+                return -1;
+            }
+            reader.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return id;
+    }
+    public int readFID(){
+        int id = -1;
+        String line = "";
+        try (BufferedReader reader = new BufferedReader(new FileReader(this.FIDFile))){
+            line = reader.readLine();
+            if(line != null){
+                id = Integer.parseInt(line);
+            }
+            else{
+                System.out.println("获取问卷ID失败");
+                return -1;
+            }
+            reader.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return id;
+    }
+    public void writeQID(int id){
+        try {
+            String result = " ";
+            result = Integer.toString(id);
+            FileWriter fileWriter = new FileWriter(this.QIDFile);
+            fileWriter.write(result);
+            fileWriter.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    public void writeFID(int id){
+        try {
+            String result = " ";
+            result = Integer.toString(id);
+            FileWriter fileWriter = new FileWriter(this.FIDFile);
+            fileWriter.write(result);
+            fileWriter.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

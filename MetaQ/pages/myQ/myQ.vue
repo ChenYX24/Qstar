@@ -25,7 +25,7 @@
 		      </swiper-item>
 		      <swiper-item>
 				<view class="page2">
-				  <QBlock2 v-for="item in myFilleds" :key="item.id" :title="item.title" :isEnd="item.commited" :name="item.creator"
+				  <QBlock2 v-for="item in myFilleds" :key="item.id" :title="item.title" :isEnd="item.committed" :name="item.creator"
 				  @tap="checkFill(item.id)"
 				  ></QBlock2>
 				</view>
@@ -52,10 +52,11 @@ export default {
 	QBlock2
   },
   onLoad: function (options) {
-	this.tab=options.tab
+	this.tab=options.tab;
+	this.fetchData();
   },
   mounted() {
-  	this.fetchData();
+  	// this.fetchData();
   },
   data() {
   	return {
@@ -115,9 +116,9 @@ export default {
 			      console.log(error);
 			    });
 			try {  
-			  const response = await axios.get('/static/test2.json'); // TODO
-			  this.blocks = response.data.data.blocks;
-			  this.blocks1=response.data.data.blocks1
+			  // const response = await axios.get('/static/test2.json'); // TODO
+			  // this.blocks = response.data.data.blocks;
+			  // this.blocks1=response.data.data.blocks1
 			} catch (error) {  
 			  console.error('Error fetching data:', error);  
 			}
@@ -160,7 +161,7 @@ export default {
 			if(this.inputValue&&this.currentTab==1)
 			{
 				return this.blocks.filter(post =>
-							post.title.includes(this.inputValue)||post.name.includes(this.inputValue)
+							post.title.includes(this.inputValue)||post.creator.includes(this.inputValue)
 							);  
 			}
 			else{

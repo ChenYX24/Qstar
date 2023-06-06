@@ -40,7 +40,7 @@ public class Controller {
         return Result.success(infos);
     }
     //创建问卷
-    @PostMapping("/create")
+    @RequestMapping("/create")
     public Result create(@RequestBody CreatedReceive receive, @RequestHeader("token") String token) throws IOException {
         /*String attach=handleFile(receive);*/
         System.out.println("title:"+receive.getTitle());

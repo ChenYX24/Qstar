@@ -45,6 +45,7 @@
 		},
 		
 		computed:{
+			
 			button1Text(){
 				if(this.b1==0)
 				{
@@ -90,13 +91,19 @@
 				type:Number,
 				default:0
 			},
-			
+			id:{
+				type:Number,
+				default:-1
+			}
 		},
 		methods:{
 			save(){
+				this.questionNirePorps['commit'] = false;
+				console.log("save",this.questionNirePorps);
 				axios.defaults.headers.common['token'] = localStorage.getItem('token');
 				console.log("this.questionNirePorps",this.questionNirePorps);
 				if(this.$store.state.qnid==-1){
+					console.log("创建并保存问卷");
 					axios.post(/*'https://metaq.scutbot.icu/login'*/
 								'http://localhost:8080/create', 
 							this.questionNirePorps
@@ -111,7 +118,9 @@
 						url:"/pages/myQ/myQ"
 					})
 				}else{
+					console.log("保存已创建问卷");
 					this.questionNirePorps['id'] = this.$store.state.qnid;
+					this.$store.state.qnid = -1;
 					axios.post(/*'https://metaq.scutbot.icu/login'*/
 								'http://localhost:8080/save', 
 							this.questionNirePorps,
@@ -128,10 +137,12 @@
 				}
 			},
 			push(){
+				console.log("push",this.questionNirePorps);
 				this.questionNirePorps['commit'] = true;
 				axios.defaults.headers.common['token'] = localStorage.getItem('token');
 				console.log("this.questionNirePorps",this.questionNirePorps);
 				if(this.$store.state.qnid==-1){
+					console.log("创建并发布问卷");
 					axios.post(/*'https://metaq.scutbot.icu/login'*/
 								'http://localhost:8080/create', 
 							this.questionNirePorps
@@ -146,7 +157,9 @@
 						url:"/pages/myQ/myQ"
 					})
 				}else{
+					console.log("发布已创建问卷");
 					this.questionNirePorps['id'] = this.$store.state.qnid;
+					this.$store.state.qnid = -1;
 					axios.post(/*'https://metaq.scutbot.icu/login'*/
 								'http://localhost:8080/save', 
 							this.questionNirePorps,
@@ -178,25 +191,38 @@
 			copyText() {
 			if(this.b1==0)
 			{
-				const textToCopy = 'This is the text to be copied to the clipboard.';//TODO
-				uni.setClipboardData({  
-				  data: textToCopy,  
-				  success: () => {  
-				    uni.showToast({  
-				      title: '已复制到剪贴板',  
-				      icon: 'success',  
+				axios.defaults.headers.common['token'] = localStorage.getItem('token');
+				console.log("token",localStorage.getItem('token'));
+				axios.post(/*'https://metaq.scutbot.icu/login'*/
+							'http://localhost:8080/share',{
+								id:this.$store.state.qnid,
+								flag:false
+							})
+				    .then(response => {
+				      const textToCopy = response.data;
+					  uni.setClipboardData({
+					    data: textToCopy,  
+					    success: () => {  
+					      uni.showToast({  
+					        title: '已复制到剪贴板',  
+					        icon: 'success',  
+					      });
+					  		this.b1=1
+					    },  
+					    fail: (err) => {  
+					      console.error('Error copying text: ', err);  
+					      uni.showToast({  
+					        title: '复制失败',  
+					        icon: 'none',  
+					      });  
+					  		this.b1=0
+					    },  
+					  });  
+				    })
+				    .catch(error => {
+				      console.log(error);
 				    });
-						this.b1=1
-				  },  
-				  fail: (err) => {  
-				    console.error('Error copying text: ', err);  
-				    uni.showToast({  
-				      title: '复制失败',  
-				      icon: 'none',  
-				    });  
-						this.b1=0
-				  },  
-				});  
+				
 			}
 			},
 			isMobileDevice() {  
@@ -204,7 +230,20 @@
 			  },
 			saveQRCode() {  
 			  if (!this.isQrcode) {  
-				  //TODO获取qrcode
+				axios.defaults.headers.common['token'] = localStorage.getItem('token');
+				console.log("token",localStorage.getItem('token'));
+				axios.post(/*'https://metaq.scutbot.icu/login'*/
+							'http://localhost:8080/share',{
+								id:this.$store.state.qnid,
+								flag:true
+							})
+				    .then(response => {
+						console.log(response.data);
+				      this.qrcode = response.data;
+				    })
+				    .catch(error => {
+				      console.log(error);
+				    });
 				this.isQrcode = !this.isQrcode ;  
 				this.b1 = 2;  
 			  } else {  

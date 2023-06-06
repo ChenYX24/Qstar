@@ -54,7 +54,7 @@ public class FilledQuestionaire {//已填写的问卷
     // }
     @JsonIgnore
     public FilledQuestionaireInfo getInfo(){
-        return new FilledQuestionaireInfo(id,creator,committed,title,commitCount);
+        return new FilledQuestionaireInfo(index,creator,committed,title,commitCount);
     }
     public boolean save(String[] data){//之后再编辑时
         if(!this.committed) {

@@ -80,12 +80,11 @@ public class LoginController {
         result = userService.autoLogin(info);
         return result;
      }
-     //获取二维码base64
-     @RequestMapping("/getqrcode")
-     public String getqrcode(@RequestHeader("token") String token) {
+     //分享问卷
+     @RequestMapping("/share")
+     public String share(@RequestHeader("token") String token,@RequestBody String info) {
         String qrcode = "";
-        String id = userio.getKeyValueofJson(token,"id");
-        qrcode = QRcodeGenerator.generate("https://www.baidu.com",id);
+        qrcode = userService.Share(info);
         return qrcode;
      }
      //修改省份和电话号

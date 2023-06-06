@@ -1,5 +1,6 @@
 package com.qstar.demo.pojo;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 //import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -35,15 +36,25 @@ public class Questionaire {//创建的问卷
     private List<Integer> filledIDs=new ArrayList<>();  //只有当记录名字时才会使用
     private Date begin;                 //开始时间
     private Date end;                   //结束时间
-
-
+    @JsonCreator
+    public Questionaire(int id,String title,String description,List<Question> questions,String creator,String creatorEmail,List<Statistics> statistics){
+        info=new QuestionaireInfo(title,id);
+        this.questions=questions;
+        this.description=description;
+        //this.attachFile=attachFile;
+        //statistics=new ArrayList<>(questions.size());
+        this.statistics=statistics;
+        System.out.println(questions.size());
+        this.creatorEmail=creatorEmail;
+        this.creator=creator;
+    }
     public Questionaire(String title,String description/*,String attachFile*/,List<Question> questions,int id,String name,String creatorEmail,String photo){//初始化问卷对象，其中数据统计对象是和问题对象高度绑定的
         info=new QuestionaireInfo(title,id);
         this.questions=questions;
         this.description=description;
         //this.attachFile=attachFile;
         //statistics=new ArrayList<>(questions.size());
-        statistics=new ArrayList<>();
+        this.statistics=new ArrayList<>();
         System.out.println(questions.size());
         this.creatorEmail=creatorEmail;
         this.creator=name;
@@ -101,26 +112,39 @@ public class Questionaire {//创建的问卷
         return info.isCommit();
     }
     public Result upload(String[] data){//上传填写数据到统计对象
-        if(checkUnfill(data)) {//检测是否还有数据没有填完的，但是可能有些问题不是必须要填的
-            Date date=new Date();
-            if((begin!=null&&date.after(begin)||begin==null)) {       //验证是否在规定时间内提交，如果没设置时间，可以直接过
-                if ((end != null && date.before(end)) || end == null) {
+        //if(checkUnfill(data)) {//检测是否还有数据没有填完的，但是可能有些问题不是必须要填的
+            //Date date=new Date();
+            //if((begin!=null&&date.after(begin)||begin==null)) {       //验证是否在规定时间内提交，如果没设置时间，可以直接过
+               // if ((end != null && date.before(end)) || end == null) {
+                    
+                    if(statistics.size() == 0){
+                        for(int i = 0;i < questions.size();i++){
+                            Type t = questions.get(i).getType();
+                            int num = questions.get(i).getChoice().length;
+                            Statistics s = new Statistics(t, num);
+                            statistics.add(s);
+                        }
+                    }
+                    System.out.println("写入前:");
+                    System.out.println(statistics);
+                    System.out.println("开始写入数据");
                     for (int i = 0; i < questions.size(); i++) {
                         statistics.get(i).add(data[i]);
                     }
+                    System.out.println(statistics);
                     return Result.success();
-                }
-            }
-            return Result.fail("已超时");
-        }
-        return Result.fail("有些问题没有回答");
+                //}
+            //}
+            //return Result.fail("已超时");
+        //}
+        //return Result.fail("有些问题没有回答");
     }
     public boolean checkUnfill(String[] data){//检验没填的问题，如果为空，除非为不必填或者有前提条件没有满足，否则返回没有false
-        for(int i=0;i<questions.size();i++){
-            if(data[i]==null&&questions.get(i).isNeed()&&checkSatisfiedPromise(data,questions.get(i).getLogic())){
-                return false;
-            }
-        }
+        // for(int i=0;i<questions.size();i++){
+        //     if(data[i]==null&&questions.get(i).isNeed()&&checkSatisfiedPromise(data,questions.get(i).getLogic())){
+        //         return false;
+        //     }
+        // }
         return true;
     }
     public boolean checkSatisfiedPromise(String[] data,Map<Integer,String> map){//

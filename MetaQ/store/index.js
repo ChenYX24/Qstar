@@ -15,7 +15,7 @@ const store = createStore({
 	//最后一位用来记录选择了那个操作
 	otherOperate:false,
 	index:-1,//第几个操作
-	qnid:0
+	qnid:-1
   }, 
   mutations: {  
 	    setNowOperate(state, id){

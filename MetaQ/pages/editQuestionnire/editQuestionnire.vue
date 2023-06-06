@@ -119,8 +119,8 @@
 					  <image src="/static/editQuestion/shouji.png" mode="aspectFit"></image>
 					  <p>手机</p>
 				  </view>
-				  <view class="rectangle_square">
-					  <image src="/static/editQuestion/riqi.png" mode="aspectFit"></image>
+				  <view class="rectangle_square" @click="generateQuestion" id="DATE">
+					  <image src="/static/editQuestion/riqi.png" mode="aspectFit" ></image>
 					  <p>日期</p>
 				  </view>
 				  <view class="rectangle_square">
@@ -154,10 +154,12 @@
 		},
 		onLoad: function(options) {
 			this.tab = options.tab
-			
+
 			if(options.content){
 				// console.log(this.$store.state.questionNire.content)
 				//重新获取content
+				this.questionNire.title=this.$store.state.questionNire.title;
+				this.questionNire.description=this.$store.state.questionNire.description;
 				this.questionNire.content=this.$store.state.questionNire.content
 				const temp=JSON.parse(options.content);
 				//如果content的长度比当前正在操作的选择的序号大
@@ -177,6 +179,8 @@
 			}
 			else if(options.flag){
 				//重新获取content
+				this.questionNire.title=this.$store.state.questionNire.title;
+				this.questionNire.description=this.$store.state.questionNire.description;
 				this.questionNire.content=this.$store.state.questionNire.content
 			}
 			
@@ -191,6 +195,23 @@
 					title:'',
 					description:'',
 					content:[
+						{
+							"choice": ["MetaQ", "问卷星", "星问卷", "QStar"],
+							"question": "你最喜欢哪个问卷系统",
+							"type": "SINGLE"
+						}, {
+							"choice": ["外观", "功能", "便捷"],
+							"question": "你喜欢什么方面",
+							"type": "MULTIPLE"
+						}, {
+							"choice": [],
+							"question": "有什么建议吗",
+							"type": "BLANK"
+						}, {
+							"choice": [0, "", "10", "", 0],
+							"question": "评个分吧",
+							"type": "SLIDE"
+						}
 							// {
 							// 	question:"日期",
 							// 	type:'DATE',

@@ -92,10 +92,12 @@
 				this.answerTemp=Array.from({length:this.questionNaire.content.length}, () => '');
 			}
 			else if(options.check){
-				//这里是answer的id
+				//这里是answer的id\
+				console.log("asdjaklsjdlkasjdlk");
 				this.ID= this.$store.state.qnid;
 				axios.defaults.headers.common['token'] = localStorage.getItem('token');
 				console.log("token",localStorage.getItem('token'));
+				console.log("ID:",this.ID);
 				axios.post(/*'https://metaq.scutbot.icu/login'*/
 							'http://localhost:8080/checkFill',{id:this.ID})
 				    .then(response => {
@@ -119,47 +121,47 @@
 				componentName:['danxuanAnswer','duoxuanAnswer',
 				'tiankongAnswer','huadongtiaoAnswer','','riqiAnswer'],
 				questionNaire:{
-					title:'关于c10居住学生学校住宿感受的的调研',
-					description:'请c10的同学填写，谢谢配合！',
-					content:[
-							{
-								question:"日期",
-								type:'DATE',
-								choice:[2],
-								setting:[2]
-							},
-							{
-								question:"标题1",
-								type:'SINGLE',
-								choice:['a','b','c'],
-								setting:[]
-							},
-							{
-								question:"填空题",
-								type:'BLANK',
-								choice:[],
-								setting:[]
-							},
-							{
-								question:"滑动条",
-								type:'SLIDE',
-								choice:[10,'非常差',1000,'非常好',0],
-								setting:[]
-							},
-							{
-								question:"标题2",
-								type:'MULTIPLE',
-								choice:['m','n','b'],
-								setting:[]
-							},
-							{
-								question:"标题2",
-								type:'SINGLE',
-								choice:['m','n','b'],
-								setting:[]
-							},
+					// title:'关于c10居住学生学校住宿感受的的调研',
+					// description:'请c10的同学填写，谢谢配合！',
+					// content:[
+					// 		{
+					// 			question:"日期",
+					// 			type:'DATE',
+					// 			choice:[2],
+					// 			setting:[2]
+					// 		},
+					// 		{
+					// 			question:"标题1",
+					// 			type:'SINGLE',
+					// 			choice:['a','b','c'],
+					// 			setting:[]
+					// 		},
+					// 		{
+					// 			question:"填空题",
+					// 			type:'BLANK',
+					// 			choice:[],
+					// 			setting:[]
+					// 		},
+					// 		{
+					// 			question:"滑动条",
+					// 			type:'SLIDE',
+					// 			choice:[10,'非常差',1000,'非常好',0],
+					// 			setting:[]
+					// 		},
+					// 		{
+					// 			question:"标题2",
+					// 			type:'MULTIPLE',
+					// 			choice:['m','n','b'],
+					// 			setting:[]
+					// 		},
+					// 		{
+					// 			question:"标题2",
+					// 			type:'SINGLE',
+					// 			choice:['m','n','b'],
+					// 			setting:[]
+					// 		},
 
-							],
+					// 		],
 				},
 			}
 		},

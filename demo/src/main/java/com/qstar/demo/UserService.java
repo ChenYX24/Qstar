@@ -259,4 +259,16 @@ public class UserService {
 		}
 		return false;
 	}
+	//获取二维码
+	public String Share(String info){
+		String Base = "http://localhost:5173/#/pages/fillQuestionnaire/fillQuestionnaire?id=";
+		String flag = userio.getKeyValueofJson(info, "flag");
+		int id = Integer.parseInt(userio.getKeyValueofJson(info, "id"));
+		String url = Base + id;
+		if(flag.hashCode() == "true".hashCode()){
+			return "data:image/png;base64," + QRcodeGenerator.generate(flag, id);
+		}else{
+			return url;
+		}
+	} 
 }
