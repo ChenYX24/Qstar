@@ -1,1 +1,1 @@
-{"id":3,"name":"root","email":"a@qq.com","passwd":"741963","phonenumber":"123456789","location":"上海市","headPic":" ","questionaires":[0],"filledQuestionaires":[0],"allowCheckQuestionaires":[],"allowEditQuestionaires":[],"allowManageQuestionaires":[]}
+{"id":3,"name":"cyx","email":"a@qq.com","passwd":"741963","phonenumber":"19303035505","location":"河北省","headPic":" ","questionaires":[0,3,4],"filledQuestionaires":[0,2],"allowCheckQuestionaires":[],"allowEditQuestionaires":[],"allowManageQuestionaires":[]}

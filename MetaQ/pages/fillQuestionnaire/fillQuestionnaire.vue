@@ -94,10 +94,12 @@
 				this.answerTemp=Array.from({length:this.questionNaire.content.length}, () => '');
 			}
 			else if(options.check){
-				//这里是answer的id
+				//这里是answer的id\
+				console.log("asdjaklsjdlkasjdlk");
 				this.ID= this.$store.state.qnid;
 				axios.defaults.headers.common['token'] = localStorage.getItem('token');
 				console.log("token",localStorage.getItem('token'));
+				console.log("ID:",this.ID);
 				axios.post(/*'https://metaq.scutbot.icu/login'*/
 							'http://localhost:8080/checkFill',{id:this.ID})
 				    .then(response => {

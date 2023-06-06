@@ -22,7 +22,7 @@
 					<view class="input-area">
 						<!-- <input type="number" placeholder="0" maxlength="3" v-model="setting[0]"> -->
 						<picker mode="selector" :value="index" :range="arr" @change="bindPickerChange">
-							<view>{{arr[index]}}</view>
+							<view>{{arr[index[0]]}}</view>
 						</picker>
 					</view>
 
@@ -47,8 +47,8 @@
 		},
 		props:{
 			indexProps:{
-				type:Number,
-				default:1
+				type:Array,
+				default:[1]
 			},
 			num:{
 				type:Number,
@@ -63,7 +63,7 @@
 		methods:{
 				bindPickerChange(e){
 					// console.log('picker发送选择改变，携带值为', e.detail.value)
-					this.index = e.detail.value
+					this.index[0] = e.detail.value
 				},
 		}
 	}

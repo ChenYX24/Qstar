@@ -43,10 +43,10 @@
 		data() {
 			return {
 				range:({
-					start: new Date(2023, 0, 6),
-					  end: new Date(2023, 0, 10)
+					start: new Date(2023, 5, 5),
+					  end: new Date(2023, 5, 6)
 				}),
-				date: new Date(2023, 0, 6),
+				date: new Date(2023, 5, 5),
 				answer:this.answerProps,
 				isShow:false,
 				dateState:0,
@@ -93,7 +93,7 @@
 					this.answer=this.date.toLocaleDateString().replace(/\//g, '-')
 					return false
 				}
-				else if(this.content.choice[0]==2)//只能range
+				else if(this.content.choice==2)//只能range
 				{	
 					var start=this.range.start.toLocaleDateString().replace(/\//g, '-');
 					var end=this.range.end.toLocaleDateString().replace(/\//g, '-')
@@ -141,7 +141,7 @@
 				default:{
 					question:"3333",
 					type:'blank',
-					choice:[0],
+					choice:0,
 				}
 			},
 

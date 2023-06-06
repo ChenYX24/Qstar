@@ -77,7 +77,7 @@ public class ObjReader {//读取user对象，根据用户的名字读取，用�
         String json=read(questionaireRoad,id+"");
         if(json!=null){
         //return objectMapper.readValue(json,Questionaire.class);
-        return (Questionaire) JSON.parseObject(json, Questionaire.class);
+        return JSON.parseObject(json, Questionaire.class);
         }
         return null;
     }

@@ -80,7 +80,7 @@ import axios from 'axios';
 		},
 		data() {
 			return {
-				title:'关于c10居住学生学校住宿感受的的调研',
+				title:'a大问卷',
 				currentTab: 0,
 				text1:'分析',
 				text2:"编辑",

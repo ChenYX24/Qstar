@@ -11,16 +11,16 @@ import java.nio.file.Path;
 import java.nio.file.Files;
 public class QRcodeGenerator {
 
-    public static String generate(String url,String id){
+    public static String generate(String url,int id){
         String base64String="";
         try{
             QRCodeWriter qrCodeWriter = new QRCodeWriter();
             BitMatrix matrix = qrCodeWriter.encode(url, BarcodeFormat.QR_CODE, 200, 200);
             BufferedImage image = MatrixToImageWriter.toBufferedImage(matrix);
             System.out.println(id);
-            File outputFile = new File(id + ".png");
+            File outputFile = new File(""+id + ".png");
             ImageIO.write(image, "png", outputFile);
-            Path imagePath = Path.of(id + ".png");
+            Path imagePath = Path.of(""+id + ".png");
             byte[] imageBytes = Files.readAllBytes(imagePath);
             base64String = Base64.getEncoder().encodeToString(imageBytes);
             System.out.println(base64String);

@@ -55,7 +55,7 @@
 		},
 		methods:{
 			check(){
-				uni.reLaunch({
+				uni.navigateTo({
 					url:"/pages/fillQuestionnaire/fillQuestionnaire?check="+'1'
 				})
 			}
