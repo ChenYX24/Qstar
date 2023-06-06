@@ -26,7 +26,7 @@
 		
 		data() {
 			return {
-				answer:''
+				answer:this.answerProps
 			};
 		},
 		watch:{

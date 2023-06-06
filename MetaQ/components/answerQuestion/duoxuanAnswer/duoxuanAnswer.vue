@@ -26,7 +26,7 @@
 		name:'duoxuanAnswer',
 		data() {
 			return {
-				answer:''
+				answer:this.answerProps
 			};
 		},
 		watch:{
