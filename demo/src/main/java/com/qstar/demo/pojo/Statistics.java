@@ -50,8 +50,9 @@ public class Statistics {//单个问题的数据，可以是String或者integer�
     }
     public boolean addCount(String choice){//可能会有多选题的添加，多选题的选项包含在一个字符串中
         int index=0;
-        for(int i=0;i<choice.length();i++){
+        for(int i=0;i<choice.length();i+=2){
             index=(int)(choice.charAt(i)-'0');
+            System.out.println("index:" + index);
             if(!addSingleCount(index)){
                 return false;
             }

@@ -2,10 +2,6 @@ package com.qstar.demo;
 import javax.swing.plaf.synth.SynthOptionPaneUI;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.*;
 
 import com.alibaba.fastjson.JSON;
@@ -17,6 +13,16 @@ import com.qstar.demo.pojo.Userinfo;
 @RestController
 @CrossOrigin
 public class LoginController {
+   public String totoken(String token){
+      System.out.println("传入的token:" + token);
+        String temp = userService.userio.getKeyValueofJson(token, "data");
+        if(temp != ""){
+         System.out.println("data:" + temp);
+            return temp;
+        }
+        System.out.println("无修改");
+        return token;
+    }
     @Autowired
     EmailSender emailSender;
     @Autowired
@@ -60,6 +66,7 @@ public class LoginController {
      //修改密码
      @RequestMapping("/changepasswd")
      public String changepasswd(@RequestHeader("token") String token,@RequestBody String json){
+        token = totoken(token);
         System.out.println("前端传入的json" + json + " " + token);
         String success = "false";
         success = userService.ChangePasswd(token,json);
@@ -83,6 +90,7 @@ public class LoginController {
      //分享问卷
      @RequestMapping("/share")
      public String share(@RequestHeader("token") String token,@RequestBody String info) {
+      token = totoken(token);
         String qrcode = "";
         qrcode = userService.Share(info);
         return qrcode;
@@ -91,6 +99,7 @@ public class LoginController {
      @RequestMapping("/changepl")
      //@RequestHeader("token") String token,@RequestBody String request
      public Result changepl(@RequestHeader("token") String token,@RequestBody String info) {
+      token = totoken(token);
       System.out.println(info);
       if(userService.ChangPL(token, info)){
          return Result.success("true");
@@ -99,10 +108,19 @@ public class LoginController {
      }
      //修改用户名
      @RequestMapping("/changename")
-     //@RequestHeader("token") String token,@RequestBody String request
      public Result changename(@RequestHeader("token") String token,@RequestBody String info) {
+      token = totoken(token);
       System.out.println(info);
       if(userService.ChangeName(token, info)){
+         return Result.success("true");
+      }
+      return Result.fail("false");
+     }
+     //是否已经登录
+     @RequestMapping("/isLogin")
+     public Result isLogin(@RequestHeader("token") String token) {
+      token = totoken(token);
+      if(userService.isLogin(token)){
          return Result.success("true");
       }
       return Result.fail("false");
@@ -112,6 +130,7 @@ public class LoginController {
      @RequestMapping("/test")
      //@RequestHeader("token") String token,@RequestBody String request
      public Result test(@RequestHeader("token") String token,@RequestBody String info) {
+      token = totoken(token);
       System.out.println("testinfo" + info);
       System.out.println("testtoken" +token);
      

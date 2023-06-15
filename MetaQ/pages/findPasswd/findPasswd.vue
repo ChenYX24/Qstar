@@ -74,48 +74,104 @@ import axios from 'axios';
 		},
 		methods: {
 		    changepasswd() {
-				axios.post('http://localhost:8080/checkcode', {
-				  email: this.formData.email,
-				  code:  this.formData.verification
-				})
-				.then(response => {
-					if(response.data == true){
-						axios.post('http://localhost:8080/findpasswd', {
-							email:    this.formData.email,
-							password: this.formData.password
-						})
-						.then(response => {
-							console.log("响应值",response.data);
-							if(response.data == true){
-								uni.showToast({
-								  title: '修改密码成功',  
-								  icon: 'none'
-								}); 
-								uni.navigateTo({
-									url:"/pages/login/login"
-								})
-							}
-							else{
-								uni.showToast({
-								  title: '修改密码失败',  
-								  icon: 'none'
-								}); 
-							}
-						})
-						.catch(error => {
-						    console.log(error);
-						});
-					}
-					else{
-						uni.showToast({
-						  title: '验证码错误',  
-						  icon: 'none'
-						}); 
-					}
-				})
-				.catch(error => {
-				    console.log(error);
+				uni.request({
+					url: this.$store.state.host + '/checkcode',
+					method: 'POST',
+					header:{
+						'Content-Type' : 'application/json',
+						token : uni.getStorageSync("token")
+					},
+					data: {
+						email: this.formData.email,
+						code:  this.formData.verification
+					},
+					success: res => {
+						if(res.data == true){
+							uni.request({
+								url: this.$store.state.host + '/findpasswd',
+								method: 'POST',
+								header:{
+									'Content-Type' : 'application/json',
+									token : uni.getStorageSync("token")
+								},
+								data: {
+									email:    this.formData.email,
+									password: this.formData.password
+								},
+								success: res => {
+									console.log("响应值",response.data);
+									if(res.data == true){
+										uni.showToast({
+										  title: '修改密码成功',  
+										  icon: 'none'
+										}); 
+										uni.navigateTo({
+											url:"/pages/login/login"
+										})
+									}
+									else{
+										uni.showToast({
+										  title: '修改密码失败',  
+										  icon: 'none'
+										}); 
+									}
+								},
+								fail: () => {},
+								complete: () => {}
+							});
+						}
+						else{
+							uni.showToast({
+							  title: '验证码错误',  
+							  icon: 'none'
+							}); 
+						}
+					},
+					fail: () => {},
+					complete: () => {}
 				});
+				// axios.post('https://metaq.scutbot.icu/checkcode', {
+				//   email: this.formData.email,
+				//   code:  this.formData.verification
+				// })
+				// .then(response => {
+				// 	if(response.data == true){
+				// 		axios.post('https://metaq.scutbot.icu/findpasswd', {
+				// 			email:    this.formData.email,
+				// 			password: this.formData.password
+				// 		})
+				// 		.then(response => {
+				// 			console.log("响应值",response.data);
+				// 			if(response.data == true){
+				// 				uni.showToast({
+				// 				  title: '修改密码成功',  
+				// 				  icon: 'none'
+				// 				}); 
+				// 				uni.navigateTo({
+				// 					url:"/pages/login/login"
+				// 				})
+				// 			}
+				// 			else{
+				// 				uni.showToast({
+				// 				  title: '修改密码失败',  
+				// 				  icon: 'none'
+				// 				}); 
+				// 			}
+				// 		})
+				// 		.catch(error => {
+				// 		    console.log(error);
+				// 		});
+				// 	}
+				// 	else{
+				// 		uni.showToast({
+				// 		  title: '验证码错误',  
+				// 		  icon: 'none'
+				// 		}); 
+				// 	}
+				// })
+				// .catch(error => {
+				//     console.log(error);
+				// });
 		    },
 			Login(){
 				uni.navigateTo({
@@ -124,20 +180,41 @@ import axios from 'axios';
 			},
 			startTime(){
 				if(this.enableGetcode && this.check){
-					axios.post('http://localhost:8080/sendcode', {
-					  email: this.formData.email
-					})
-					.then(response => {
-						if(response.data == false){
-							uni.showToast({
-							  title: '获取验证码失败',  
-							  icon: 'none'
-							}); 
-						}
-					})
-					.catch(error => {
-					    console.log(error);
+					uni.request({
+						url: this.$store.state.host + '/sendcode',
+						method: 'POST',
+						header:{
+							'Content-Type' : 'application/json',
+							token : uni.getStorageSync("token")
+						},
+						data: {
+							email: this.formData.email
+						},
+						success: res => {
+							if(res.data == false){
+								uni.showToast({
+								  title: '获取验证码失败',  
+								  icon: 'none'
+								}); 
+							}
+						},
+						fail: () => {},
+						complete: () => {}
 					});
+					// axios.post('https://metaq.scutbot.icu/sendcode', {
+					//   email: this.formData.email
+					// })
+					// .then(response => {
+					// 	if(response.data == false){
+					// 		uni.showToast({
+					// 		  title: '获取验证码失败',  
+					// 		  icon: 'none'
+					// 		}); 
+					// 	}
+					// })
+					// .catch(error => {
+					//     console.log(error);
+					// });
 					var time = 30;
 					this.active = false;
 					this.getCodeText = time;

@@ -78,49 +78,100 @@ import axios from 'axios';
 		},
 		methods: {
 		    submitForm() {
-				axios.post(
-				// 'https://metaq.scutbot.icu/checkcode'
-				'http://localhost:8080/checkcode', {
-				  email: this.formData.email,
-				  code:  this.formData.verification
-				})
-				.then(response => {
-					if(response.data == true){
-						axios.post(
-						// 'https://metaq.scutbot.icu/register'
-						'http://localhost:8080/register', {
-						  username:this.formData.username,
-						  email: this.formData.email,
-						password: this.formData.password
-						})
-						.then(response => {
-							const responses = response.data;
-							if(responses == "该邮箱已经被注册过"){
-								uni.showToast({
-								  title: '该邮箱已经被注册过',  
-								  icon: 'none'
-								}); 
-							}else{
-								uni.navigateTo({
-									url:"/pages/login/login"
-								})
-							}
-							
-						})
-						.catch(error => {
-						    console.log(error);
-						});
-					}
-					else{
-						uni.showToast({
-						  title: '验证码错误',  
-						  icon: 'none'
-						}); 
-					}
-				})
-				.catch(error => {
-				    console.log(error);
+				uni.request({
+					url: this.$store.state.host + '/checkcode',
+					method: 'POST',
+					header:{
+						'Content-Type' : 'application/json',
+						token : uni.getStorageSync("token")
+					},
+					data: {
+						email: this.formData.email,
+						code:  this.formData.verification
+					},
+					success: res => {
+						if(res.data == true){
+							uni.request({
+								url:this.$store.state.host + '/register',
+								method:'POST',
+								header:{
+									'Content-Type' : 'application/json',
+									token : uni.getStorageSync("token")
+								},
+								data:{
+									username:this.formData.username,
+									email: this.formData.email,
+									password: this.formData.password
+								},
+								success: res => {
+									const responses = res.data;
+									if(responses == "该邮箱已经被注册过"){
+										uni.showToast({
+										  title: '该邮箱已经被注册过',  
+										  icon: 'none'
+										}); 
+									}else{
+										uni.navigateTo({
+											url:"/pages/login/login"
+										})
+									}
+								},
+								fail: () => {},
+								complete: () => {}
+							})
+						}else{
+							uni.showToast({
+							title: '验证码错误',  
+							icon: 'none'
+							}); 
+						}
+					},
+					fail: () => {},
+					complete: () => {}
 				});
+				// axios.post(
+				// 'https://metaq.scutbot.icu/checkcode'
+				// /*'http://localhost:8080/checkcode'*/, {
+				//   email: this.formData.email,
+				//   code:  this.formData.verification
+				// })
+				// .then(response => {
+				// 	if(response.data == true){
+				// 		axios.post(
+				// 		 'https://metaq.scutbot.icu/register'
+				// 		/*'http://localhost:8080/register'*/, {
+				// 		  username:this.formData.username,
+				// 		  email: this.formData.email,
+				// 		password: this.formData.password
+				// 		})
+				// 		.then(response => {
+				// 			const responses = response.data;
+				// 			if(responses == "该邮箱已经被注册过"){
+				// 				uni.showToast({
+				// 				  title: '该邮箱已经被注册过',  
+				// 				  icon: 'none'
+				// 				}); 
+				// 			}else{
+				// 				uni.navigateTo({
+				// 					url:"/pages/login/login"
+				// 				})
+				// 			}
+							
+				// 		})
+				// 		.catch(error => {
+				// 		    console.log(error);
+				// 		});
+				// 	}
+				// 	else{
+				// 		uni.showToast({
+				// 		  title: '验证码错误',  
+				// 		  icon: 'none'
+				// 		}); 
+				// 	}
+				// })
+				// .catch(error => {
+				//     console.log(error);
+				// });
 		    },
 			changeView1(){
 				this.visible1 = !this.visible1;
@@ -136,8 +187,8 @@ import axios from 'axios';
 			startTime(){
 				if(this.enableGetcode && this.check){
 					axios.post(
-					// 'https://metaq.scutbot.icu/sendcode'
-						'http://localhost:8080/sendcode', {
+					'https://metaq.scutbot.icu/sendcode'
+						/*'http://localhost:8080/sendcode'*/, {
 					  email: this.formData.email
 					})
 					.then(response => {

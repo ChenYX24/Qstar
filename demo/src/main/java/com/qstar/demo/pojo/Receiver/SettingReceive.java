@@ -17,5 +17,5 @@ public class SettingReceive {//设置
     private Date end;
     private boolean recordName; //是否记录名字
     private boolean multiCommit;    //是否重复提交
-    private AuthorityReceive people;
+/*    private AuthorityReceive people;*/
 }

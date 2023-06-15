@@ -70,86 +70,162 @@
 			riqiAnswer
 		},
 		onLoad: function(options) {
+			console.log("options.id:",options.id);
+			console.log("options.check:",options.check);
 			if(options.id){
-				const token = localStorage.getItem('token')
-				axios.defaults.headers.common['token'] = token;
-				//console.log("token",localStorage.getItem('token'));
-				this.id = options.id;
+				uni.request({
+					url:this.$store.state.host + '/isLogin',
+					method:'POST',
+					header:{
+						'Content-Type' : 'application/json',
+						token : uni.getStorageSync("token")
+					},
+					success: res => {
+						console.log("isLogin:",res.data);
+						
+						if(res.data.msg == "false"){
+							uni.navigateTo({
+								url:'/pages/login/login?flag=true'
+							})
+						}
+					},
+					fail: () => {},
+					complete: () => {}
+				})
 				var info = {
 					id:options.id,
 					commit:false,
 				}
-				console.log(info);
-				axios.post(/*'https://metaq.scutbot.icu/login'*/
-							'http://localhost:8080/fill',info)
-				    .then(response => {
-				      console.log(response.data);
-					  this.questionNaire = response.data.data;
-					  this.ID = response.data.data.id;
-				    })
-				    .catch(error => {
-				      console.log(error);
-				    });
-				console.log(this.answer);
+				uni.request({
+					url: this.$store.state.host + '/fill',
+					method: 'POST',
+					header:{
+						'Content-Type' : 'application/json',
+						token : uni.getStorageSync("token")
+					},
+					data: info,
+					success: res => {
+						//console.log(res);
+						console.log("fill:",res.data);
+						this.questionNaire = res.data.data;
+						this.ID = res.data.data.id;
+					},
+					fail: () => {},
+					complete: () => {}
+				});
+				//const token = localStorage.getItem('token')
+				//axios.defaults.headers.common['token'] = token;
+				//console.log("token",localStorage.getItem('token'));
+				this.id = options.id;
+				// var info = {
+				// 	id:options.id,
+				// 	commit:false,
+				// }
+				// console.log(info);
+				// axios.post('https://metaq.scutbot.icu/fill'
+				// 			/*'http://localhost:8080/fill'*/,info)
+				//     .then(response => {
+				//       console.log(response.data);
+				// 	  this.questionNaire = response.data.data;
+				// 	  this.ID = response.data.data.id;
+				//     })
+				//     .catch(error => {
+				//       console.log(error);
+				//     });
+				// console.log(this.answer);
 				this.answerTemp=Array.from({length:this.questionNaire.content.length}, () => '');
 			}
 			else if(options.check){
 				//这里是answer的id\
 				console.log("asdjaklsjdlkasjdlk");
 				this.ID= this.$store.state.qnid;
-				axios.defaults.headers.common['token'] = localStorage.getItem('token');
-				console.log("token",localStorage.getItem('token'));
+				//axios.defaults.headers.common['token'] = localStorage.getItem('token');
+				//console.log("token",localStorage.getItem('token'));
 				console.log("ID:",this.ID);
-				axios.post(/*'https://metaq.scutbot.icu/login'*/
-							'http://localhost:8080/checkFill',{id:this.ID})
-				    .then(response => {
-				      console.log(response.data);
-					  this.answerTemp=response.data.data.filled;
-					  this.questionNaire=response.data.data.check;//这个是问卷内容
-					  this.id = response.data.data.id;
-				    })
-				    .catch(error => {
-				      console.log(error);
-				    });
+				uni.request({
+					url: this.$store.state.host + '/checkFill',
+					method: 'POST',
+					header:{
+						'Content-Type' : 'application/json',
+						token : uni.getStorageSync("token")
+					},
+					data: {
+						id:this.ID
+					},
+					success: res => {
+						//console.log(res);
+						console.log("checkfill:",res.data);
+						this.answerTemp=res.data.data.filled;
+						this.questionNaire=res.data.data.check;//这个是问卷内容
+						this.id = res.data.data.id;
+					},
+					fail: () => {},
+					complete: () => {}
+				});
+				// axios.post('https://metaq.scutbot.icu/checkFill'
+				// 			/*'http://localhost:8080/checkFill'*/,{id:this.ID})
+				//     .then(response => {
+				//       console.log(response.data);
+				// 	  this.answerTemp=response.data.data.filled;
+				// 	  this.questionNaire=response.data.data.check;//这个是问卷内容
+				// 	  this.id = response.data.data.id;
+				//     })
+				//     .catch(error => {
+				//       console.log(error);
+				//     });
 			}
 		},
+		// data() {
+		// 	return {
+		// 		// A:['1','ttt','500','0,1','0'],
+		// 		answerTemp:['0','012','太好了，没有建议','10',''],
+		// 		answer:[],
+		// 		ID:-1,//问卷的一份答案的id
+		// 		id:-1,//问卷id
+		// 		componentName:['danxuanAnswer','duoxuanAnswer',
+		// 		'tiankongAnswer','huadongtiaoAnswer','','riqiAnswer'],
+		// 		questionNaire:{    
+		// 		},
+		// 	}
+		// },
 		data() {
-			return {
-				// A:['1','ttt','500','0,1','0'],
-				answerTemp:['0','012','太好了，没有建议','10',''],
-				answer:[],
-				ID:-1,//问卷的一份答案的id
-				id:-1,//问卷id
-				componentName:['danxuanAnswer','duoxuanAnswer',
-				'tiankongAnswer','huadongtiaoAnswer','','riqiAnswer'],
-				questionNaire:{
-				     title:'关于生活中常用的问卷系统的使用情况以及喜爱程度的调查',
-				     description:'请大家认真填写，谢谢大家！',
-				     content:[
-				      {
-				       "choice": ["MetaQ", "问卷星", "星问卷", "QStar"],
-				       "question": "你最喜欢哪个问卷系统",
-				       "type": "SINGLE"
-				      }, {
-				       "choice": ["外观", "功能", "便捷"],
-				       "question": "你喜欢什么方面",
-				       "type": "MULTIPLE"
-				      }, {
-				       "choice": [],
-				       "question": "有什么建议吗",
-				       "type": "BLANK"
-				      }, {
-				       "choice": [0, "", "10", "", 0],
-				       "question": "评个分吧",
-				       "type": "SLIDE"
-				      }, {
-				       "choice": 0,
-				       "question": "什么时候使用最频繁",
-				       "type": "DATE"
-				      }]
-				},
-			}
-		},
+		   return {
+		    // A:['1','ttt','500','0,1','0'],
+		    answerTemp:['0','012','太好了，没有建议','10',''],
+		    answer:[],
+		    ID:-1,//问卷的一份答案的id
+		    id:-1,//问卷id
+		    componentName:['danxuanAnswer','duoxuanAnswer',
+		    'tiankongAnswer','huadongtiaoAnswer','','riqiAnswer'],
+		    questionNaire:{
+		         title:'关于生活中常用的问卷系统的使用情况以及喜爱程度的调查',
+		         description:'请大家认真填写，谢谢大家！',
+		         content:[
+		          {
+		           "choice": ["MetaQ", "问卷星", "星问卷", "QStar"],
+		           "question": "你最喜欢哪个问卷系统",
+		           "type": "SINGLE"
+		          }, {
+		           "choice": ["外观", "功能", "便捷"],
+		           "question": "你喜欢什么方面",
+		           "type": "MULTIPLE"
+		          }, {
+		           "choice": [],
+		           "question": "有什么建议吗",
+		           "type": "BLANK"
+		          }, {
+		           "choice": [0, "", "10", "", 0],
+		           "question": "评个分吧",
+		           "type": "SLIDE"
+		          }, {
+		           "choice": 0,
+		           "question": "什么时候使用最频繁",
+		           "type": "DATE"
+		          }]
+		    },
+		   }},
+		
+
 		methods:{
 			getT(){
 				console.log(this.answerTemp)
@@ -183,7 +259,7 @@
 							this.answer.push(childComponent.answer);
 				});
 				const token = localStorage.getItem('token')
-				axios.defaults.headers.common['token'] = token;
+				//axios.defaults.headers.common['token'] = token;
 				//console.log("token",localStorage.getItem('token'));
 				var info = {
 					filledID:this.ID,
@@ -192,19 +268,37 @@
 					id:this.id
 				}
 				console.log(info);
-				axios.post(/*'https://metaq.scutbot.icu/login'*/
-							'http://localhost:8080/saveFill',info)
-				    .then(response => {
-				      console.log(response.data);
-					  uni.reLaunch({
-					  	url:'/pages/myQ/myQ'
-					  })
-					  //this.questionNaire = response.data.data;
-				    })
-				    .catch(error => {
-				      console.log(error);
-				    });
 				console.log(this.answer);
+				uni.request({
+					url: this.$store.state.host + '/saveFill',
+					method: 'POST',
+					header:{
+						'Content-Type' : 'application/json',
+						token : uni.getStorageSync("token")
+					},
+					data: info,
+					success: res => {
+						console.log(res.data);
+						uni.reLaunch({
+							url:'/pages/myQ/myQ'
+						})
+					},
+					fail: () => {},
+					complete: () => {}
+				});
+				// axios.post('https://metaq.scutbot.icu/saveFill'
+				// 			/*'http://localhost:8080/saveFill'*/,info)
+				//     .then(response => {
+				//       console.log(response.data);
+				// 	  uni.reLaunch({
+				// 	  	url:'/pages/myQ/myQ'
+				// 	  })
+				// 	  //this.questionNaire = response.data.data;
+				//     })
+				//     .catch(error => {
+				//       console.log(error);
+				//     });
+				
 
 				
 			},

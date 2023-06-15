@@ -8,6 +8,7 @@ import java.util.Base64;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.Files;
 public class QRcodeGenerator {
 
@@ -20,7 +21,7 @@ public class QRcodeGenerator {
             System.out.println(id);
             File outputFile = new File(""+id + ".png");
             ImageIO.write(image, "png", outputFile);
-            Path imagePath = Path.of(""+id + ".png");
+            Path imagePath = Paths.get(String.format("%d.png", id));
             byte[] imageBytes = Files.readAllBytes(imagePath);
             base64String = Base64.getEncoder().encodeToString(imageBytes);
             System.out.println(base64String);

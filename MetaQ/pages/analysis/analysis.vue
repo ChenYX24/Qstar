@@ -16,7 +16,7 @@
 		    >
 		      <swiper-item>
 				<view class="page1">
-					<AnalysisBlock v-for="(block, index) in blocks" :key="block.id" :title="block.title" :type="block.type" :chartData="block.content"></AnalysisBlock>
+					<AnalysisBlock v-for="(block, index) in blocks" :key=index :title="block.title" :type="block.type" :chartData="block.content"></AnalysisBlock>
 				</view>
 		      </swiper-item>
 		      <swiper-item>
@@ -78,6 +78,39 @@ import axios from 'axios';
 			TabSwiper,
 			AnalysisBlock
 		},
+		onLoad(option){
+			console.log("id:",option.id);
+			//axios.defaults.headers.common['token'] = localStorage.getItem('token');
+			//console.log("token",localStorage.getItem('token'));
+			uni.request({
+				url: this.$store.state.host + '/statistics',
+				method: 'POST',
+				header:{
+					'Content-Type' : 'application/json',
+					token : uni.getStorageSync("token")
+				},
+				data: {
+					id:option.id
+				},
+				success: res => {
+					console.log(res.data);
+					this.blocks = res.data.data
+				},
+				fail: () => {},
+				complete: () => {}
+			});
+			// axios.post('https://metaq.scutbot.icu/login'
+			// 			/*'http://localhost:8080/statistics'*/,{id:option.id})
+			//     .then(response => {
+			// 	  //console.log(option.id);
+			//       console.log(response.data);
+			// 	  //this.blocks = response.data.data;
+			// 	  //console.log("blocks1",this.blocks1);
+			//     })
+			//     .catch(error => {
+			//       console.log(error);
+			//     });
+		},
 		data() {
 			return {
 				title:'a大问卷',
@@ -97,8 +130,8 @@ import axios from 'axios';
 		methods: {
 			async fetchData() {  
 				try {  
-				  const response = await axios.get('/static/test.json'); // TODO
-				  this.blocks = response.data.data;  
+				  // const response = await axios.get('/static/test.json'); // TODO
+				  // this.blocks = response.data.data;  
 				} catch (error) {  
 				  console.error('Error fetching data:', error);  
 				}  

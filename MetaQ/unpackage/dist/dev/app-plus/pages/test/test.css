@@ -1,0 +1,54 @@
+.slider-setting {
+  display: flex;
+  justify-content: center;
+  width: 100vw;
+}
+.slider-box {
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 10px;
+  width: 85vw;
+  border: 2px solid #e1e1eb;
+}
+.group {
+  margin: 25px 20px 25px 20px;
+}
+.xuanxiang_text {
+  height: 4vh;
+  font-size: 18px;
+  color: #991cff;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+.question-input {
+  font-size: 18px;
+  margin-left: 8px;
+  color: black;
+}
+.danxuanti-label {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  color: rgb(237 64 225);
+  font-size: 14px;
+}
+.box {
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid #e1e1eb;
+  height: 6vh;
+  justify-content: space-between;
+}
+.text {
+  margin-left: 10px;
+}
+.input-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 5vh;
+  margin-right: 10px;
+  color: #991cff;
+}
