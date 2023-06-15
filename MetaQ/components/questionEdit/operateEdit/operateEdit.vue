@@ -2,16 +2,20 @@
 	<view class="operateEdit">
 		<view class="operate-box">
 			<view class="operate" @click="emitUp">
-				<img src="/static/operationEditQuestion/up.png" alt="">
+				<!-- <img src="/static/operationEditQuestion/up.png" alt=""> -->
+				<image src="/static/operationEditQuestion/up.png" mode="" class="big-image"></image>
 			</view>
 			<view class="operate" @click="emitDown">
-				<img src="/static/operationEditQuestion/down.png" alt="">
+				<!-- <img src="/static/operationEditQuestion/down.png" alt=""> -->
+				<image src="/static/operationEditQuestion/down.png" mode="" class="big-image"></image>
 			</view>
 			<view class="operate" @click="emitDelete">
-				<img src="/static/question_component/delete.png" alt="">
+				<!-- <img src="/static/question_component/delete.png" alt=""> -->
+				<image src="/static/operationEditQuestion/delete.png" mode="" class="big-image"></image>
 			</view>
 			<view class="operate">
-				<img src="/static/operationEditQuestion/attach.png" alt="">
+				<!-- <img src="/static/operationEditQuestion/attach.png" alt=""> -->
+				<image src="/static/operationEditQuestion/attach.png" mode="" class="big-image"></image>
 			</view>
 		</view>
 		
@@ -65,21 +69,25 @@
 .operate{
 	display: flex;
 	height: 100%;
+	// width: 75%;
 	
 }
-
-.operate img{
-	// border: 1px solid green;
-	height:100%;
+.big-image{
+    height: 6.5vh;
+    width: 6.5vh;
 }
+// .operate img{
+// 	// border: 1px solid green;
+// 	height:100%;
+// }
 
-.operate:nth-child(3){
-	height: 80%;
-}
+// .operate:nth-child(3){
+// 	height: 80%;
+// }
 
-.operate:nth-child(4){
-	height: 80%;
-}
+// .operate:nth-child(4){
+// 	height: 80%;
+// }
 
 
 
