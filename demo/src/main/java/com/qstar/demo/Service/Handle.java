@@ -37,8 +37,8 @@ public class Handle {
     /*public Result commit(int id,String token) throws IOException {
         return link.commit(id,token);
     }*/
-    public Result fill(int id,String token,boolean commit) throws IOException{
-        return link.fill(id,token,commit);
+    public Result fill(int id,String token) throws IOException{
+        return link.fill(id,token);
     }
     public List<FilledQuestionaireInfo> getFillRecord(String token) throws IOException {
         return link.getFillRecord(token);
@@ -112,5 +112,9 @@ public class Handle {
 
     public Result getFilled(Integer id, String token) throws IOException {
         return link.getFilled(id,token);
+    }
+
+    public Result commit(Integer id, String token) throws IOException {
+        return link.commit(id,token);
     }
 }

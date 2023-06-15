@@ -91,9 +91,14 @@ public class Link {
         //     idDistribute=0;
         //     filledIDDistribute=0;
         // //}
-        // int a [] = reader.readQuestionaireID();
-        // idDistribute = a[0];
-        // filledIDDistribute = a[1];
+         int a [] = reader.readQuestionaireID();
+         if(a!=null) {
+             idDistribute = a[0];
+             filledIDDistribute = a[1];
+         }else{
+             idDistribute = 0;
+             filledIDDistribute = 0;
+         }
         System.out.println("idDistribute:"+idDistribute);
         //idDistribute=0; //不用读写文件的话至少还要赋值，否则创建不了问卷和填写记录
         //filledIDDistribute=0;
@@ -137,7 +142,7 @@ public class Link {
                 return Result.fail("尚未登录");
             }
             user.addQuestionaire(idDistribute);
-            Questionaire questionaire=new Questionaire(title,description,questions,idDistribute,user.getName(),user.getEmail(),user.getHeadPic());
+            Questionaire questionaire=new Questionaire(title,description,questions,user.getName(),idDistribute,user.getHeadPic());
             questionaire.getInfo().setCommit(commit);
             questionaires.put(idDistribute,questionaire);
             System.out.println("开始写入问卷");
@@ -194,7 +199,10 @@ public class Link {
                 Questionaire questionaire = questionaires.get(id);   //在用户map读入时，问卷map同步读入
                 if (questionaire != null) {
                     /*deleteFile(questionaire.getAttachFile()); //删除原有的文件，因为已经被覆盖了*/
-                    boolean suc= questionaire.save(title,description, list,user.getEmail());
+                    boolean suc= questionaire.save(title,description, list);
+                    if(questionaire.isCommit()){
+                        return Result.fail("已发布问卷!");
+                    }
                     questionaire.getInfo().setCommit(commit);
                     // if(commit){ //当需要提交时
                     //     if (questionaire.allowEdit(user.getEmail())) {//允许编辑的才允许查看
@@ -221,17 +229,21 @@ public class Link {
     public String comboPicFileRoad(String filename){    //图片路径
         return base+"/"+picSonRoad+"/"+filename;
     }*/
-   /* public Result commit(int id,String token) throws IOException {  //暂时性放弃
+    public Result commit(int id,String token) throws IOException {  //暂时性放弃
         User user=map.get(token);
         if(user.hasQuestionaireID(id)) {//如果id正确中
             if(checkQuestionaire(id) ){
             Questionaire questionaire = questionaires.get(id);   //在用户map读入时，问卷map同步读入
-
+            if(!questionaire.isCommit()){
+                questionaire.getInfo().setCommit(true);
+                return Result.success();
+            }
+            return Result.fail("已发布问卷！");
             }
         }
         return null;
-    }*/
-    public Result fill(int id,String token,boolean commit) throws IOException {//填写问卷时返回问题，并在加到自己的填写记录上    这里的ID改了，这不是问卷的ID，这是已填写的问卷的ID
+    }
+    public Result fill(int id,String token) throws IOException {//填写问卷时返回问题，并在加到自己的填写记录上    这里的ID改了，这不是问卷的ID，这是已填写的问卷的ID
             System.out.println("要填问卷的人的token："+token);
             User user=map.get(token);
             if(user == null){
@@ -750,4 +762,5 @@ public class Link {
         }
         return Result.fail("问卷ID错误");
     }
+
 }
