@@ -1,0 +1,198 @@
+
+*{
+		margin: 0%;
+}
+@font-face {
+	  font-family: 'ali';
+	  src: url('../../assets/Alimama_ShuHeiTi_Bold.a8adaed0.ttf') format('truetype');
+}
+.bg {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	    position: fixed;
+	    top: 0;
+	    left: 0;
+	    right: 0;
+	    bottom: 0;
+		width: 100vw;
+		height: 100vh;
+		opacity: 1;
+		background: url('../../static/index/bg.png') center center / 225% 130% no-repeat,  linear-gradient(225deg, rgba(230, 247, 255, 1) 0%, rgba(255, 254, 247, 1) 38.89%, rgba(233, 229, 254, 1) 67.78%, rgba(230, 224, 250, 1) 100%);
+}
+.buttonGroup {
+		margin-top: 3vh;
+		width: 79vw;
+}
+.buttonGroup uni-button {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin-top: 1.5vh;
+		background-color: rgba(230, 230, 240, 1);
+		box-shadow: 0px 2px 4px 0px rgba(136, 63, 143, 0.25);
+		height: 6.2vh;
+}
+.buttonGroup .active {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 10vh;
+		font-size: 24px;
+		font-weight: 400;
+		color: rgba(0, 0, 0, 0.75);
+		text-align: center;
+		vertical-align: top;
+		border-radius: 12px;
+		background: linear-gradient(90deg, rgba(224, 222, 250, 0.75) 0%, rgba(255, 235, 244, 0.75) 100%);
+		box-shadow: 0px 2px 4px 0px rgba(136, 63, 143, 0.25);
+		/* filter: blur(4px); */
+}
+.buttonGroup .inactive {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 10vh;
+		font-size: 24px;
+		font-weight: 400;
+		text-align: center;
+		vertical-align: top;
+		color: rgba(128, 128, 128, 1);
+		border-radius: 12px;
+		background-color: rgba(230, 230, 240, 1);
+		box-shadow: 0px 2px 4px 0px rgba(136, 63, 143, 0.25);
+		/* filter: blur(4px); */
+}
+uni-form {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+}
+#getcode {
+		display: inline-block;
+		display: flex;
+		align-items: center;
+		border-radius: 20px;
+		width: 47.7vw;
+		height: 6.2vh;
+		background-color: rgba(255,255,255,0.8);
+}
+#getcode:focus-within {
+		border: 1px solid #8431de;
+		border-radius: 20px;
+}
+#getcode uni-input{
+		display: inline-block;
+		text-align: left;
+		vertical-align: top;
+}
+#getcode .label {
+		width: 29vw;
+}
+#gbutton{
+		margin-top:3vh;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+}
+#gbutton uni-view{
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		/* text-align: center; */
+		border-radius: 20px;
+		margin-left: 1vw;
+		width: 28.3vw;
+		height: 6.2vh;
+		/* background-color: rgba(255,255,255,0.8); */
+		box-shadow: 2px 2px 20px 0px rgba(136, 63, 143, 0.15);
+}
+.Input {
+		display: inline-block;
+		text-align: left;
+		vertical-align: top;
+		/* width: 45vw; */
+}
+	/* .Input:focus-within{
+		border: 1px solid rgba(200, 196, 218, 50);
+		border-radius: 10px;
+	} */
+.errorWrite {
+		margin-top: 3vh;
+		display: flex;
+		align-items: center;
+		text-align: left;
+		vertical-align: top;
+		border: 1px solid red;
+		border-radius: 20px;
+		width: 77vw;
+		height: 6.2vh;
+		background-color: rgba(255,255,255,0.8);
+		box-shadow: 2px 2px 20px 0px rgba(136, 63, 143, 0.15);
+}
+.errorWrite:focus-within {
+		border: 1px solid #8431de;
+		border-radius: 20px;
+}
+.Input-margin {
+		margin-top: 3vh;
+		display: flex;
+		align-items: center;
+		/* border: 1px solid rgba(0,0,0,0.6); */
+		border-radius: 20px;
+		width: 77vw;
+		height: 6.2vh;
+		background-color: rgba(255,255,255,0.8);
+		box-shadow: 2px 2px 20px 0px rgba(136, 63, 143, 0.15);
+}
+.Input-margin:focus-within{
+		border: 1px solid #8431de;
+		border-radius: 20px;
+}
+.confirm_input {
+		display: inline-block;
+		text-align: left;
+		vertical-align: top;
+		width: 37vw;
+}
+.confirm_label {
+		display: inline-block;
+		margin-left: 5vw;
+		text-align: left;
+		width: 21vw;
+}
+.img {
+		display: inline-block;
+		width: 9vw;
+		height: 4vh;
+		margin-right: 2vw;
+}
+.label {
+		display: inline-block;
+		margin-left: 5vw;
+		text-align: left;
+}
+.link {
+		margin-top: 5px;
+		font-size: 14px;
+		color: rgba(128, 128, 128, 1);
+		border-radius: 12px;
+		background: rgba(230, 230, 240, 1);
+		box-shadow: 0px 2px 4px 0px rgba(136, 63, 143, 0.25);
+}
+.title {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		font-size: 48px;
+		font-weight: 400;
+		letter-spacing: 0px;
+		line-height: 57.6px;
+		color: rgba(0, 0, 0, 1);
+		text-align: center;
+		vertical-align: top;
+		font-family: 'ali', sans-serif;
+}

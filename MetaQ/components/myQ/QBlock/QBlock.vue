@@ -75,42 +75,64 @@ export default {
 	  toEdit(){
 		  if(this.isPush)
 		  {
-			 this.$store.state.qnid = -1;
+			 //this.$store.state.qnid = -1;
 			 uni.navigateTo({
-			 	url: "/pages/analysis/analysis"
+			 	url: "/pages/analysis/analysis?id="+this.id
 			 }) 
 		  }
 		  else{
 			console.log(132324)
 			console.log("id",this.id);
-			axios.defaults.headers.common['token'] = localStorage.getItem('token');
-			axios.post(/*'https://metaq.scutbot.icu/login'*/
-						'http://localhost:8080/check',
-								//'/static/test2.json',
-								{
-									id:this.id
-								})
-			    .then(response => {
-								console.log(response.data);
-								var temp=response.data.data
-								// var temp;
-								// temp['title'] = data.info.title;
-								// temp['description'] = data.description;
-								// temp['content'] = data.content;
-								//temp['commit'] = data.info.commit;
-								// console.log(temp)
-								// temp.title=this.title
-								this.$store.commit('setIsCreate',this.id);
-								this.$store.commit('setQuestionNire',temp);
+			uni.request({
+				url: this.$store.state.host + '/check',
+				method: 'POST',
+				header:{
+					'Content-Type' : 'application/json',
+					token : uni.getStorageSync("token")
+				},
+				data: {
+					id:this.id
+				},
+				success: res => {
+					console.log(res.data);
+					var temp=res.data.data
+					this.$store.commit('setIsCreate',this.id);
+					this.$store.commit('setQuestionNire',temp);
+					uni.navigateTo({
+						url: '/pages/editQuestionnire/editQuestionnire?flag='+1
+					})
+				},
+				fail: () => {},
+				complete: () => {}
+			});
+			// axios.defaults.headers.common['token'] = localStorage.getItem('token');
+			// axios.post('https://metaq.scutbot.icu/check'
+			// 			/*'http://localhost:8080/check'*/,
+			// 					//'/static/test2.json',
+			// 					{
+			// 						id:this.id
+			// 					})
+			//     .then(response => {
+			// 					console.log(response.data);
+			// 					var temp=response.data.data
+			// 					// var temp;
+			// 					// temp['title'] = data.info.title;
+			// 					// temp['description'] = data.description;
+			// 					// temp['content'] = data.content;
+			// 					//temp['commit'] = data.info.commit;
+			// 					// console.log(temp)
+			// 					// temp.title=this.title
+			// 					this.$store.commit('setIsCreate',this.id);
+			// 					this.$store.commit('setQuestionNire',temp);
 								
-								// // console.log(this.$store.state.questionNire)
-								uni.navigateTo({
-									url: '/pages/editQuestionnire/editQuestionnire?flag='+1
-								})
-			    })
-			    .catch(error => {
-			      console.log(error);
-			    });  
+			// 					// // console.log(this.$store.state.questionNire)
+			// 					uni.navigateTo({
+			// 						url: '/pages/editQuestionnire/editQuestionnire?flag='+1
+			// 					})
+			//     })
+			//     .catch(error => {
+			//       console.log(error);
+			//     });  
 		  }
 	  		
 	  	

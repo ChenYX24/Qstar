@@ -30,6 +30,10 @@
 <script>
 import axios from 'axios';
 	export default {
+		onLoad(option){
+			console.log("option_flag:",option.flag)
+			this.flag = option.flag;
+		},
 		data() {
 			return {
 				formData: {
@@ -39,7 +43,8 @@ import axios from 'axios';
 				token:"",
 				trueEmail:true,
 				check:false,
-				visible:false
+				visible:false,
+				flag:false
 			};
 		},
 		computed: {
@@ -48,33 +53,80 @@ import axios from 'axios';
 			}
 		},
 		methods: {
-		    submitForm() {
-				axios.post(/*'https://metaq.scutbot.icu/login'*/
-							'http://localhost:8080/login', {
-		            email: this.formData.email,
+		  //   submitForm() {
+				// axios.post('https://metaq.scutbot.icu/login'
+				// 			/*'http://localhost:8080/login'*/, {
+		  //           email: this.formData.email,
+				// 	password: this.formData.password
+				// 	})
+		  //           .then(response => {
+		  //             this.token = response.data;
+				// 	  if(this.token == " ")
+				// 	  {
+				// 		  uni.showToast({
+				// 		    title: '登录失败',  
+				// 		    icon: 'none'
+				// 		  }) 
+				// 	  }else{
+				// 		  console.log("token",this.token);
+				// 		  localStorage.setItem('token', JSON.stringify(this.token));
+				// 		  console.log("localStorage",localStorage.getItem('token'));
+				// 		  uni.reLaunch({
+				// 		  		url:"/pages/myQ/myQ"
+				// 		  	})
+				// 	  }
+		  //           })
+		  //           .catch(error => {
+		  //             console.log(error);
+		  //           });
+		  //   },
+		  submitForm(){
+			  console.log(this.$store.state.host + '/login');
+			uni.request({
+				url: this.$store.state.host + '/login',
+				//url:'http://localhost:8080/login',
+				method: 'POST',
+				header:{
+					'Content-Type' : 'application/json',
+					//token : uni.getStorageSync("token")
+				},
+				data: {
+					email: this.formData.email,
 					password: this.formData.password
-					})
-		            .then(response => {
-		              this.token = response.data;
-					  if(this.token == " ")
-					  {
-						  uni.showToast({
-						    title: '登录失败',  
-						    icon: 'none'
-						  }); 
+				},
+				success: res => {
+					console.log(res);
+					this.token = res.data;
+					if(this.token == " ")
+					{
+					  uni.showToast({
+					    title: '登录失败',  
+					    icon: 'none'
+					  }) 
+					}else{
+					  const Token = JSON.stringify(this.token);
+					  console.log("token",Token);
+					  uni.setStorageSync('token',Token)
+					  console.log("存在缓存中的:",uni.getStorageSync('token'))
+					  //localStorage.setItem('token', JSON.stringify(this.token));
+					  //console.log("localStorage",localStorage.getItem('token'));
+					  console.log("flag：",this.flag)
+					  if(this.flag){
+						  console.log("返回填写页面")
+						  uni.navigateBack();
 					  }else{
-						  console.log("token",this.token);
-						  localStorage.setItem('token', JSON.stringify(this.token));
-						  console.log("localStorage",localStorage.getItem('token'));
 						  uni.reLaunch({
 						  		url:"/pages/myQ/myQ"
 						  	})
 					  }
-		            })
-		            .catch(error => {
-		              console.log(error);
-		            });
-		    },
+					  
+					}
+				},
+				fail: () => {},
+				complete: () => {}
+			});
+  
+		  },
 			checkEmail(){
 				this.check = true;
 				const emailPattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;

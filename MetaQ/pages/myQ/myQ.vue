@@ -25,7 +25,7 @@
 		      </swiper-item>
 		      <swiper-item>
 				<view class="page2">
-				  <QBlock2 v-for="item in myFilleds" :key="item.id" :title="item.title" :isEnd="item.committed" :name="item.creator"
+				  <QBlock2 v-for="item in myFilleds" :ID='item.id' :title="item.title" :isEnd="item.committed" :name="item.creator"
 				  @tap="checkFill(item.id)"
 				  ></QBlock2>
 				</view>
@@ -89,7 +89,8 @@ export default {
 		checkFill(id){
 			//一旦对应的QBlock被点击，就把对应的问卷id写入qnid中
 			//这里的id是指answer的id，不是问卷的id
-			this.$store.commit('setIsCreate',id)
+			// console.log("myQID:",id);
+			// this.$store.commit('setIsCreate',id)
 			// axios.defaults.headers.common['token'] = localStorage.getItem('token');
 			// console.log("token",localStorage.getItem('token'));
 			// axios.post(/*'https://metaq.scutbot.icu/login'*/
@@ -101,38 +102,85 @@ export default {
 			//       console.log(error);
 			//     });
 		},
+		
 		async fetchData() {
 			//获取已经创建的问卷
-			axios.defaults.headers.common['token'] = localStorage.getItem('token');
-			console.log("token",localStorage.getItem('token'));
-			axios.get(/*'https://metaq.scutbot.icu/login'*/
-						'http://localhost:8080/getCreated')
-			    .then(response => {
-			      console.log(response.data);
-				  this.blocks1 = response.data.data;
-				  console.log("blocks1",this.blocks1);
-			    })
-			    .catch(error => {
-			      console.log(error);
-			    });
-			try {  
-			  // const response = await axios.get('/static/test2.json'); // TODO
-			  // this.blocks = response.data.data.blocks;
-			  // this.blocks1=response.data.data.blocks1
-			} catch (error) {  
-			  console.error('Error fetching data:', error);  
-			}
-			//获取已经填写的问卷
-			axios.get(/*'https://metaq.scutbot.icu/login'*/
-						'http://localhost:8080/fillRecord')
-			    .then(response => {
-			      console.log("已经填写过的问卷",response.data);
-			      this.blocks = response.data.data;
-			      console.log("blocks",this.blocks);
-			    })
-			    .catch(error => {
-			      console.log(error);
-			    });
+			
+			uni.request({
+				url: this.$store.state.host + '/getCreated',
+				//url:'http://localhost:8080/getCreated',
+				method: 'GET',
+				header:{
+					'Content-Type' : 'application/json',
+					"token" :uni.getStorageSync('token')
+				},
+				// data: {
+				// 	email: this.formData.email,
+				// 	password: this.formData.password
+				// },
+				success: res => {
+					//console.log(res);
+					console.log(res.data);
+			 	    this.blocks1 = res.data.data;
+					console.log("blocks1",this.blocks1);
+					console.log(res)
+				},
+				fail: (e) => {},
+				complete: () => {}
+			});
+			uni.request({
+				url: this.$store.state.host + '/fillRecord',
+				//url:'http://localhost:8080/fillRecord',
+				method: 'GET',
+				header:{
+					'Content-Type' : 'application/json',
+					token : uni.getStorageSync("token")
+				},
+				// data: {
+				// 	email: this.formData.email,
+				// 	password: this.formData.password
+				// },
+				success: res => {
+					console.log("已经填写过的问卷",res.data);
+					this.blocks = res.data.data;
+					console.log("blocks",this.blocks);
+				},
+				fail: (e) => {},
+				complete: () => {}
+			});
+			
+			// //#ifdef H5
+			// axios.defaults.headers.common['token'] = localStorage.getItem('token');
+			// console.log("token",localStorage.getItem('token'));
+			// axios.get('https://metaq.scutbot.icu/getCreated'
+			// 			/*'http://localhost:8080/getCreated'*/)
+			//     .then(response => {
+			//       console.log(response.data);
+			// 	  this.blocks1 = response.data.data;
+			// 	  console.log("blocks1",this.blocks1);
+			//     })
+			//     .catch(error => {
+			//       console.log(error);
+			//     });
+			// try {  
+			//   // const response = await axios.get('/static/test2.json'); // TODO
+			//   // this.blocks = response.data.data.blocks;
+			//   // this.blocks1=response.data.data.blocks1
+			// } catch (error) {  
+			//   console.error('Error fetching data:', error);  
+			// }
+			// //获取已经填写的问卷
+			// axios.get('https://metaq.scutbot.icu/fillRecord'
+			// 			/*'http://localhost:8080/fillRecord'*/)
+			//     .then(response => {
+			//       console.log("已经填写过的问卷",response.data);
+			//       this.blocks = response.data.data;
+			//       console.log("blocks",this.blocks);
+			//     })
+			//     .catch(error => {
+			//       console.log(error);
+			//     });
+			// //#endif
 		  },
       swiperChange(e) {
         this.currentTab = e.detail.current;

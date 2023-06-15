@@ -45,25 +45,47 @@ export default {
   },
   onLoad: function (options) {
 	this.tab=options.tab
-	const Token = JSON.parse(localStorage.getItem('token'));
+	//const Token = JSON.parse(localStorage.getItem('token'));
+	//this.email = Token.email;
+	//console.log(this.email);
+	const Token = JSON.parse(uni.getStorageSync('token'));
 	this.email = Token.email;
-	console.log(this.email);
-	axios.post(/*'https://metaq.scutbot.icu/login'*/
-				'http://localhost:8080/getPage', {
+	console.log("获取个人信息email:",this.email);
+	uni.request({
+		url: this.$store.state.host + '/getPage',
+		method: 'POST',
+		header:{
+			'Content-Type' : 'application/json',
+			token : uni.getStorageSync("token")
+		},
+		data: {
 			email:this.email
-		})
-	    .then(response => {
-			console.log(response.data);
-			this.name = response.data.data.username;
-			this.phone = response.data.data.phoneNumber;
-			this.currentProvince = response.data.data.location;
-			if(response.data.data.headPic != " "){
+		},
+		success: res => {
+			console.log(res.data);
+			this.name = res.data.data.username;
+			this.phone = res.data.data.phoneNumber;
+			this.currentProvince = res.data.data.location;
+		},
+		fail: (e) => {},
+		complete: () => {}
+	});
+	// axios.post(/*'https://metaq.scutbot.icu/login'*/
+	// 			'http://localhost:8080/getPage', {
+	// 		email:this.email
+	// 	})
+	//     .then(response => {
+	// 		console.log(response.data);
+	// 		this.name = response.data.data.username;
+	// 		this.phone = response.data.data.phoneNumber;
+	// 		this.currentProvince = response.data.data.location;
+	// 		if(response.data.data.headPic != " "){
 				
-			}
-	    })
-	    .catch(error => {
-	      console.log(error);
-	    });
+	// 		}
+	//     })
+	//     .catch(error => {
+	//       console.log(error);
+	//     });
 	
   },
   data() {
@@ -101,17 +123,34 @@ export default {
 					//
 					if(this.origin_name != this.name){
 						this.origin_name != this.name
-						axios.defaults.headers.common['token'] = localStorage.getItem('token');
-						axios.post(/*'https://metaq.scutbot.icu/login'*/
-									'http://localhost:8080/changename', {
+						uni.request({
+							url: this.$store.state.host + '/changename',
+							method: 'POST',
+							header:{
+								'Content-Type' : 'application/json',
+								token : uni.getStorageSync("token")
+							},
+							data: {
 								username:this.name
-							})
-						    .then(response => {
-								console.log(response.data);
-						    })
-						    .catch(error => {
-						      console.log(error);
-						    });
+							},
+							success: res => {
+								//console.log(res);
+								console.log(res.data);
+							},
+							fail: () => {},
+							complete: () => {}
+						});
+						// axios.defaults.headers.common['token'] = localStorage.getItem('token');
+						// axios.post('https://metaq.scutbot.icu/changename'
+						// 			/*'http://localhost:8080/changename'*/, {
+						// 		username:this.name
+						// 	})
+						//     .then(response => {
+						// 		console.log(response.data);
+						//     })
+						//     .catch(error => {
+						//       console.log(error);
+						//     });
 					}
 				}
 			}
@@ -132,18 +171,35 @@ export default {
 					if(this.origin_phone != this.phone || this.origin_provinces != this.currentProvince){
 						this.origin_phone = this.phone;
 						this.origin_provinces = this.currentProvince;
-						axios.defaults.headers.common['token'] = localStorage.getItem('token');
-						axios.post(/*'https://metaq.scutbot.icu/login'*/
-									'http://localhost:8080/changepl', {
+						uni.request({
+							url: this.$store.state.host + '/changepl',
+							method: 'POST',
+							header:{
+								'Content-Type' : 'application/json',
+								token : uni.getStorageSync("token")
+							},
+							data: {
 								phoneNumber:this.phone,
 								location:this.currentProvince
-							})
-						    .then(response => {
-								console.log(response.data);
-						    })
-						    .catch(error => {
-						      console.log(error);
-						    });
+							},
+							success: res => {
+								console.log(res.data);
+							},
+							fail: () => {},
+							complete: () => {}
+						});
+						//axios.defaults.headers.common['token'] = localStorage.getItem('token');
+						// axios.post('https://metaq.scutbot.icu/changepl'
+						// 			/*'http://localhost:8080/changepl'*/, {
+						// 		phoneNumber:this.phone,
+						// 		location:this.currentProvince
+						// 	})
+						//     .then(response => {
+						// 		console.log(response.data);
+						//     })
+						//     .catch(error => {
+						//       console.log(error);
+						//     });
 					}
 				}
 			}

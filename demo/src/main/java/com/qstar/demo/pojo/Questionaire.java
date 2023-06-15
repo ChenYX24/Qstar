@@ -120,6 +120,7 @@ public class Questionaire {//创建的问卷
                     if(statistics.size() == 0){
                         for(int i = 0;i < questions.size();i++){
                             Type t = questions.get(i).getType();
+                            System.out.println(t);
                             int num = questions.get(i).getChoice().length;
                             Statistics s = new Statistics(t, num);
                             statistics.add(s);

@@ -35,6 +35,10 @@
 			name:{
 				type:String,
 				default:''
+			},
+			ID:{
+				type:Number,
+				default:-1
 			}
 		},
 		data() {
@@ -55,6 +59,8 @@
 		},
 		methods:{
 			check(){
+				console.log("myQID:",this.ID);
+				this.$store.commit('setIsCreate',this.ID)
 				uni.navigateTo({
 					url:"/pages/fillQuestionnaire/fillQuestionnaire?check="+'1'
 				})

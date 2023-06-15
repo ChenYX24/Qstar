@@ -100,37 +100,65 @@
 			save(){
 				this.questionNirePorps['commit'] = false;
 				console.log("save",this.questionNirePorps);
-				axios.defaults.headers.common['token'] = localStorage.getItem('token');
+				//axios.defaults.headers.common['token'] = localStorage.getItem('token');
 				console.log("this.questionNirePorps",this.questionNirePorps);
 				if(this.$store.state.qnid==-1){
 					console.log("创建并保存问卷");
-					axios.post(/*'https://metaq.scutbot.icu/login'*/
-								'http://localhost:8080/create', 
-							this.questionNirePorps
-						)
-						.then(response => {
-						  console.log(response.data);
-						})
-						.catch(error => {
-						  console.log(error);
-						});
-					uni.navigateTo({
-						url:"/pages/myQ/myQ"
-					})
+					uni.request({
+						url: this.$store.state.host + '/create',
+						method: 'POST',
+						header:{
+							'Content-Type' : 'application/json',
+							token : uni.getStorageSync("token")
+						},
+						data: this.questionNirePorps,
+						success: res => {
+							console.log(res.data);
+						},
+						fail: () => {},
+						complete: () => {}
+					});
+					// axios.post('https://metaq.scutbot.icu/create'
+					// 			/*'http://localhost:8080/create'*/, 
+					// 		this.questionNirePorps
+					// 	)
+					// 	.then(response => {
+					// 	  console.log(response.data);
+					// 	})
+					// 	.catch(error => {
+					// 	  console.log(error);
+					// 	});
+					// uni.navigateTo({
+					// 	url:"/pages/myQ/myQ"
+					// })
 				}else{
 					console.log("保存已创建问卷");
 					this.questionNirePorps['id'] = this.$store.state.qnid;
 					this.$store.state.qnid = -1;
-					axios.post(/*'https://metaq.scutbot.icu/login'*/
-								'http://localhost:8080/save', 
-							this.questionNirePorps,
-						)
-						.then(response => {
-						  console.log(response.data);
-						})
-						.catch(error => {
-						  console.log(error);
-						});
+					uni.request({
+						url: this.$store.state.host + '/save',
+						method: 'POST',
+						header:{
+							'Content-Type' : 'application/json',
+							token : uni.getStorageSync("token")
+						},
+						data: this.questionNirePorps,
+						success: res => {
+							console.log(res.data);
+						},
+						fail: () => {},
+						complete: () => {}
+					});
+					// axios.post('https://metaq.scutbot.icu/save'
+					// 			/*'http://localhost:8080/save'*/, 
+					// 		this.questionNirePorps,
+					// 	)
+					// 	.then(response => {
+					// 	  console.log(response.data);
+					// 	})
+					// 	.catch(error => {
+					// 	  console.log(error);
+					// 	});
 					uni.navigateTo({
 						url:"/pages/myQ/myQ"
 					})
@@ -139,20 +167,34 @@
 			push(){
 				console.log("push",this.questionNirePorps);
 				this.questionNirePorps['commit'] = true;
-				axios.defaults.headers.common['token'] = localStorage.getItem('token');
+				//axios.defaults.headers.common['token'] = localStorage.getItem('token');
 				console.log("this.questionNirePorps",this.questionNirePorps);
 				if(this.$store.state.qnid==-1){
 					console.log("创建并发布问卷");
-					axios.post(/*'https://metaq.scutbot.icu/login'*/
-								'http://localhost:8080/create', 
-							this.questionNirePorps
-						)
-						.then(response => {
-						  console.log(response.data);
-						})
-						.catch(error => {
-						  console.log(error);
-						});
+					uni.request({
+						url: this.$store.state.host + '/create',
+						method: 'POST',
+						header:{
+							'Content-Type' : 'application/json',
+							token : uni.getStorageSync("token")
+						},
+						data: this.questionNirePorps,
+						success: res => {
+							console.log(res.data);
+						},
+						fail: () => {},
+						complete: () => {}
+					});
+					// axios.post('https://metaq.scutbot.icu/create'
+					// 			/*'http://localhost:8080/create'*/, 
+					// 		this.questionNirePorps
+					// 	)
+					// 	.then(response => {
+					// 	  console.log(response.data);
+					// 	})
+					// 	.catch(error => {
+					// 	  console.log(error);
+					// 	});
 					uni.navigateTo({
 						url:"/pages/myQ/myQ"
 					})
@@ -160,16 +202,30 @@
 					console.log("发布已创建问卷");
 					this.questionNirePorps['id'] = this.$store.state.qnid;
 					this.$store.state.qnid = -1;
-					axios.post(/*'https://metaq.scutbot.icu/login'*/
-								'http://localhost:8080/save', 
-							this.questionNirePorps,
-						)
-						.then(response => {
-						  console.log(response.data);
-						})
-						.catch(error => {
-						  console.log(error);
-						});
+					uni.request({
+						url: this.$store.state.host + '/save',
+						method: 'POST',
+						header:{
+							'Content-Type' : 'application/json',
+							token : uni.getStorageSync("token")
+						},
+						data: this.questionNirePorps,
+						success: res => {
+							console.log(res.data);
+						},
+						fail: () => {},
+						complete: () => {}
+					});
+					// axios.post('https://metaq.scutbot.icu/save'
+					// 			/*'http://localhost:8080/save'*/, 
+					// 		this.questionNirePorps,
+					// 	)
+					// 	.then(response => {
+					// 	  console.log(response.data);
+					// 	})
+					// 	.catch(error => {
+					// 	  console.log(error);
+					// 	});
 					uni.navigateTo({
 						url:"/pages/myQ/myQ"
 					})
@@ -191,63 +247,128 @@
 			copyText() {
 			if(this.b1==0)
 			{
-				axios.defaults.headers.common['token'] = localStorage.getItem('token');
-				console.log("token",localStorage.getItem('token'));
-				axios.post(/*'https://metaq.scutbot.icu/login'*/
-							'http://localhost:8080/share',{
-								id:this.$store.state.qnid,
-								flag:false
-							})
-				    .then(response => {
-				      const textToCopy = response.data;
-					  uni.setClipboardData({
-					    data: textToCopy,  
-					    success: () => {  
-					      uni.showToast({  
-					        title: '已复制到剪贴板',  
-					        icon: 'success',  
-					      });
-					  		this.b1=1
-					    },  
-					    fail: (err) => {  
-					      console.error('Error copying text: ', err);  
-					      uni.showToast({  
-					        title: '复制失败',  
-					        icon: 'none',  
-					      });  
-					  		this.b1=0
-					    },  
-					  });  
-				    })
-				    .catch(error => {
-				      console.log(error);
-				    });
+				//axios.defaults.headers.common['token'] = localStorage.getItem('token');
+				//console.log("token",localStorage.getItem('token'));
+				uni.request({
+					url: this.$store.state.host + '/share',
+					method: 'POST',
+					header:{
+						'Content-Type' : 'application/json',
+						token : uni.getStorageSync("token")
+					},
+					data: {
+						id:this.$store.state.qnid,
+						flag:false
+					},
+					success: res => {
+						const textToCopy = res.data;
+						uni.setClipboardData({
+						  data: textToCopy,  
+						  success: () => {  
+						    uni.showToast({  
+						      title: '已复制到剪贴板',  
+						      icon: 'success',  
+						    });
+								this.b1=1
+						  },  
+						  fail: (err) => {  
+						    console.error('Error copying text: ', err);  
+						    uni.showToast({  
+						      title: '复制失败',  
+						      icon: 'none',  
+						    });  
+								this.b1=0
+						  },  
+						});
+					},
+					fail: () => {},
+					complete: () => {}
+				});
+				// axios.post('https://metaq.scutbot.icu/share'
+				// 			/*'http://localhost:8080/share'*/,{
+				// 				id:this.$store.state.qnid,
+				// 				flag:false
+				// 			})
+				//     .then(response => {
+				//       const textToCopy = response.data;
+				// 	  uni.setClipboardData({
+				// 	    data: textToCopy,  
+				// 	    success: () => {  
+				// 	      uni.showToast({  
+				// 	        title: '已复制到剪贴板',  
+				// 	        icon: 'success',  
+				// 	      });
+				// 	  		this.b1=1
+				// 	    },  
+				// 	    fail: (err) => {  
+				// 	      console.error('Error copying text: ', err);  
+				// 	      uni.showToast({  
+				// 	        title: '复制失败',  
+				// 	        icon: 'none',  
+				// 	      });  
+				// 	  		this.b1=0
+				// 	    },  
+				// 	  });  
+				//     })
+				//     .catch(error => {
+				//       console.log(error);
+				//     });
 				
 			}
 			},
-			isMobileDevice() {  
-			    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);  
+			isMobileDevice() {
+				// navigator=/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+				// if (typeof navigator == 'undefined' || navigator) {
+				//   // 在移动端环境中运行的代码
+				//   return true;  
+				// } else {
+				//   // 在非移动端环境中运行的代码
+				//   return false;  
+				// }
+				return true;
+			    
 			  },
 			saveQRCode() {  
 			  if (!this.isQrcode) {  
-				axios.defaults.headers.common['token'] = localStorage.getItem('token');
-				console.log("token",localStorage.getItem('token'));
-				axios.post(/*'https://metaq.scutbot.icu/login'*/
-							'http://localhost:8080/share',{
-								id:this.$store.state.qnid,
-								flag:true
-							})
-				    .then(response => {
-						console.log(response.data);
-				      this.qrcode = response.data;
-				    })
-				    .catch(error => {
-				      console.log(error);
-				    });
+				  uni.request({
+				  	url: this.$store.state.host + '/share',
+				  	method: 'POST',
+				  	header:{
+				  		'Content-Type' : 'application/json',
+				  		token : uni.getStorageSync("token")
+				  	},
+				  	data: {
+				  		id:this.$store.state.qnid,
+				  		flag:true
+				  	},
+				  	success: res => {
+				  		console.log(res);
+				  		console.log(res.data);
+				  		this.qrcode = res.data;
+				  	},
+				  	fail: () => {},
+				  	complete: () => {}
+				});
+				// axios.defaults.headers.common['token'] = localStorage.getItem('token');
+				// console.log("token",localStorage.getItem('token'));
+				// axios.post('https://metaq.scutbot.icu/share'
+				// 			/*'http://localhost:8080/share'*/,{
+				// 				id:this.$store.state.qnid,
+				// 				flag:true
+				// 			})
+				//     .then(response => {
+				// 		console.log(response.data);
+				//       this.qrcode = response.data;
+					  
+				//     })
+				//     .catch(error => {
+				//       console.log(error);
+				//     });
 				this.isQrcode = !this.isQrcode ;  
 				this.b1 = 2;  
 			  } else {  
-				if (this.isMobileDevice()) {    
+				if (this.isMobileDevice()) {
+					console.log(111)
 					uni.downloadFile({  
 					  url: this.qrcode,  
 					  success: (res) => {  
@@ -279,6 +400,7 @@
 					  },  
 					});
 				} else {  
+					console.log(222)
 				  const link = document.createElement('a');  
 				  link.href = this.qrcode;  
 				  link.download = 'mataQ.png';  

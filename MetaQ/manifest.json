@@ -7,6 +7,11 @@
     "transformPx" : false,
     /* 5+App特有相关 */
     "app-plus" : {
+        "network" : {
+            "cors" : {
+                "origin" : "https://metaq.scutbot.icu"
+            }
+        },
         "usingComponents" : true,
         "nvueStyleCompiler" : "uni-app",
         "compilerVersion" : 3,
@@ -74,9 +79,9 @@
     },
     "vueVersion" : "3",
     "h5" : {
-		"devServer": {  
-		    "disableHostCheck": true  
-		  },  
+        "devServer" : {
+            "disableHostCheck" : true
+        },
         "router" : {
             "mode" : "hash",
             "base" : "./"

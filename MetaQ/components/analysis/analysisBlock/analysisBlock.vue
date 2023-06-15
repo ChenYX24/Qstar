@@ -424,16 +424,16 @@
 		},
 		mounted() {
 			switch (this.type){
-				case 'single':
+				case 'SINGLE':
 					this.CType="单选题"
 					break;
-				case 'multiple':
+				case 'MULTIPLE':
 					this.CType="多选题"
 					break;
-				case 'blank':
+				case 'BLANK':
 					this.CType="填空题"
 					break;
-				case 'slider':
+				case 'SLIDER':
 					this.CType="滑动条"
 					break;
 				default:

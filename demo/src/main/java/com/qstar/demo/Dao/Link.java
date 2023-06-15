@@ -232,6 +232,7 @@ public class Link {
         return null;
     }*/
     public Result fill(int id,String token,boolean commit) throws IOException {//填写问卷时返回问题，并在加到自己的填写记录上    这里的ID改了，这不是问卷的ID，这是已填写的问卷的ID
+            System.out.println("要填问卷的人的token："+token);
             User user=map.get(token);
             if(user == null){
                 return Result.fail("尚未登录");

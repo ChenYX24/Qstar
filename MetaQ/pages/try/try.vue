@@ -99,7 +99,7 @@
 				num:this.$store.state.now_operate+1,
 				content:{
 						question:"日期",
-						type:'DATE',
+						type:'SINGLE',
 						choice:[2],
 						setting:[]
 				}

@@ -35,33 +35,65 @@
 		mounted(options){
 			if(!this.flag){
 				//自动登录
-				const token = localStorage.getItem('token');
+				//const token = localStorage.getItem('token');
+				const token = uni.getStorageSync("token")
 				console.log(token);
 				if (token) {
 				  // 发送请求进行自动登录
-				  axios.post(/*'https://metaq.scutbot.icu/login'*/
-				  			'http://localhost:8080/autologin', {token})
-				      .then(response => {
-				        var response = response.data;
+				uni.request({
+					url: this.$store.state.host + '/autologin',
+					method: 'POST',
+					header:{
+						'Content-Type' : 'application/json',
+						//token : uni.getStorageSync("token")
+					},
+					data: {
+						token
+					},
+					success: res => {
+						var response = res.data;
 						console.log(response);
-				  	  if(response == "fail")
-				  	  {
-				  		  uni.showToast({
-				  		    title: '登录失败',  
-				  		    icon: 'none'
-				  		  }); 
-				  	  }else{
+						if(response == "fail")
+						{
+							uni.showToast({
+							  title: '登录失败',  
+							  icon: 'none'
+							}); 
+						}else{
 						  console.log(response);
-						  console.log(localStorage.getItem('token'));
+						  //console.log(localStorage.getItem('token'));
 						  console.log("自动登录成功！");
 						  uni.reLaunch({
 						  		url:"/pages/myQ/myQ"
 						  	})
 						}
-					  })
-				      .catch(error=> {
-				        console.log(error);
-				      });
+					},
+					fail: () => {},
+					complete: () => {}
+				});
+				  // axios.post('https://metaq.scutbot.icu/autologin'
+				  // 			/*'http://localhost:8080/autologin'*/, {token})
+				  //     .then(response => {
+				  //       var response = response.data;
+						// console.log(response);
+				  // 	  if(response == "fail")
+				  // 	  {
+				  // 		  uni.showToast({
+				  // 		    title: '登录失败',  
+				  // 		    icon: 'none'
+				  // 		  }); 
+				  // 	  }else{
+						//   console.log(response);
+						//   console.log(localStorage.getItem('token'));
+						//   console.log("自动登录成功！");
+						//   uni.reLaunch({
+						//   		url:"/pages/myQ/myQ"
+						//   	})
+						// }
+					 //  })
+				  //     .catch(error=> {
+				  //       console.log(error);
+				  //     });
 				}
 			}
 

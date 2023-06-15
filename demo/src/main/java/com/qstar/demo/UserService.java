@@ -44,6 +44,8 @@ public class UserService {
         String password = "";
         email = userio.getKeyValueofJson(info, "email");
         password = userio.getKeyValueofJson(info, "password");
+		System.out.println(email);
+		System.out.println(password);
 		// this.MatchEmailtoPasswd(email, password)
         if(this.MatchEmailtoPasswd(email, password)){
 			try {
@@ -261,14 +263,28 @@ public class UserService {
 	}
 	//获取二维码
 	public String Share(String info){
-		String Base = "http://localhost:5173/#/pages/fillQuestionnaire/fillQuestionnaire?id=";
+		String Base = "https://qmeta.scutbot.icu/#/pages/fillQuestionnaire/fillQuestionnaire?id=";
 		String flag = userio.getKeyValueofJson(info, "flag");
 		int id = Integer.parseInt(userio.getKeyValueofJson(info, "id"));
 		String url = Base + id;
+		System.out.println(url);
 		if(flag.hashCode() == "true".hashCode()){
-			return "data:image/png;base64," + QRcodeGenerator.generate(flag, id);
+			return "data:image/png;base64," + QRcodeGenerator.generate(url, id);
 		}else{
 			return url;
 		}
 	} 
+	//是否已经登录
+	public boolean isLogin(String token){
+		Map<String,User> map = link.getMap();
+		if(map != null){
+			User user = map.get(token);
+			if(user != null){
+				System.out.println("已登录");
+				return true;
+			}
+		}
+		System.out.println("未登录");
+		return false;
+	}
 }

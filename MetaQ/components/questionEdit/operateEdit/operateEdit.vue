@@ -2,16 +2,20 @@
 	<view class="operateEdit">
 		<view class="operate-box">
 			<view class="operate" @click="emitUp">
-				<img src="/static/operationEditQuestion/up.png" alt="">
+				<!-- <img src="/static/operationEditQuestion/up.png" alt=""> -->
+				<image src="/static/operationEditQuestion/up.png"></image>
 			</view>
 			<view class="operate" @click="emitDown">
-				<img src="/static/operationEditQuestion/down.png" alt="">
+				<!-- <img src="/static/operationEditQuestion/down.png" alt=""> -->
+				<image src="/static/operationEditQuestion/down.png"></image>
 			</view>
 			<view class="operate" @click="emitDelete">
-				<img src="/static/question_component/delete.png" alt="">
+				<!-- <img src="/static/question_component/delete.png" alt=""> -->
+				<image src="/static/question_component/delete.png"></image>
 			</view>
 			<view class="operate">
-				<img src="/static/operationEditQuestion/attach.png" alt="">
+				<!-- <img src="/static/operationEditQuestion/attach.png" alt=""> -->
+				<image src="/static/operationEditQuestion/attach.png" mode="aspectFit"></image>
 			</view>
 		</view>
 		
